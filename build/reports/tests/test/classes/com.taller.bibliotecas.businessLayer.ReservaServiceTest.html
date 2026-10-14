@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - ReservaService - Unit Tests (RF-21, RF-22)</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>ReservaService - Unit Tests (RF-21, RF-22)</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.taller.bibliotecas.businessLayer.html">com.taller.bibliotecas.businessLayer</a> &gt; ReservaServiceTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">36</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.121s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testAprobarReserva_DesaparecioAlActualizar()</td>
+<td class="success">testAprobarReserva_DesaparecioAlActualizar()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testAprobarReserva_NotFound()</td>
+<td class="success">testAprobarReserva_NotFound()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] estadoActual=APROBADA</td>
+<td class="success">testAprobarReserva_SoloSePuedeAprobarUnaPendiente(EstadoReserva)[1]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] estadoActual=RECHAZADA</td>
+<td class="success">testAprobarReserva_SoloSePuedeAprobarUnaPendiente(EstadoReserva)[2]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] estadoActual=CANCELADA</td>
+<td class="success">testAprobarReserva_SoloSePuedeAprobarUnaPendiente(EstadoReserva)[3]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testAprobarReserva_Success()</td>
+<td class="success">testAprobarReserva_Success()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCancelarReserva_DesaparecioAlActualizar()</td>
+<td class="success">testCancelarReserva_DesaparecioAlActualizar()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] estadoActual=RECHAZADA</td>
+<td class="success">testCancelarReserva_NoSePuedeSiYaFueCerrada(EstadoReserva)[1]</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] estadoActual=CANCELADA</td>
+<td class="success">testCancelarReserva_NoSePuedeSiYaFueCerrada(EstadoReserva)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCancelarReserva_NotFound()</td>
+<td class="success">testCancelarReserva_NotFound()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] estadoActual=PENDIENTE</td>
+<td class="success">testCancelarReserva_PendienteOAprobada(EstadoReserva)[1]</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] estadoActual=APROBADA</td>
+<td class="success">testCancelarReserva_PendienteOAprobada(EstadoReserva)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_ClienteNoExiste()</td>
+<td class="success">testCreateReserva_ClienteNoExiste()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_HayEjemplaresDisponiblesEnLaSede()</td>
+<td class="success">testCreateReserva_HayEjemplaresDisponiblesEnLaSede()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_LibroNoExiste()</td>
+<td class="success">testCreateReserva_LibroNoExiste()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_SedeDesactivada()</td>
+<td class="success">testCreateReserva_SedeDesactivada()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_SedeNoExiste()</td>
+<td class="success">testCreateReserva_SedeNoExiste()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_SolicitudPendienteDuplicada()</td>
+<td class="success">testCreateReserva_SolicitudPendienteDuplicada()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateReserva_Success()</td>
+<td class="success">testCreateReserva_Success()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetAllReservas_ReturnsList()</td>
+<td class="success">testGetAllReservas_ReturnsList()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservaById_Found()</td>
+<td class="success">testGetReservaById_Found()</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservaById_NotFound()</td>
+<td class="success">testGetReservaById_NotFound()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservasByCliente_ClienteNoExiste()</td>
+<td class="success">testGetReservasByCliente_ClienteNoExiste()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservasByCliente_Success()</td>
+<td class="success">testGetReservasByCliente_Success()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservasBySede_SedeNoExiste()</td>
+<td class="success">testGetReservasBySede_SedeNoExiste()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservasBySede_SinFiltroDeEstado()</td>
+<td class="success">testGetReservasBySede_SinFiltroDeEstado()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetReservasBySede_SoloPendientes()</td>
+<td class="success">testGetReservasBySede_SoloPendientes()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRechazarReserva_DesaparecioAlActualizar()</td>
+<td class="success">testRechazarReserva_DesaparecioAlActualizar()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRechazarReserva_GuardaElMotivoSinEspacios()</td>
+<td class="success">testRechazarReserva_GuardaElMotivoSinEspacios()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] motivo=null</td>
+<td class="success">testRechazarReserva_MotivoObligatorio(String)[1]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] motivo=</td>
+<td class="success">testRechazarReserva_MotivoObligatorio(String)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] motivo=   </td>
+<td class="success">testRechazarReserva_MotivoObligatorio(String)[3]</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRechazarReserva_NotFound()</td>
+<td class="success">testRechazarReserva_NotFound()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] estadoActual=APROBADA</td>
+<td class="success">testRechazarReserva_SoloSePuedeRechazarUnaPendiente(EstadoReserva)[1]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] estadoActual=RECHAZADA</td>
+<td class="success">testRechazarReserva_SoloSePuedeRechazarUnaPendiente(EstadoReserva)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] estadoActual=CANCELADA</td>
+<td class="success">testRechazarReserva_SoloSePuedeRechazarUnaPendiente(EstadoReserva)[3]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>15:08:36.918 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:36.928 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:36.974 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Aprobando reserva ID: 1
+15:08:36.990 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:36.997 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Rechazando reserva ID: 1
+15:08:37.004 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.007 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Reserva creada con ID: 10
+15:08:37.025 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:37.035 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.062 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.071 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.079 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.124 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.133 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Aprobando reserva ID: 1
+15:08:37.182 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Rechazando reserva ID: 1
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 10/10/2026, 3:08:38 p. m.</p>
+</div>
+</div>
+</body>
+</html>

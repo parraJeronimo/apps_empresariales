@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MovimientoEjemplarService - Unit Tests (RF-20)" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:35.347Z" hostname="SEBASTIAN" time="0.062">
+  <properties/>
+  <testcase name="testGetHistorialByEjemplar_Success()" classname="com.taller.bibliotecas.businessLayer.MovimientoEjemplarServiceTest" time="0.042"/>
+  <testcase name="testRegistrarMovimiento_Success()" classname="com.taller.bibliotecas.businessLayer.MovimientoEjemplarServiceTest" time="0.005"/>
+  <testcase name="testGetHistorialByEjemplar_EjemplarNoExiste()" classname="com.taller.bibliotecas.businessLayer.MovimientoEjemplarServiceTest" time="0.003"/>
+  <system-out><![CDATA[15:08:35.397 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.MovimientoEjemplarServiceImpl -- Registrando movimiento PRESTAMO del ejemplar ID: 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

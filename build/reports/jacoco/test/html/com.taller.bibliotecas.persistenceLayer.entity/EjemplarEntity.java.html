@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EjemplarEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.entity</a> &gt; <span class="el_source">EjemplarEntity.java</span></div><h1>EjemplarEntity.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+/**
+ * Copia fisica de un libro. sedePropietariaEntity es la sede a la que pertenece;
+ * sedeActualEntity es donde se encuentra fisicamente en este momento.
+ */
+@Entity
+@Table(name = &quot;ejemplares&quot;)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class EjemplarEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String codigo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoEjemplar estado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;libro_id&quot;, nullable = false)
+    private LibroEntity libroEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;sede_propietaria_id&quot;, nullable = false)
+    private SedeEntity sedePropietariaEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;sede_actual_id&quot;, nullable = false)
+    private SedeEntity sedeActualEntity;
+
+    @Column(name = &quot;created_at&quot;)
+    private LocalDateTime createdAt;
+
+    @Column(name = &quot;updated_at&quot;)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L52">        this.createdAt = LocalDateTime.now();</span>
+<span class="nc" id="L53">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (this.estado == null) {</span>
+<span class="nc" id="L55">            this.estado = EstadoEjemplar.DISPONIBLE;</span>
+        }
+<span class="nc" id="L57">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L61">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

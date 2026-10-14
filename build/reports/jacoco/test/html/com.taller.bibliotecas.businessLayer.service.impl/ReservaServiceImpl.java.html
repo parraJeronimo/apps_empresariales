@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservaServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">ReservaServiceImpl.java</span></div><h1>ReservaServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.ReservaCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReservaDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReservaRechazoDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.service.ClienteService;
+import com.taller.bibliotecas.businessLayer.service.EjemplarService;
+import com.taller.bibliotecas.businessLayer.service.LibroService;
+import com.taller.bibliotecas.businessLayer.service.ReservaService;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.persistenceLayer.dao.ReservaDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoReserva;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L27">@Slf4j</span>
+public class ReservaServiceImpl implements ReservaService {
+
+    private final ReservaDAO reservaDAO;
+    private final ClienteService clienteService;
+    private final LibroService libroService;
+    private final SedeService sedeService;
+    private final EjemplarService ejemplarService;
+
+    @Override
+    public ReservaDTO createReserva(ReservaCreateDTO createDTO) {
+<span class="fc" id="L38">        log.info(&quot;Creando reserva del libro ID: {} para el cliente ID: {}&quot;, createDTO.getLibroId(), createDTO.getClienteId());</span>
+
+        // Validar que existan cliente, libro y sede (404 si no)
+<span class="fc" id="L41">        clienteService.getClienteById(createDTO.getClienteId());</span>
+<span class="fc" id="L42">        libroService.getLibroById(createDTO.getLibroId());</span>
+<span class="fc" id="L43">        SedeDTO sede = sedeService.getSedeById(createDTO.getSedeId());</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(sede.getActiva())) {</span>
+<span class="fc" id="L45">            throw new SolicitudInvalidaException(&quot;No se pueden registrar reservas en una sede desactivada&quot;);</span>
+        }
+
+        // RF-21: solo se reservan libros que NO estan disponibles en la sede solicitada
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (ejemplarService.contarEjemplaresDisponibles(createDTO.getLibroId(), createDTO.getSedeId()) &gt; 0) {</span>
+<span class="fc" id="L50">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L51">                    &quot;El libro tiene ejemplares disponibles en la sede &quot; + sede.getNombre()</span>
+                            + &quot;. Registre un prestamo en lugar de una reserva&quot;);
+        }
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (reservaDAO.existsByClienteIdAndLibroIdAndSedeIdAndEstado(</span>
+<span class="fc" id="L56">                createDTO.getClienteId(), createDTO.getLibroId(), createDTO.getSedeId(), EstadoReserva.PENDIENTE)) {</span>
+<span class="fc" id="L57">            throw new SolicitudInvalidaException(</span>
+                    &quot;El cliente ya tiene una solicitud pendiente para este libro en la sede indicada&quot;);
+        }
+
+<span class="fc" id="L61">        ReservaDTO creada = reservaDAO.save(createDTO);</span>
+<span class="fc" id="L62">        log.info(&quot;Reserva creada con ID: {}&quot;, creada.getId());</span>
+<span class="fc" id="L63">        return creada;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReservaDTO getReservaById(Long id) {
+<span class="fc" id="L69">        return reservaDAO.findById(id)</span>
+<span class="fc" id="L70">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Reserva no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;ReservaDTO&gt; getAllReservas() {
+<span class="fc" id="L76">        return reservaDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;ReservaDTO&gt; getReservasByCliente(Long clienteId) {
+<span class="fc" id="L82">        clienteService.getClienteById(clienteId);</span>
+<span class="fc" id="L83">        return reservaDAO.findByClienteId(clienteId);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;ReservaDTO&gt; getReservasBySede(Long sedeId, EstadoReserva estado) {
+<span class="fc" id="L89">        sedeService.getSedeById(sedeId);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return estado == null</span>
+<span class="fc" id="L91">                ? reservaDAO.findBySedeId(sedeId)</span>
+<span class="fc" id="L92">                : reservaDAO.findBySedeIdAndEstado(sedeId, estado);</span>
+    }
+
+    @Override
+    public ReservaDTO aprobarReserva(Long id) {
+<span class="fc" id="L97">        ReservaDTO reserva = getReservaById(id);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (reserva.getEstado() != EstadoReserva.PENDIENTE) {</span>
+<span class="fc" id="L99">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L100">                    &quot;Solo se pueden aprobar reservas pendientes. Estado actual: &quot; + reserva.getEstado());</span>
+        }
+<span class="fc" id="L102">        log.info(&quot;Aprobando reserva ID: {}&quot;, id);</span>
+<span class="fc" id="L103">        return reservaDAO.actualizarEstado(id, EstadoReserva.APROBADA, null, LocalDateTime.now())</span>
+<span class="fc" id="L104">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Reserva no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public ReservaDTO rechazarReserva(Long id, ReservaRechazoDTO rechazoDTO) {
+<span class="fc" id="L109">        String motivo = rechazoDTO.getMotivo();</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">        if (motivo == null || motivo.isBlank()) {</span>
+<span class="fc" id="L111">            throw new SolicitudInvalidaException(&quot;El motivo del rechazo es obligatorio&quot;);</span>
+        }
+<span class="fc" id="L113">        ReservaDTO reserva = getReservaById(id);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (reserva.getEstado() != EstadoReserva.PENDIENTE) {</span>
+<span class="fc" id="L115">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L116">                    &quot;Solo se pueden rechazar reservas pendientes. Estado actual: &quot; + reserva.getEstado());</span>
+        }
+<span class="fc" id="L118">        log.info(&quot;Rechazando reserva ID: {}&quot;, id);</span>
+<span class="fc" id="L119">        return reservaDAO.actualizarEstado(id, EstadoReserva.RECHAZADA, motivo.trim(), LocalDateTime.now())</span>
+<span class="fc" id="L120">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Reserva no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public ReservaDTO cancelarReserva(Long id) {
+<span class="fc" id="L125">        ReservaDTO reserva = getReservaById(id);</span>
+<span class="fc bfc" id="L126" title="All 4 branches covered.">        if (reserva.getEstado() != EstadoReserva.PENDIENTE &amp;&amp; reserva.getEstado() != EstadoReserva.APROBADA) {</span>
+<span class="fc" id="L127">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L128">                    &quot;Solo se pueden cancelar reservas pendientes o aprobadas. Estado actual: &quot; + reserva.getEstado());</span>
+        }
+<span class="fc" id="L130">        log.info(&quot;Cancelando reserva ID: {}&quot;, id);</span>
+<span class="fc" id="L131">        return reservaDAO.actualizarEstado(id, EstadoReserva.CANCELADA, null, null)</span>
+<span class="fc" id="L132">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Reserva no encontrada con ID: &quot; + id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

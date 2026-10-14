@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovimientoEjemplarServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">MovimientoEjemplarServiceImpl.java</span></div><h1>MovimientoEjemplarServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarDTO;
+import com.taller.bibliotecas.businessLayer.service.MovimientoEjemplarService;
+import com.taller.bibliotecas.persistenceLayer.dao.EjemplarDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.MovimientoEjemplarDAO;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L19">@Slf4j</span>
+public class MovimientoEjemplarServiceImpl implements MovimientoEjemplarService {
+
+    private final MovimientoEjemplarDAO movimientoDAO;
+    private final EjemplarDAO ejemplarDAO;
+
+    @Override
+    public MovimientoEjemplarDTO registrarMovimiento(MovimientoEjemplarCreateDTO createDTO) {
+<span class="fc" id="L27">        log.info(&quot;Registrando movimiento {} del ejemplar ID: {}&quot;, createDTO.getTipo(), createDTO.getEjemplarId());</span>
+<span class="fc" id="L28">        return movimientoDAO.save(createDTO);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;MovimientoEjemplarDTO&gt; getHistorialByEjemplar(Long ejemplarId) {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (!ejemplarDAO.existsById(ejemplarId)) {</span>
+<span class="fc" id="L35">            throw new RecursoNoEncontradoException(&quot;Ejemplar no encontrado con ID: &quot; + ejemplarId);</span>
+        }
+<span class="fc" id="L37">        return movimientoDAO.findByEjemplarId(ejemplarId);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

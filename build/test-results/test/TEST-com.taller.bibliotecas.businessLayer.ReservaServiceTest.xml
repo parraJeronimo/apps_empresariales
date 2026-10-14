@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ReservaService - Unit Tests (RF-21, RF-22)" tests="36" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:36.860Z" hostname="SEBASTIAN" time="0.333">
+  <properties/>
+  <testcase name="testGetReservaById_Found()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.008"/>
+  <testcase name="testGetReservasBySede_SinFiltroDeEstado()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[1] estadoActual=RECHAZADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.005"/>
+  <testcase name="[2] estadoActual=CANCELADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[1] estadoActual=PENDIENTE" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.005"/>
+  <testcase name="[2] estadoActual=APROBADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[1] motivo=null" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[2] motivo=" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[3] motivo=   " classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testAprobarReserva_Success()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.007"/>
+  <testcase name="testGetReservasByCliente_Success()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testCreateReserva_LibroNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testRechazarReserva_GuardaElMotivoSinEspacios()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testCreateReserva_Success()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.004"/>
+  <testcase name="testGetReservaById_NotFound()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testCancelarReserva_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.004"/>
+  <testcase name="testCreateReserva_SolicitudPendienteDuplicada()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.006"/>
+  <testcase name="testCancelarReserva_NotFound()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testRechazarReserva_NotFound()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testCreateReserva_SedeDesactivada()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.004"/>
+  <testcase name="testCreateReserva_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.004"/>
+  <testcase name="testCreateReserva_HayEjemplaresDisponiblesEnLaSede()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[1] estadoActual=APROBADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[2] estadoActual=RECHAZADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="[3] estadoActual=CANCELADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testGetReservasByCliente_ClienteNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testCreateReserva_ClienteNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testAprobarReserva_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.004"/>
+  <testcase name="[1] estadoActual=APROBADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[2] estadoActual=RECHAZADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="[3] estadoActual=CANCELADA" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testGetReservasBySede_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.003"/>
+  <testcase name="testAprobarReserva_NotFound()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testRechazarReserva_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testGetReservasBySede_SoloPendientes()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <testcase name="testGetAllReservas_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.ReservaServiceTest" time="0.002"/>
+  <system-out><![CDATA[15:08:36.918 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:36.928 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:36.974 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Aprobando reserva ID: 1
+15:08:36.990 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:36.997 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Rechazando reserva ID: 1
+15:08:37.004 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.007 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Reserva creada con ID: 10
+15:08:37.025 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Cancelando reserva ID: 1
+15:08:37.035 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.062 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.071 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.079 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.124 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Creando reserva del libro ID: 2 para el cliente ID: 1
+15:08:37.133 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Aprobando reserva ID: 1
+15:08:37.182 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ReservaServiceImpl -- Rechazando reserva ID: 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

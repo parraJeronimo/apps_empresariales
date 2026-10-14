@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ReporteService - Unit Tests (RF-24 y libros mas solicitados)" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:36.311Z" hostname="SEBASTIAN" time="0.503">
+  <properties/>
+  <testcase name="testReporteLibros_TotalesPorEstadoYPorSede()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.26"/>
+  <testcase name="testReportePrestamos_TodasLasSedes()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.009"/>
+  <testcase name="testReportePrestamos_FiltradoPorSede()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.003"/>
+  <testcase name="testReporteMovimientos_RangoInvalido()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReportePrestamos_SinPrestamos()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReporteDevoluciones_RangoInvalido()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.004"/>
+  <testcase name="testLibrosMasSolicitados_SumaPrestamosYReservasYOrdena()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.013"/>
+  <testcase name="testLibrosMasSolicitados_LimiteInvalido()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReporteDevoluciones_FiltradoPorSedeDeDevolucion()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReportePrestamos_RangoInvalido()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReportePrestamos_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.006"/>
+  <testcase name="testReporteMovimientos_TodasLasSedes()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.007"/>
+  <testcase name="testLibrosMasSolicitados_SinDatos()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.003"/>
+  <testcase name="testReportePrestamos_FechasObligatorias()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.004"/>
+  <testcase name="testReporteClientes_ClientesConPrestamosActivosYVencidos()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.006"/>
+  <testcase name="testLibrosMasSolicitados_SoloReservas()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.003"/>
+  <testcase name="testReporteDevoluciones_TodasLasSedes()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.003"/>
+  <testcase name="testReporteMovimientos_FiltradoPorSedeOrigenODestino()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.005"/>
+  <testcase name="testReporteClientes_SinPrestamosActivos()" classname="com.taller.bibliotecas.businessLayer.ReporteServiceTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

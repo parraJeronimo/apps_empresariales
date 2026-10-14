@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="UsuarioAdminService - Unit Tests (RF-23)" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:37.672Z" hostname="SEBASTIAN" time="0.171">
+  <properties/>
+  <testcase name="testGetAllUsuarios_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.057"/>
+  <testcase name="testGetUsuariosBySede_Success()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testUpdateUsuario_DesactivarUsuario()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.003"/>
+  <testcase name="testGetUsuarioById_Found()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.003"/>
+  <testcase name="testUpdateUsuario_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testCreateUsuario_EmailDuplicado()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.004"/>
+  <testcase name="testCreateUsuario_AdministradorGeneralNoNecesitaSede()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testUpdateUsuario_NotFound()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testGetUsuarioById_NotFound()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testGetUsuariosBySede_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.001"/>
+  <testcase name="testCreateUsuario_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.003"/>
+  <testcase name="testUpdateUsuario_EmailDeOtroUsuario()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testUpdateUsuario_DeGeneralASedeRequiereSede()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testCreateUsuario_BibliotecarioSinSede()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testUpdateUsuario_SoloNombre()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <testcase name="testCreateUsuario_AdministradorDeSede()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.003"/>
+  <testcase name="testUpdateUsuario_CambiaElRolYLaSede()" classname="com.taller.bibliotecas.businessLayer.UsuarioAdminServiceTest" time="0.002"/>
+  <system-out><![CDATA[15:08:37.769 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+15:08:37.775 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+15:08:37.800 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+15:08:37.821 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+15:08:37.836 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

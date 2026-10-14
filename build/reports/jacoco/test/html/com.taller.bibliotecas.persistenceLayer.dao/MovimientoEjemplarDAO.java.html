@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovimientoEjemplarDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.dao</a> &gt; <span class="el_source">MovimientoEjemplarDAO.java</span></div><h1>MovimientoEjemplarDAO.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.dao;
+
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarDTO;
+import com.taller.bibliotecas.persistenceLayer.entity.MovimientoEjemplarEntity;
+import com.taller.bibliotecas.persistenceLayer.mapper.MovimientoEjemplarMapper;
+import com.taller.bibliotecas.persistenceLayer.repository.EjemplarRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.MovimientoEjemplarRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.SedeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@RequiredArgsConstructor
+public class MovimientoEjemplarDAO {
+
+    private final MovimientoEjemplarRepository movimientoRepository;
+    private final EjemplarRepository ejemplarRepository;
+    private final SedeRepository sedeRepository;
+    private final MovimientoEjemplarMapper movimientoMapper;
+
+    public MovimientoEjemplarDTO save(MovimientoEjemplarCreateDTO createDTO) {
+<span class="nc" id="L25">        MovimientoEjemplarEntity entity = new MovimientoEjemplarEntity();</span>
+<span class="nc" id="L26">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
+<span class="nc" id="L27">        entity.setTipo(createDTO.getTipo());</span>
+<span class="nc" id="L28">        entity.setDetalle(createDTO.getDetalle());</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (createDTO.getSedeOrigenId() != null) {</span>
+<span class="nc" id="L30">            entity.setSedeOrigenEntity(sedeRepository.getReferenceById(createDTO.getSedeOrigenId()));</span>
+        }
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (createDTO.getSedeDestinoId() != null) {</span>
+<span class="nc" id="L33">            entity.setSedeDestinoEntity(sedeRepository.getReferenceById(createDTO.getSedeDestinoId()));</span>
+        }
+<span class="nc" id="L35">        return movimientoMapper.toDTO(movimientoRepository.save(entity));</span>
+    }
+
+    public List&lt;MovimientoEjemplarDTO&gt; findByEjemplarId(Long ejemplarId) {
+<span class="nc" id="L39">        return movimientoMapper.toDTOList(</span>
+<span class="nc" id="L40">                movimientoRepository.findByEjemplarEntityIdOrderByFechaMovimientoAscIdAsc(ejemplarId));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

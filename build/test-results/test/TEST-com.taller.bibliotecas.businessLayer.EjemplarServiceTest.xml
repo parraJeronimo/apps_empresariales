@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EjemplarService - Unit Tests (RF-04, RF-08)" tests="20" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:34.114Z" hostname="SEBASTIAN" time="0.893">
+  <properties/>
+  <testcase name="testGetAllEjemplares_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.581"/>
+  <testcase name="testGetEjemplaresBySede_Success()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.007"/>
+  <testcase name="testGetEjemplaresBySede_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.018"/>
+  <testcase name="testCreateEjemplar_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.009"/>
+  <testcase name="testCreateEjemplar_GeneraCodigoSaltandoLosOcupados()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.009"/>
+  <testcase name="testCreateEjemplar_ConCodigoPropio()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.017"/>
+  <testcase name="testCreateEjemplar_LibroNoExiste()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.006"/>
+  <testcase name="testCreateEjemplar_GeneraCodigoUnico()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.01"/>
+  <testcase name="testGetEjemplarByCodigo_NotFound()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.007"/>
+  <testcase name="testCreateEjemplar_CodigoDuplicado()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.006"/>
+  <testcase name="testGetEjemplarById_Found()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.006"/>
+  <testcase name="testActualizarEstadoYUbicacion_NotFound()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.006"/>
+  <testcase name="testGetEjemplaresByLibro_Success()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.006"/>
+  <testcase name="testGetEjemplarByCodigo_Found()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.005"/>
+  <testcase name="testCreateEjemplar_RecortaEspaciosDelCodigo()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.005"/>
+  <testcase name="testCreateEjemplar_SedeDesactivada()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.005"/>
+  <testcase name="testGetEjemplarById_NotFound()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.005"/>
+  <testcase name="testGetEjemplaresByLibro_LibroNoExiste()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.007"/>
+  <testcase name="testActualizarEstadoYUbicacion_Success()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.005"/>
+  <testcase name="testContarEjemplaresDisponibles()" classname="com.taller.bibliotecas.businessLayer.EjemplarServiceTest" time="0.009"/>
+  <system-out><![CDATA[15:08:34.747 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.760 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.764 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 9782-003
+15:08:34.800 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.804 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: EJ-001
+15:08:34.823 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.839 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.839 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 97803074747-001
+15:08:34.864 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.931 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+15:08:34.931 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 11 y codigo: EJ-002
+15:08:34.945 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

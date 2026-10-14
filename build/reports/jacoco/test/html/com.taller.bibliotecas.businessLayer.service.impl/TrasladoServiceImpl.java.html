@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrasladoServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">TrasladoServiceImpl.java</span></div><h1>TrasladoServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.EjemplarDTO;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.dto.TrasladoCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.TrasladoDTO;
+import com.taller.bibliotecas.businessLayer.service.EjemplarService;
+import com.taller.bibliotecas.businessLayer.service.MovimientoEjemplarService;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.businessLayer.service.TrasladoService;
+import com.taller.bibliotecas.persistenceLayer.dao.TrasladoDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoTraslado;
+import com.taller.bibliotecas.persistenceLayer.entity.TipoMovimiento;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L31">@Slf4j</span>
+public class TrasladoServiceImpl implements TrasladoService {
+
+    private final TrasladoDAO trasladoDAO;
+    private final EjemplarService ejemplarService;
+    private final SedeService sedeService;
+    private final MovimientoEjemplarService movimientoService;
+
+    @Override
+    public TrasladoDTO createTraslado(TrasladoCreateDTO createDTO) {
+<span class="fc" id="L41">        log.info(&quot;Registrando traslado del ejemplar ID: {} hacia la sede ID: {}&quot;,</span>
+<span class="fc" id="L42">                createDTO.getEjemplarId(), createDTO.getSedeDestinoId());</span>
+
+<span class="fc" id="L44">        EjemplarDTO ejemplar = ejemplarService.getEjemplarById(createDTO.getEjemplarId());</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (ejemplar.getEstado() != EstadoEjemplar.DISPONIBLE) {</span>
+<span class="fc" id="L46">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L47">                    &quot;Solo se pueden trasladar ejemplares disponibles. Estado actual: &quot; + ejemplar.getEstado());</span>
+        }
+
+<span class="fc" id="L50">        SedeDTO destino = sedeService.getSedeById(createDTO.getSedeDestinoId());</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(destino.getActiva())) {</span>
+<span class="fc" id="L52">            throw new SolicitudInvalidaException(&quot;La sede destino se encuentra desactivada&quot;);</span>
+        }
+
+<span class="fc" id="L55">        Long sedeOrigenId = ejemplar.getSedeActualId();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (sedeOrigenId.equals(createDTO.getSedeDestinoId())) {</span>
+<span class="fc" id="L57">            throw new SolicitudInvalidaException(</span>
+                    &quot;La sede destino debe ser diferente a la sede donde se encuentra el ejemplar&quot;);
+        }
+
+<span class="fc" id="L61">        TrasladoDTO creado = trasladoDAO.save(createDTO, sedeOrigenId);</span>
+
+<span class="fc" id="L63">        ejemplarService.actualizarEstadoYUbicacion(createDTO.getEjemplarId(), EstadoEjemplar.EN_TRASLADO, null);</span>
+<span class="fc" id="L64">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L65">                createDTO.getEjemplarId(), TipoMovimiento.TRASLADO_SALIDA, sedeOrigenId, createDTO.getSedeDestinoId(),</span>
+<span class="fc" id="L66">                &quot;Sale en traslado hacia la sede &quot; + destino.getNombre()));</span>
+
+<span class="fc" id="L68">        log.info(&quot;Traslado registrado con ID: {}&quot;, creado.getId());</span>
+<span class="fc" id="L69">        return creado;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TrasladoDTO getTrasladoById(Long id) {
+<span class="fc" id="L75">        return trasladoDAO.findById(id)</span>
+<span class="fc" id="L76">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Traslado no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;TrasladoDTO&gt; getAllTraslados() {
+<span class="fc" id="L82">        return trasladoDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;TrasladoDTO&gt; getTrasladosBySede(Long sedeId, EstadoTraslado estado) {
+<span class="fc" id="L88">        sedeService.getSedeById(sedeId);</span>
+<span class="fc" id="L89">        List&lt;TrasladoDTO&gt; traslados = trasladoDAO.findBySedeId(sedeId);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (estado == null) {</span>
+<span class="fc" id="L91">            return traslados;</span>
+        }
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        return traslados.stream().filter(t -&gt; t.getEstado() == estado).toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;TrasladoDTO&gt; getTrasladosPorRango(LocalDate desde, LocalDate hasta) {
+<span class="fc" id="L99">        return trasladoDAO.findByFechaSolicitudBetween(desde.atStartOfDay(), hasta.atTime(LocalTime.MAX));</span>
+    }
+
+    @Override
+    public TrasladoDTO confirmarRecepcion(Long id) {
+<span class="fc" id="L104">        TrasladoDTO traslado = getTrasladoById(id);</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (traslado.getEstado() != EstadoTraslado.EN_TRANSITO) {</span>
+<span class="fc" id="L106">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L107">                    &quot;Solo se puede confirmar la recepcion de traslados en transito. Estado actual: &quot; + traslado.getEstado());</span>
+        }
+<span class="fc" id="L109">        SedeDTO destino = sedeService.getSedeById(traslado.getSedeDestinoId());</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(destino.getActiva())) {</span>
+<span class="fc" id="L111">            throw new SolicitudInvalidaException(&quot;La sede destino se encuentra desactivada&quot;);</span>
+        }
+
+<span class="fc" id="L114">        TrasladoDTO recibido = trasladoDAO.actualizarEstado(id, EstadoTraslado.RECIBIDO, LocalDateTime.now())</span>
+<span class="fc" id="L115">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Traslado no encontrado con ID: &quot; + id));</span>
+
+        // RF-19: la ubicacion del ejemplar se actualiza automaticamente al confirmar la recepcion
+<span class="fc" id="L118">        ejemplarService.actualizarEstadoYUbicacion(</span>
+<span class="fc" id="L119">                traslado.getEjemplarId(), EstadoEjemplar.DISPONIBLE, traslado.getSedeDestinoId());</span>
+<span class="fc" id="L120">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L121">                traslado.getEjemplarId(), TipoMovimiento.TRASLADO_RECEPCION,</span>
+<span class="fc" id="L122">                traslado.getSedeOrigenId(), traslado.getSedeDestinoId(),</span>
+<span class="fc" id="L123">                &quot;Recepcion confirmada en la sede &quot; + destino.getNombre()));</span>
+
+<span class="fc" id="L125">        log.info(&quot;Recepcion confirmada para el traslado ID: {}&quot;, id);</span>
+<span class="fc" id="L126">        return recibido;</span>
+    }
+
+    @Override
+    public TrasladoDTO cancelarTraslado(Long id) {
+<span class="fc" id="L131">        TrasladoDTO traslado = getTrasladoById(id);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (traslado.getEstado() != EstadoTraslado.EN_TRANSITO) {</span>
+<span class="fc" id="L133">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L134">                    &quot;Solo se pueden cancelar traslados en transito. Estado actual: &quot; + traslado.getEstado());</span>
+        }
+
+<span class="fc" id="L137">        TrasladoDTO cancelado = trasladoDAO.actualizarEstado(id, EstadoTraslado.CANCELADO, null)</span>
+<span class="fc" id="L138">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Traslado no encontrado con ID: &quot; + id));</span>
+
+        // El ejemplar nunca salio de la sede de origen: vuelve a estar disponible alli
+<span class="fc" id="L141">        ejemplarService.actualizarEstadoYUbicacion(traslado.getEjemplarId(), EstadoEjemplar.DISPONIBLE, null);</span>
+<span class="fc" id="L142">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L143">                traslado.getEjemplarId(), TipoMovimiento.TRASLADO_CANCELADO,</span>
+<span class="fc" id="L144">                traslado.getSedeOrigenId(), traslado.getSedeDestinoId(),</span>
+                &quot;Traslado cancelado; el ejemplar permanece en la sede de origen&quot;));
+
+<span class="fc" id="L147">        log.info(&quot;Traslado ID: {} cancelado&quot;, id);</span>
+<span class="fc" id="L148">        return cancelado;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

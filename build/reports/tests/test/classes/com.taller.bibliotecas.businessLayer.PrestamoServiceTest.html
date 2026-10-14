@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - PrestamoService - Unit Tests (RF-11 a RF-17, RF-25)</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>PrestamoService - Unit Tests (RF-11 a RF-17, RF-25)</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.taller.bibliotecas.businessLayer.html">com.taller.bibliotecas.businessLayer</a> &gt; PrestamoServiceTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">38</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.418s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testCreatePrestamo_ClienteNoExiste()</td>
+<td class="success">testCreatePrestamo_ClienteNoExiste()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1] dias=0</td>
+<td class="success">testCreatePrestamo_DiasFueraDeRango(int)[1]</td>
+<td class="success">0.037s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2] dias=-1</td>
+<td class="success">testCreatePrestamo_DiasFueraDeRango(int)[2]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[3] dias=31</td>
+<td class="success">testCreatePrestamo_DiasFueraDeRango(int)[3]</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[4] dias=100</td>
+<td class="success">testCreatePrestamo_DiasFueraDeRango(int)[4]</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_EjemplarEnOtraSede()</td>
+<td class="success">testCreatePrestamo_EjemplarEnOtraSede()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_EjemplarEnTrasladoNoSePuedePrestar()</td>
+<td class="success">testCreatePrestamo_EjemplarEnTrasladoNoSePuedePrestar()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_EjemplarNoDisponible()</td>
+<td class="success">testCreatePrestamo_EjemplarNoDisponible()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_EjemplarNoExiste()</td>
+<td class="success">testCreatePrestamo_EjemplarNoExiste()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_MarcaElEjemplarComoPrestadoYRegistraMovimiento()</td>
+<td class="success">testCreatePrestamo_MarcaElEjemplarComoPrestadoYRegistraMovimiento()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_PlazoPersonalizado()</td>
+<td class="success">testCreatePrestamo_PlazoPersonalizado()</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_PlazoPorDefecto()</td>
+<td class="success">testCreatePrestamo_PlazoPorDefecto()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreatePrestamo_SedeDesactivada()</td>
+<td class="success">testCreatePrestamo_SedeDesactivada()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetAllPrestamos_ReturnsList()</td>
+<td class="success">testGetAllPrestamos_ReturnsList()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetDevolucionesPorRango()</td>
+<td class="success">testGetDevolucionesPorRango()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetHistorialByCliente_ClienteNoExiste()</td>
+<td class="success">testGetHistorialByCliente_ClienteNoExiste()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetHistorialByCliente_OrdenadoDelMasRecienteAlMasAntiguo()</td>
+<td class="success">testGetHistorialByCliente_OrdenadoDelMasRecienteAlMasAntiguo()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamoById_FinalizadoNuncaEstaVencido()</td>
+<td class="success">testGetPrestamoById_FinalizadoNuncaEstaVencido()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamoById_NotFound()</td>
+<td class="success">testGetPrestamoById_NotFound()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamoById_VencidoCalculaDiasDeRetraso()</td>
+<td class="success">testGetPrestamoById_VencidoCalculaDiasDeRetraso()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamoById_Vigente()</td>
+<td class="success">testGetPrestamoById_Vigente()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosActivos_IncluyeVigentesYVencidos()</td>
+<td class="success">testGetPrestamosActivos_IncluyeVigentesYVencidos()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosByCliente_Activos()</td>
+<td class="success">testGetPrestamosByCliente_Activos()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosByCliente_ClienteNoExiste()</td>
+<td class="success">testGetPrestamosByCliente_ClienteNoExiste()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosByCliente_Finalizados()</td>
+<td class="success">testGetPrestamosByCliente_Finalizados()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosByCliente_SinFiltroDevuelveTodos()</td>
+<td class="success">testGetPrestamosByCliente_SinFiltroDevuelveTodos()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosByCliente_Vencidos()</td>
+<td class="success">testGetPrestamosByCliente_Vencidos()</td>
+<td class="success">0.011s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosPorRangoDeInicio()</td>
+<td class="success">testGetPrestamosPorRangoDeInicio()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetPrestamosVencidos_SoloLosQueSuperaronLaFechaLimite()</td>
+<td class="success">testGetPrestamosVencidos_SoloLosQueSuperaronLaFechaLimite()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_ATiempoEnLaMismaSede()</td>
+<td class="success">testRegistrarDevolucion_ATiempoEnLaMismaSede()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_ConRetrasoCalculaLosDias()</td>
+<td class="success">testRegistrarDevolucion_ConRetrasoCalculaLosDias()</td>
+<td class="success">0.177s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_EnLimiteDeLaFechaNoEsRetraso()</td>
+<td class="success">testRegistrarDevolucion_EnLimiteDeLaFechaNoEsRetraso()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_EnSedeDiferenteDejaElEjemplarEnEsaSede()</td>
+<td class="success">testRegistrarDevolucion_EnSedeDiferenteDejaElEjemplarEnEsaSede()</td>
+<td class="success">0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_PrestamoDesaparecioAlActualizar()</td>
+<td class="success">testRegistrarDevolucion_PrestamoDesaparecioAlActualizar()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_PrestamoNoExiste()</td>
+<td class="success">testRegistrarDevolucion_PrestamoNoExiste()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_PrestamoYaFinalizado()</td>
+<td class="success">testRegistrarDevolucion_PrestamoYaFinalizado()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_SedeDesactivada()</td>
+<td class="success">testRegistrarDevolucion_SedeDesactivada()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testRegistrarDevolucion_SedeNoExiste()</td>
+<td class="success">testRegistrarDevolucion_SedeNoExiste()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>15:08:35.623 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:35.629 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: true)
+15:08:35.778 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.798 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.807 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.816 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.870 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:35.871 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:35.880 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.891 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.891 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+15:08:35.905 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 99 en la sede ID: 3
+15:08:35.928 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.969 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.044 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.058 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.069 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.081 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 4
+15:08:36.118 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 4
+15:08:36.120 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:36.133 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.135 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:36.146 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 77
+15:08:36.181 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.185 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+15:08:36.208 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.221 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.234 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.236 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 10/10/2026, 3:08:38 p. m.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EjemplarServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">EjemplarServiceImpl.java</span></div><h1>EjemplarServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.EjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.EjemplarDTO;
+import com.taller.bibliotecas.businessLayer.dto.LibroDTO;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.service.EjemplarService;
+import com.taller.bibliotecas.businessLayer.service.LibroService;
+import com.taller.bibliotecas.businessLayer.service.MovimientoEjemplarService;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.persistenceLayer.dao.EjemplarDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
+import com.taller.bibliotecas.persistenceLayer.entity.TipoMovimiento;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L27">@Slf4j</span>
+public class EjemplarServiceImpl implements EjemplarService {
+
+    private final EjemplarDAO ejemplarDAO;
+    private final LibroService libroService;
+    private final SedeService sedeService;
+    private final MovimientoEjemplarService movimientoService;
+
+    @Override
+    public EjemplarDTO createEjemplar(EjemplarCreateDTO createDTO) {
+<span class="fc" id="L37">        log.info(&quot;Registrando ejemplar del libro ID: {}&quot;, createDTO.getLibroId());</span>
+
+<span class="fc" id="L39">        LibroDTO libro = libroService.getLibroById(createDTO.getLibroId());</span>
+<span class="fc" id="L40">        SedeDTO sede = sedeService.getSedeById(createDTO.getSedeId());</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(sede.getActiva())) {</span>
+<span class="fc" id="L42">            throw new SolicitudInvalidaException(&quot;No se pueden registrar ejemplares en una sede desactivada&quot;);</span>
+        }
+
+<span class="fc" id="L45">        String codigo = createDTO.getCodigo();</span>
+<span class="fc bfc" id="L46" title="All 4 branches covered.">        if (codigo == null || codigo.isBlank()) {</span>
+<span class="fc" id="L47">            codigo = generarCodigo(libro);</span>
+        } else {
+<span class="fc" id="L49">            codigo = codigo.trim();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (ejemplarDAO.existsByCodigo(codigo)) {</span>
+<span class="fc" id="L51">                throw new SolicitudInvalidaException(&quot;Ya existe un ejemplar con el codigo: &quot; + codigo);</span>
+            }
+        }
+<span class="fc" id="L54">        createDTO.setCodigo(codigo);</span>
+
+<span class="fc" id="L56">        EjemplarDTO creado = ejemplarDAO.save(createDTO);</span>
+
+<span class="fc" id="L58">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L59">                creado.getId(), TipoMovimiento.REGISTRO, null, createDTO.getSedeId(),</span>
+<span class="fc" id="L60">                &quot;Registro del ejemplar en la sede &quot; + sede.getNombre()));</span>
+
+<span class="fc" id="L62">        log.info(&quot;Ejemplar registrado con ID: {} y codigo: {}&quot;, creado.getId(), codigo);</span>
+<span class="fc" id="L63">        return creado;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EjemplarDTO getEjemplarById(Long id) {
+<span class="fc" id="L69">        return ejemplarDAO.findById(id)</span>
+<span class="fc" id="L70">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Ejemplar no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;EjemplarDTO&gt; getAllEjemplares() {
+<span class="fc" id="L76">        return ejemplarDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EjemplarDTO getEjemplarByCodigo(String codigo) {
+<span class="fc" id="L82">        return ejemplarDAO.findByCodigo(codigo)</span>
+<span class="fc" id="L83">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Ejemplar no encontrado con codigo: &quot; + codigo));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;EjemplarDTO&gt; getEjemplaresByLibro(Long libroId) {
+<span class="fc" id="L89">        libroService.getLibroById(libroId);</span>
+<span class="fc" id="L90">        return ejemplarDAO.findByLibroId(libroId);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;EjemplarDTO&gt; getEjemplaresBySede(Long sedeId) {
+<span class="fc" id="L96">        sedeService.getSedeById(sedeId);</span>
+<span class="fc" id="L97">        return ejemplarDAO.findBySedeActualId(sedeId);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long contarEjemplaresDisponibles(Long libroId, Long sedeId) {
+<span class="fc" id="L103">        return ejemplarDAO.countByLibroIdAndSedeActualIdAndEstado(libroId, sedeId, EstadoEjemplar.DISPONIBLE);</span>
+    }
+
+    @Override
+    public EjemplarDTO actualizarEstadoYUbicacion(Long ejemplarId, EstadoEjemplar estado, Long sedeActualId) {
+<span class="fc" id="L108">        return ejemplarDAO.actualizarEstadoYSede(ejemplarId, estado, sedeActualId)</span>
+<span class="fc" id="L109">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Ejemplar no encontrado con ID: &quot; + ejemplarId));</span>
+    }
+
+    /** Genera un codigo consecutivo por libro: ISBN (solo alfanumerico) + &quot;-&quot; + numero de 3 digitos. */
+    private String generarCodigo(LibroDTO libro) {
+<span class="fc" id="L114">        String base = libro.getIsbn().replaceAll(&quot;[^A-Za-z0-9]&quot;, &quot;&quot;);</span>
+<span class="fc" id="L115">        long consecutivo = ejemplarDAO.countByLibroId(libro.getId()) + 1;</span>
+<span class="fc" id="L116">        String candidato = String.format(&quot;%s-%03d&quot;, base, consecutivo);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        while (ejemplarDAO.existsByCodigo(candidato)) {</span>
+<span class="fc" id="L118">            consecutivo++;</span>
+<span class="fc" id="L119">            candidato = String.format(&quot;%s-%03d&quot;, base, consecutivo);</span>
+        }
+<span class="fc" id="L121">        return candidato;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

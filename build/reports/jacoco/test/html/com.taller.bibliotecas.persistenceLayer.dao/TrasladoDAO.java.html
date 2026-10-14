@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrasladoDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.dao</a> &gt; <span class="el_source">TrasladoDAO.java</span></div><h1>TrasladoDAO.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.dao;
+
+import com.taller.bibliotecas.businessLayer.dto.TrasladoCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.TrasladoDTO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoTraslado;
+import com.taller.bibliotecas.persistenceLayer.entity.TrasladoEntity;
+import com.taller.bibliotecas.persistenceLayer.mapper.TrasladoMapper;
+import com.taller.bibliotecas.persistenceLayer.repository.EjemplarRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.SedeRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.TrasladoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class TrasladoDAO {
+
+    private final TrasladoRepository trasladoRepository;
+    private final EjemplarRepository ejemplarRepository;
+    private final SedeRepository sedeRepository;
+    private final TrasladoMapper trasladoMapper;
+
+    public TrasladoDTO save(TrasladoCreateDTO createDTO, Long sedeOrigenId) {
+<span class="nc" id="L28">        TrasladoEntity entity = new TrasladoEntity();</span>
+<span class="nc" id="L29">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
+<span class="nc" id="L30">        entity.setSedeOrigenEntity(sedeRepository.getReferenceById(sedeOrigenId));</span>
+<span class="nc" id="L31">        entity.setSedeDestinoEntity(sedeRepository.getReferenceById(createDTO.getSedeDestinoId()));</span>
+<span class="nc" id="L32">        entity.setObservaciones(createDTO.getObservaciones());</span>
+<span class="nc" id="L33">        entity.setEstado(EstadoTraslado.EN_TRANSITO);</span>
+<span class="nc" id="L34">        entity.setFechaSolicitud(LocalDateTime.now());</span>
+<span class="nc" id="L35">        return trasladoMapper.toDTO(trasladoRepository.save(entity));</span>
+    }
+
+    public Optional&lt;TrasladoDTO&gt; findById(Long id) {
+<span class="nc" id="L39">        return trasladoRepository.findById(id).map(trasladoMapper::toDTO);</span>
+    }
+
+    public List&lt;TrasladoDTO&gt; findAll() {
+<span class="nc" id="L43">        return trasladoMapper.toDTOList(trasladoRepository.findAll());</span>
+    }
+
+    /** Traslados donde la sede es origen o destino */
+    public List&lt;TrasladoDTO&gt; findBySedeId(Long sedeId) {
+<span class="nc" id="L48">        return trasladoMapper.toDTOList(</span>
+<span class="nc" id="L49">                trasladoRepository.findBySedeOrigenEntityIdOrSedeDestinoEntityId(sedeId, sedeId));</span>
+    }
+
+    public List&lt;TrasladoDTO&gt; findByFechaSolicitudBetween(LocalDateTime desde, LocalDateTime hasta) {
+<span class="nc" id="L53">        return trasladoMapper.toDTOList(trasladoRepository.findByFechaSolicitudBetween(desde, hasta));</span>
+    }
+
+    public Optional&lt;TrasladoDTO&gt; actualizarEstado(Long id, EstadoTraslado estado, LocalDateTime fechaRecepcion) {
+<span class="nc" id="L57">        return trasladoRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L58">            existing.setEstado(estado);</span>
+<span class="nc" id="L59">            existing.setFechaRecepcion(fechaRecepcion);</span>
+<span class="nc" id="L60">            return trasladoMapper.toDTO(trasladoRepository.save(existing));</span>
+        });
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

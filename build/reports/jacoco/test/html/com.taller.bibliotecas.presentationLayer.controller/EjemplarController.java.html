@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EjemplarController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.presentationLayer.controller</a> &gt; <span class="el_source">EjemplarController.java</span></div><h1>EjemplarController.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.presentationLayer.controller;
+
+import com.taller.bibliotecas.businessLayer.dto.EjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.EjemplarDTO;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarDTO;
+import com.taller.bibliotecas.businessLayer.service.EjemplarService;
+import com.taller.bibliotecas.businessLayer.service.MovimientoEjemplarService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/v1/ejemplares&quot;)
+@RequiredArgsConstructor
+<span class="nc" id="L25">@Slf4j</span>
+@Tag(name = &quot;Ejemplares&quot;, description = &quot;RF-04, RF-08 y RF-20: ejemplares fisicos, ubicacion, estado e historial&quot;)
+public class EjemplarController {
+
+    private final EjemplarService ejemplarService;
+    private final MovimientoEjemplarService movimientoService;
+
+    @PostMapping
+    @Operation(summary = &quot;RF-04: Registrar ejemplar&quot;, description = &quot;Si no se envia codigo, el sistema genera uno unico&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Ejemplar registrado&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Codigo repetido o sede desactivada&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Libro o sede inexistente&quot;)
+    })
+    public ResponseEntity&lt;EjemplarDTO&gt; crear(@Valid @RequestBody EjemplarCreateDTO createDTO) {
+<span class="nc" id="L40">        log.info(&quot;POST /api/v1/ejemplares - libroId={}&quot;, createDTO.getLibroId());</span>
+<span class="nc" id="L41">        return ResponseEntity.status(HttpStatus.CREATED).body(ejemplarService.createEjemplar(createDTO));</span>
+    }
+
+    @GetMapping
+    @Operation(summary = &quot;RF-08: Listar ejemplares con su sede actual y estado&quot;)
+    public ResponseEntity&lt;List&lt;EjemplarDTO&gt;&gt; listar() {
+<span class="nc" id="L47">        return ResponseEntity.ok(ejemplarService.getAllEjemplares());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Obtener ejemplar por ID&quot;)
+    public ResponseEntity&lt;EjemplarDTO&gt; obtenerPorId(
+            @Parameter(description = &quot;ID del ejemplar&quot;, example = &quot;1&quot;) @PathVariable Long id) {
+<span class="nc" id="L54">        return ResponseEntity.ok(ejemplarService.getEjemplarById(id));</span>
+    }
+
+    @GetMapping(&quot;/codigo/{codigo}&quot;)
+    @Operation(summary = &quot;Obtener ejemplar por codigo&quot;)
+    public ResponseEntity&lt;EjemplarDTO&gt; obtenerPorCodigo(
+            @Parameter(description = &quot;Codigo del ejemplar&quot;) @PathVariable String codigo) {
+<span class="nc" id="L61">        return ResponseEntity.ok(ejemplarService.getEjemplarByCodigo(codigo));</span>
+    }
+
+    @GetMapping(&quot;/libro/{libroId}&quot;)
+    @Operation(summary = &quot;RF-08: Ejemplares de un libro en todas las sedes&quot;)
+    public ResponseEntity&lt;List&lt;EjemplarDTO&gt;&gt; listarPorLibro(
+            @Parameter(description = &quot;ID del libro&quot;, example = &quot;1&quot;) @PathVariable Long libroId) {
+<span class="nc" id="L68">        return ResponseEntity.ok(ejemplarService.getEjemplaresByLibro(libroId));</span>
+    }
+
+    @GetMapping(&quot;/sede/{sedeId}&quot;)
+    @Operation(summary = &quot;RF-08: Ejemplares que estan actualmente en una sede&quot;)
+    public ResponseEntity&lt;List&lt;EjemplarDTO&gt;&gt; listarPorSede(
+            @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long sedeId) {
+<span class="nc" id="L75">        return ResponseEntity.ok(ejemplarService.getEjemplaresBySede(sedeId));</span>
+    }
+
+    @GetMapping(&quot;/{id}/historial&quot;)
+    @Operation(summary = &quot;RF-20: Historial de movimientos y ubicaciones del ejemplar&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Historial del ejemplar&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Ejemplar no encontrado&quot;)
+    })
+    public ResponseEntity&lt;List&lt;MovimientoEjemplarDTO&gt;&gt; historial(
+            @Parameter(description = &quot;ID del ejemplar&quot;, example = &quot;1&quot;) @PathVariable Long id) {
+<span class="nc" id="L86">        return ResponseEntity.ok(movimientoService.getHistorialByEjemplar(id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

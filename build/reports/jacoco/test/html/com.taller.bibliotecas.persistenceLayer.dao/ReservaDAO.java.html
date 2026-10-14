@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservaDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.dao</a> &gt; <span class="el_source">ReservaDAO.java</span></div><h1>ReservaDAO.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.dao;
+
+import com.taller.bibliotecas.businessLayer.dto.ConteoLibroDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReservaCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReservaDTO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoReserva;
+import com.taller.bibliotecas.persistenceLayer.entity.ReservaEntity;
+import com.taller.bibliotecas.persistenceLayer.mapper.ReservaMapper;
+import com.taller.bibliotecas.persistenceLayer.repository.ClienteRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.LibroRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.ReservaRepository;
+import com.taller.bibliotecas.persistenceLayer.repository.SedeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class ReservaDAO {
+
+    private final ReservaRepository reservaRepository;
+    private final ClienteRepository clienteRepository;
+    private final LibroRepository libroRepository;
+    private final SedeRepository sedeRepository;
+    private final ReservaMapper reservaMapper;
+
+    public ReservaDTO save(ReservaCreateDTO createDTO) {
+<span class="nc" id="L31">        ReservaEntity entity = new ReservaEntity();</span>
+<span class="nc" id="L32">        entity.setClienteEntity(clienteRepository.getReferenceById(createDTO.getClienteId()));</span>
+<span class="nc" id="L33">        entity.setLibroEntity(libroRepository.getReferenceById(createDTO.getLibroId()));</span>
+<span class="nc" id="L34">        entity.setSedeEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
+<span class="nc" id="L35">        entity.setEstado(EstadoReserva.PENDIENTE);</span>
+<span class="nc" id="L36">        entity.setFechaSolicitud(LocalDateTime.now());</span>
+<span class="nc" id="L37">        return reservaMapper.toDTO(reservaRepository.save(entity));</span>
+    }
+
+    public Optional&lt;ReservaDTO&gt; findById(Long id) {
+<span class="nc" id="L41">        return reservaRepository.findById(id).map(reservaMapper::toDTO);</span>
+    }
+
+    public List&lt;ReservaDTO&gt; findAll() {
+<span class="nc" id="L45">        return reservaMapper.toDTOList(reservaRepository.findAll());</span>
+    }
+
+    public List&lt;ReservaDTO&gt; findByClienteId(Long clienteId) {
+<span class="nc" id="L49">        return reservaMapper.toDTOList(reservaRepository.findByClienteEntityId(clienteId));</span>
+    }
+
+    public List&lt;ReservaDTO&gt; findBySedeId(Long sedeId) {
+<span class="nc" id="L53">        return reservaMapper.toDTOList(reservaRepository.findBySedeEntityId(sedeId));</span>
+    }
+
+    public List&lt;ReservaDTO&gt; findBySedeIdAndEstado(Long sedeId, EstadoReserva estado) {
+<span class="nc" id="L57">        return reservaMapper.toDTOList(reservaRepository.findBySedeEntityIdAndEstado(sedeId, estado));</span>
+    }
+
+    public boolean existsByClienteIdAndLibroIdAndSedeIdAndEstado(Long clienteId, Long libroId, Long sedeId,
+                                                                 EstadoReserva estado) {
+<span class="nc" id="L62">        return reservaRepository.existsByClienteEntityIdAndLibroEntityIdAndSedeEntityIdAndEstado(</span>
+                clienteId, libroId, sedeId, estado);
+    }
+
+    public Optional&lt;ReservaDTO&gt; actualizarEstado(Long id, EstadoReserva estado, String motivoRechazo,
+                                                 LocalDateTime fechaRespuesta) {
+<span class="nc" id="L68">        return reservaRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L69">            existing.setEstado(estado);</span>
+<span class="nc" id="L70">            existing.setMotivoRechazo(motivoRechazo);</span>
+<span class="nc" id="L71">            existing.setFechaRespuesta(fechaRespuesta);</span>
+<span class="nc" id="L72">            return reservaMapper.toDTO(reservaRepository.save(existing));</span>
+        });
+    }
+
+    public List&lt;ConteoLibroDTO&gt; contarReservasPorLibro() {
+<span class="nc" id="L77">        return reservaRepository.contarReservasPorLibro();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioAdminController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.presentationLayer.controller</a> &gt; <span class="el_source">UsuarioAdminController.java</span></div><h1>UsuarioAdminController.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.presentationLayer.controller;
+
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminDTO;
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminUpdateDTO;
+import com.taller.bibliotecas.businessLayer.service.UsuarioAdminService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/v1/usuarios-admin&quot;)
+@RequiredArgsConstructor
+<span class="nc" id="L24">@Slf4j</span>
+@Tag(name = &quot;Usuarios administrativos&quot;, description = &quot;RF-23: usuarios administrativos y asignacion de roles&quot;)
+public class UsuarioAdminController {
+
+    private final UsuarioAdminService usuarioAdminService;
+
+    @PostMapping
+    @Operation(summary = &quot;RF-23: Registrar usuario administrativo&quot;,
+            description = &quot;Todos los roles, salvo ADMINISTRADOR_GENERAL, deben indicar la sede a la que pertenecen&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Usuario registrado&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Datos invalidos, email repetido o falta la sede&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;La sede indicada no existe&quot;)
+    })
+    public ResponseEntity&lt;UsuarioAdminDTO&gt; crear(@Valid @RequestBody UsuarioAdminCreateDTO createDTO) {
+<span class="nc" id="L39">        log.info(&quot;POST /api/v1/usuarios-admin - {}&quot;, createDTO.getEmail());</span>
+<span class="nc" id="L40">        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioAdminService.createUsuario(createDTO));</span>
+    }
+
+    @GetMapping
+    @Operation(summary = &quot;Listar usuarios administrativos&quot;)
+    public ResponseEntity&lt;List&lt;UsuarioAdminDTO&gt;&gt; listar() {
+<span class="nc" id="L46">        return ResponseEntity.ok(usuarioAdminService.getAllUsuarios());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Obtener usuario administrativo por ID&quot;)
+    public ResponseEntity&lt;UsuarioAdminDTO&gt; obtenerPorId(
+            @Parameter(description = &quot;ID del usuario&quot;, example = &quot;1&quot;) @PathVariable Long id) {
+<span class="nc" id="L53">        return ResponseEntity.ok(usuarioAdminService.getUsuarioById(id));</span>
+    }
+
+    @GetMapping(&quot;/sede/{sedeId}&quot;)
+    @Operation(summary = &quot;Listar usuarios administrativos de una sede&quot;)
+    public ResponseEntity&lt;List&lt;UsuarioAdminDTO&gt;&gt; listarPorSede(
+            @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long sedeId) {
+<span class="nc" id="L60">        return ResponseEntity.ok(usuarioAdminService.getUsuariosBySede(sedeId));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;RF-23: Actualizar usuario, cambiar rol/sede o activarlo/desactivarlo&quot;)
+    public ResponseEntity&lt;UsuarioAdminDTO&gt; actualizar(
+            @Parameter(description = &quot;ID del usuario&quot;, example = &quot;1&quot;) @PathVariable Long id,
+            @Valid @RequestBody UsuarioAdminUpdateDTO updateDTO) {
+<span class="nc" id="L68">        return ResponseEntity.ok(usuarioAdminService.updateUsuario(id, updateDTO));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

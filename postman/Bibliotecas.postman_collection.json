@@ -1,0 +1,2556 @@
+{
+  "info": {
+    "name": "Bibliotecas - Sistema de gestion de multiples bibliotecas",
+    "description": "Flujo completo de los requerimientos funcionales. Ejecutar en orden (Collection Runner) con el perfil test: gradlew bootRun --args='--spring.profiles.active=test'. Los IDs se guardan automaticamente en variables de coleccion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Sedes (RF-01, RF-02)",
+      "item": [
+        {
+          "name": "Crear sede Central",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Central\",\n  \"direccion\": \"Carrera 14 # 20-30\",\n  \"ciudad\": \"Armenia\",\n  \"telefono\": \"6067400000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"sedeCentralId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear sede Norte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Norte\",\n  \"direccion\": \"Calle 50 # 14-22\",\n  \"ciudad\": \"Armenia\",\n  \"telefono\": \"6067411111\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"sedeNorteId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear sede con nombre repetido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Central\",\n  \"direccion\": \"Otra direccion\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar sedes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar sedes activas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes/activas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes",
+                "activas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar sede por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes/{{sedeCentralId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes",
+                "{{sedeCentralId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modificar sede",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes/{{sedeCentralId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes",
+                "{{sedeCentralId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefono\": \"6067422222\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Categorias (RF-05)",
+      "item": [
+        {
+          "name": "Crear categoria Literatura",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Literatura\",\n  \"descripcion\": \"Obras literarias\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"categoriaId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear subcategoria Novela",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Novela\",\n  \"categoriaPadreId\": \"{{categoriaId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"subcategoriaId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar categorias raiz",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categorias/raiz",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "categorias",
+                "raiz"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar subcategorias de Literatura",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categorias/{{categoriaId}}/subcategorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "categorias",
+                "{{categoriaId}}",
+                "subcategorias"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Libros (RF-03, RF-06, RF-07)",
+      "item": [
+        {
+          "name": "Registrar libro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Cien anios de soledad\",\n  \"autor\": \"Gabriel Garcia Marquez\",\n  \"isbn\": \"978-0307474728\",\n  \"editorial\": \"Vintage Espanol\",\n  \"anioPublicacion\": 1967,\n  \"categoriaId\": \"{{subcategoriaId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"libroId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar libro con ISBN repetido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Otro\",\n  \"autor\": \"Otro\",\n  \"isbn\": \"978-0307474728\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por titulo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros/buscar?titulo=soledad",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "titulo",
+                  "value": "soledad"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por categoria (incluye subcategorias)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros/buscar?categoriaId={{categoriaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "categoriaId",
+                  "value": "{{categoriaId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reclasificar libro",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros/{{libroId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros",
+                "{{libroId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoriaId\": \"{{subcategoriaId}}\",\n  \"editorial\": \"Alfaguara\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Ejemplares (RF-04, RF-08, RF-20)",
+      "item": [
+        {
+          "name": "Registrar ejemplar 1 en Central (codigo generado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"ejemplar1Id\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar ejemplar 2 en Central (codigo propio)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"CAS-0002\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"ejemplar2Id\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar ejemplar con codigo repetido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"CAS-0002\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Catalogo general (libros con ejemplares disponibles)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros/catalogo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros",
+                "catalogo"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ejemplares de un libro (sede y estado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares/libro/{{libroId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares",
+                "libro",
+                "{{libroId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ejemplares de una sede",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares/sede/{{sedeCentralId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares",
+                "sede",
+                "{{sedeCentralId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Historial del ejemplar 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares/{{ejemplar1Id}}/historial",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares",
+                "{{ejemplar1Id}}",
+                "historial"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 - Clientes (RF-09, RF-10)",
+      "item": [
+        {
+          "name": "Registrar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Perez\",\n  \"documento\": \"1094123456\",\n  \"email\": \"juan.perez@email.com\",\n  \"telefono\": \"3001234567\",\n  \"direccion\": \"Calle 10 # 20-30\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"clienteId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar cliente con documento repetido (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Otro\",\n  \"documento\": \"1094123456\",\n  \"email\": \"otro@email.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes",
+                "{{clienteId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar cliente por documento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes/documento/1094123456",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes",
+                "documento",
+                "1094123456"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes",
+                "{{clienteId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefono\": \"3109998888\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 - Usuarios administrativos (RF-23)",
+      "item": [
+        {
+          "name": "Crear administrador general",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Laura Gomez\",\n  \"email\": \"laura@biblioteca.com\",\n  \"rol\": \"ADMINISTRADOR_GENERAL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"usuarioGeneralId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear administrador de sede Norte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Maria Lopez\",\n  \"email\": \"maria@biblioteca.com\",\n  \"rol\": \"ADMINISTRADOR_SEDE\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"usuarioSedeId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear bibliotecario sin sede (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pedro\",\n  \"email\": \"pedro@biblioteca.com\",\n  \"rol\": \"BIBLIOTECARIO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cambiar rol de un usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin/{{usuarioSedeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin",
+                "{{usuarioSedeId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rol\": \"BIBLIOTECARIO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar usuarios de la sede Norte",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin/sede/{{sedeNorteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin",
+                "sede",
+                "{{sedeNorteId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 - Prestamos (RF-11 a RF-13)",
+      "item": [
+        {
+          "name": "Registrar prestamo del ejemplar 1 (14 dias por defecto)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ejemplarId\": \"{{ejemplar1Id}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"prestamoId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prestar de nuevo el mismo ejemplar (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ejemplarId\": \"{{ejemplar1Id}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prestamos activos del cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/cliente/{{clienteId}}?filtro=ACTIVOS",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "cliente",
+                "{{clienteId}}"
+              ],
+              "query": [
+                {
+                  "key": "filtro",
+                  "value": "ACTIVOS"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prestamos vencidos del cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/cliente/{{clienteId}}?filtro=VENCIDOS",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "cliente",
+                "{{clienteId}}"
+              ],
+              "query": [
+                {
+                  "key": "filtro",
+                  "value": "VENCIDOS"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 - Reservas y solicitudes (RF-21, RF-22)",
+      "item": [
+        {
+          "name": "Reservar libro en Norte (no hay ejemplares alli)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"reservaId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reservar de nuevo lo mismo (400, duplicada)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reservar en Central (400, hay ejemplares disponibles)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeCentralId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin de Norte: solicitudes pendientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/sede/{{sedeNorteId}}?estado=PENDIENTE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "sede",
+                "{{sedeNorteId}}"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "PENDIENTE"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rechazar sin motivo (400)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/{{reservaId}}/rechazar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "{{reservaId}}",
+                "rechazar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rechazar con motivo",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/{{reservaId}}/rechazar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "{{reservaId}}",
+                "rechazar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"No hay ejemplares disponibles para esta sede\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nueva reserva en Norte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"libroId\": \"{{libroId}}\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"reserva2Id\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar reserva",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/{{reserva2Id}}/aprobar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "{{reserva2Id}}",
+                "aprobar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar reserva",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/{{reserva2Id}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "{{reserva2Id}}",
+                "cancelar"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reservas del cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas/cliente/{{clienteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas",
+                "cliente",
+                "{{clienteId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 - Traslados (RF-18, RF-19)",
+      "item": [
+        {
+          "name": "Trasladar ejemplar 2 de Central a Norte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ejemplarId\": \"{{ejemplar2Id}}\",\n  \"sedeDestinoId\": \"{{sedeNorteId}}\",\n  \"observaciones\": \"Solicitado por la sede Norte\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"trasladoId\", pm.response.json().id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Trasladar un ejemplar que ya esta en traslado (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ejemplarId\": \"{{ejemplar2Id}}\",\n  \"sedeDestinoId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Traslados en transito hacia/desde Norte",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados/sede/{{sedeNorteId}}?estado=EN_TRANSITO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados",
+                "sede",
+                "{{sedeNorteId}}"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "EN_TRANSITO"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Norte confirma la recepcion",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados/{{trasladoId}}/recepcion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados",
+                "{{trasladoId}}",
+                "recepcion"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirmar recepcion otra vez (400)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados/{{trasladoId}}/recepcion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados",
+                "{{trasladoId}}",
+                "recepcion"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Historial del ejemplar 2 (registro, salida y recepcion)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares/{{ejemplar2Id}}/historial",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares",
+                "{{ejemplar2Id}}",
+                "historial"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "10 - Devoluciones (RF-14 a RF-17, RF-25)",
+      "item": [
+        {
+          "name": "Devolver el prestamo en la sede Norte (otra sede)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/{{prestamoId}}/devolucion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "{{prestamoId}}",
+                "devolucion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sedeDevolucionId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Devolver de nuevo (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/{{prestamoId}}/devolucion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "{{prestamoId}}",
+                "devolucion"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sedeDevolucionId\": \"{{sedeNorteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Historial de prestamos del cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/cliente/{{clienteId}}/historial",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "cliente",
+                "{{clienteId}}",
+                "historial"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prestamos finalizados del cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos/cliente/{{clienteId}}?filtro=FINALIZADOS",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos",
+                "cliente",
+                "{{clienteId}}"
+              ],
+              "query": [
+                {
+                  "key": "filtro",
+                  "value": "FINALIZADOS"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Historial del ejemplar 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares/{{ejemplar1Id}}/historial",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares",
+                "{{ejemplar1Id}}",
+                "historial"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "11 - Reportes (RF-24)",
+      "item": [
+        {
+          "name": "Reporte de prestamos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/prestamos?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "prestamos"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reporte de devoluciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/devoluciones?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "devoluciones"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reporte de libros y ejemplares",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/libros",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "libros"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reporte de clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "clientes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reporte de movimientos entre sedes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/movimientos-sedes?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "movimientos-sedes"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Libros mas solicitados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/libros-mas-solicitados?limite=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "libros-mas-solicitados"
+              ],
+              "query": [
+                {
+                  "key": "limite",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reporte con rango invalido (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reportes/prestamos?desde=2026-12-31&hasta=2026-01-01",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reportes",
+                "prestamos"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-12-31"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-01-01"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090/bibliotecas"
+    }
+  ]
+}

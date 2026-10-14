@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClienteEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.entity</a> &gt; <span class="el_source">ClienteEntity.java</span></div><h1>ClienteEntity.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;clientes&quot;)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ClienteEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 150)
+    private String nombre;
+
+    @Column(nullable = false, unique = true, length = 30)
+    private String documento;
+
+    @Column(nullable = false, unique = true, length = 150)
+    private String email;
+
+    @Column(length = 20)
+    private String telefono;
+
+    @Column(length = 200)
+    private String direccion;
+
+    @Column(name = &quot;created_at&quot;)
+    private LocalDateTime createdAt;
+
+    @Column(name = &quot;updated_at&quot;)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L44">        this.createdAt = LocalDateTime.now();</span>
+<span class="nc" id="L45">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L46">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L50">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L51">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

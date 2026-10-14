@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrestamoServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">PrestamoServiceImpl.java</span></div><h1>PrestamoServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.ClienteDTO;
+import com.taller.bibliotecas.businessLayer.dto.DevolucionDTO;
+import com.taller.bibliotecas.businessLayer.dto.EjemplarDTO;
+import com.taller.bibliotecas.businessLayer.dto.FiltroPrestamo;
+import com.taller.bibliotecas.businessLayer.dto.MovimientoEjemplarCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.PrestamoCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.PrestamoDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.service.ClienteService;
+import com.taller.bibliotecas.businessLayer.service.EjemplarService;
+import com.taller.bibliotecas.businessLayer.service.MovimientoEjemplarService;
+import com.taller.bibliotecas.businessLayer.service.PrestamoService;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.persistenceLayer.dao.PrestamoDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoPrestamo;
+import com.taller.bibliotecas.persistenceLayer.entity.TipoMovimiento;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L36">@Slf4j</span>
+public class PrestamoServiceImpl implements PrestamoService {
+
+    /** Plazo por defecto de un prestamo. Pendiente de definir con el negocio (documento, seccion 3). */
+    static final int DIAS_PRESTAMO_POR_DEFECTO = 14;
+    static final int DIAS_PRESTAMO_MAXIMO = 30;
+
+    private final PrestamoDAO prestamoDAO;
+    private final ClienteService clienteService;
+    private final SedeService sedeService;
+    private final EjemplarService ejemplarService;
+    private final MovimientoEjemplarService movimientoService;
+
+    @Override
+    public PrestamoDTO createPrestamo(PrestamoCreateDTO createDTO) {
+<span class="fc" id="L51">        log.info(&quot;Registrando prestamo del ejemplar ID: {} al cliente ID: {}&quot;,</span>
+<span class="fc" id="L52">                createDTO.getEjemplarId(), createDTO.getClienteId());</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        int dias = createDTO.getDiasPrestamo() == null ? DIAS_PRESTAMO_POR_DEFECTO : createDTO.getDiasPrestamo();</span>
+<span class="fc bfc" id="L55" title="All 4 branches covered.">        if (dias &lt; 1 || dias &gt; DIAS_PRESTAMO_MAXIMO) {</span>
+<span class="fc" id="L56">            throw new SolicitudInvalidaException(</span>
+                    &quot;Los dias de prestamo deben estar entre 1 y &quot; + DIAS_PRESTAMO_MAXIMO);
+        }
+
+<span class="fc" id="L60">        ClienteDTO cliente = clienteService.getClienteById(createDTO.getClienteId());</span>
+<span class="fc" id="L61">        SedeDTO sede = sedeService.getSedeById(createDTO.getSedeId());</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(sede.getActiva())) {</span>
+<span class="fc" id="L63">            throw new SolicitudInvalidaException(&quot;No se pueden registrar prestamos en una sede desactivada&quot;);</span>
+        }
+
+<span class="fc" id="L66">        EjemplarDTO ejemplar = ejemplarService.getEjemplarById(createDTO.getEjemplarId());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (ejemplar.getEstado() != EstadoEjemplar.DISPONIBLE) {</span>
+<span class="fc" id="L68">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L69">                    &quot;El ejemplar no esta disponible para prestamo. Estado actual: &quot; + ejemplar.getEstado());</span>
+        }
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (!Objects.equals(ejemplar.getSedeActualId(), createDTO.getSedeId())) {</span>
+<span class="fc" id="L72">            throw new SolicitudInvalidaException(</span>
+<span class="fc" id="L73">                    &quot;El ejemplar se encuentra en la sede &quot; + ejemplar.getSedeActualNombre()</span>
+<span class="fc" id="L74">                            + &quot; y no puede prestarse desde la sede &quot; + sede.getNombre());</span>
+        }
+
+<span class="fc" id="L77">        LocalDate fechaInicio = LocalDate.now();</span>
+<span class="fc" id="L78">        LocalDate fechaLimite = fechaInicio.plusDays(dias);</span>
+
+<span class="fc" id="L80">        PrestamoDTO creado = prestamoDAO.save(createDTO, fechaInicio, fechaLimite);</span>
+
+<span class="fc" id="L82">        ejemplarService.actualizarEstadoYUbicacion(createDTO.getEjemplarId(), EstadoEjemplar.PRESTADO, null);</span>
+<span class="fc" id="L83">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L84">                createDTO.getEjemplarId(), TipoMovimiento.PRESTAMO, createDTO.getSedeId(), null,</span>
+<span class="fc" id="L85">                &quot;Prestado al cliente &quot; + cliente.getNombre() + &quot;. Fecha limite: &quot; + fechaLimite));</span>
+
+<span class="fc" id="L87">        log.info(&quot;Prestamo registrado con ID: {}&quot;, creado.getId());</span>
+<span class="fc" id="L88">        return enriquecer(creado);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PrestamoDTO getPrestamoById(Long id) {
+<span class="fc" id="L94">        return prestamoDAO.findById(id)</span>
+<span class="fc" id="L95">                .map(this::enriquecer)</span>
+<span class="fc" id="L96">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Prestamo no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getAllPrestamos() {
+<span class="fc" id="L102">        return prestamoDAO.findAll().stream().map(this::enriquecer).toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getPrestamosByCliente(Long clienteId, FiltroPrestamo filtro) {
+<span class="fc" id="L108">        clienteService.getClienteById(clienteId);</span>
+<span class="fc" id="L109">        List&lt;PrestamoDTO&gt; prestamos = prestamoDAO.findByClienteId(clienteId).stream().map(this::enriquecer).toList();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (filtro == null) {</span>
+<span class="fc" id="L111">            return prestamos;</span>
+        }
+<span class="fc" id="L113">        return prestamos.stream()</span>
+<span class="fc bfc" id="L114" title="All 3 branches covered.">                .filter(p -&gt; switch (filtro) {</span>
+<span class="fc bfc" id="L115" title="All 4 branches covered.">                    case ACTIVOS -&gt; p.getEstado() == EstadoPrestamo.ACTIVO &amp;&amp; !Boolean.TRUE.equals(p.getVencido());</span>
+<span class="fc" id="L116">                    case VENCIDOS -&gt; Boolean.TRUE.equals(p.getVencido());</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">                    case FINALIZADOS -&gt; p.getEstado() == EstadoPrestamo.FINALIZADO;</span>
+                })
+<span class="fc" id="L119">                .toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getHistorialByCliente(Long clienteId) {
+<span class="fc" id="L125">        clienteService.getClienteById(clienteId);</span>
+<span class="fc" id="L126">        return prestamoDAO.findByClienteId(clienteId).stream()</span>
+<span class="fc" id="L127">                .map(this::enriquecer)</span>
+<span class="fc" id="L128">                .sorted(Comparator.comparing(PrestamoDTO::getFechaInicio, Comparator.nullsLast(Comparator.reverseOrder())))</span>
+<span class="fc" id="L129">                .toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getPrestamosActivos() {
+<span class="fc" id="L135">        return prestamoDAO.findByEstado(EstadoPrestamo.ACTIVO).stream().map(this::enriquecer).toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getPrestamosVencidos() {
+<span class="fc" id="L141">        return getPrestamosActivos().stream().filter(p -&gt; Boolean.TRUE.equals(p.getVencido())).toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getPrestamosPorRangoDeInicio(LocalDate desde, LocalDate hasta) {
+<span class="fc" id="L147">        return prestamoDAO.findByFechaInicioBetween(desde, hasta).stream().map(this::enriquecer).toList();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoDTO&gt; getDevolucionesPorRango(LocalDate desde, LocalDate hasta) {
+<span class="fc" id="L153">        return prestamoDAO.findByFechaDevolucionBetween(desde, hasta).stream().map(this::enriquecer).toList();</span>
+    }
+
+    @Override
+    public PrestamoDTO registrarDevolucion(Long prestamoId, DevolucionDTO devolucionDTO) {
+<span class="fc" id="L158">        log.info(&quot;Registrando devolucion del prestamo ID: {} en la sede ID: {}&quot;,</span>
+<span class="fc" id="L159">                prestamoId, devolucionDTO.getSedeDevolucionId());</span>
+
+<span class="fc" id="L161">        PrestamoDTO prestamo = prestamoDAO.findById(prestamoId)</span>
+<span class="fc" id="L162">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Prestamo no encontrado con ID: &quot; + prestamoId));</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (prestamo.getEstado() == EstadoPrestamo.FINALIZADO) {</span>
+<span class="fc" id="L164">            throw new SolicitudInvalidaException(&quot;El prestamo ya fue devuelto anteriormente&quot;);</span>
+        }
+
+<span class="fc" id="L167">        SedeDTO sedeDevolucion = sedeService.getSedeById(devolucionDTO.getSedeDevolucionId());</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(sedeDevolucion.getActiva())) {</span>
+<span class="fc" id="L169">            throw new SolicitudInvalidaException(&quot;No se pueden recibir devoluciones en una sede desactivada&quot;);</span>
+        }
+
+        // RF-15: determinar si se devolvio despues de la fecha limite
+<span class="fc" id="L173">        LocalDate hoy = LocalDate.now();</span>
+<span class="fc" id="L174">        boolean conRetraso = hoy.isAfter(prestamo.getFechaLimite());</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        int diasRetraso = conRetraso ? (int) ChronoUnit.DAYS.between(prestamo.getFechaLimite(), hoy) : 0;</span>
+
+        // RF-16 / RF-17: se guarda la sede donde se devolvio (puede ser distinta a la del prestamo)
+<span class="fc" id="L178">        PrestamoDTO finalizado = prestamoDAO</span>
+<span class="fc" id="L179">                .registrarDevolucion(prestamoId, devolucionDTO.getSedeDevolucionId(), hoy, conRetraso, diasRetraso)</span>
+<span class="fc" id="L180">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Prestamo no encontrado con ID: &quot; + prestamoId));</span>
+
+        // El ejemplar queda disponible en la sede donde fue devuelto
+<span class="fc" id="L183">        ejemplarService.actualizarEstadoYUbicacion(</span>
+<span class="fc" id="L184">                prestamo.getEjemplarId(), EstadoEjemplar.DISPONIBLE, devolucionDTO.getSedeDevolucionId());</span>
+<span class="fc" id="L185">        movimientoService.registrarMovimiento(new MovimientoEjemplarCreateDTO(</span>
+<span class="fc" id="L186">                prestamo.getEjemplarId(), TipoMovimiento.DEVOLUCION,</span>
+<span class="fc" id="L187">                prestamo.getSedePrestamoId(), devolucionDTO.getSedeDevolucionId(),</span>
+<span class="fc" id="L188">                &quot;Devuelto en la sede &quot; + sedeDevolucion.getNombre()</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                        + (conRetraso ? &quot; con &quot; + diasRetraso + &quot; dia(s) de retraso&quot; : &quot; a tiempo&quot;)));</span>
+
+<span class="fc" id="L191">        log.info(&quot;Devolucion registrada para el prestamo ID: {} (retraso: {})&quot;, prestamoId, conRetraso);</span>
+<span class="fc" id="L192">        return enriquecer(finalizado);</span>
+    }
+
+    /**
+     * Completa los campos calculados: un prestamo ACTIVO esta vencido si hoy es posterior a su fecha limite,
+     * y en ese caso se informan los dias de retraso acumulados hasta hoy.
+     */
+    private PrestamoDTO enriquecer(PrestamoDTO prestamo) {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        boolean activo = prestamo.getEstado() == EstadoPrestamo.ACTIVO;</span>
+<span class="fc" id="L201">        LocalDate hoy = LocalDate.now();</span>
+<span class="pc bpc" id="L202" title="1 of 6 branches missed.">        boolean vencido = activo &amp;&amp; prestamo.getFechaLimite() != null &amp;&amp; hoy.isAfter(prestamo.getFechaLimite());</span>
+<span class="fc" id="L203">        prestamo.setVencido(vencido);</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (activo) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">            prestamo.setDiasRetraso(vencido ? (int) ChronoUnit.DAYS.between(prestamo.getFechaLimite(), hoy) : 0);</span>
+        }
+<span class="fc" id="L207">        return prestamo;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

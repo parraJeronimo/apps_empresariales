@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OpenApiConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.config</a> &gt; <span class="el_source">OpenApiConfig.java</span></div><h1>OpenApiConfig.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.config;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Configuracion de la documentacion OpenAPI / Swagger.
+ * Visible en /bibliotecas/swagger-ui.html y /bibliotecas/api-docs
+ * (segun server.servlet.context-path definido en application.properties)
+ */
+@Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = &quot;Sistema de Gestion de Multiples Bibliotecas API&quot;,
+                version = &quot;1.0.0&quot;,
+                description = &quot;API REST para administrar sedes, libros, ejemplares, clientes, prestamos, &quot;
+                        + &quot;devoluciones, reservas y traslados entre sedes de una biblioteca&quot;,
+                contact = @Contact(
+                        name = &quot;Sebastian Ospina - Jose Bravo&quot;,
+                        email = &quot;contacto@taller.edu.co&quot;
+                ),
+                license = @License(
+                        name = &quot;MIT License&quot;,
+                        url = &quot;https://opensource.org/licenses/MIT&quot;
+                )
+        ),
+        servers = {
+                @Server(url = &quot;http://localhost:8080/bibliotecas&quot;, description = &quot;Servidor de Desarrollo&quot;),
+                @Server(url = &quot;http://localhost:8090/bibliotecas&quot;, description = &quot;Servidor de Pruebas&quot;),
+                @Server(url = &quot;http://localhost:8099/bibliotecas&quot;, description = &quot;Servidor de Produccion&quot;)
+        }
+)
+<span class="nc" id="L37">public class OpenApiConfig {</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

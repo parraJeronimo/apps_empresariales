@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="LibroService - Unit Tests (RF-03, RF-05, RF-06, RF-07)" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:35.044Z" hostname="SEBASTIAN" time="0.267">
+  <properties/>
+  <testcase name="testBuscarLibros_CategoriaNoExiste()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.055"/>
+  <testcase name="testUpdateLibro_CategoriaNoExiste()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.006"/>
+  <testcase name="testGetLibroById_NotFound()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.007"/>
+  <testcase name="testDeleteLibro_Success()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testCreateLibro_CategoriaNoExiste()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.006"/>
+  <testcase name="testUpdateLibro_Success()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.005"/>
+  <testcase name="testGetCatalogo_ReturnsBooksWithAvailableCopies()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testUpdateLibro_NotFound()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.005"/>
+  <testcase name="testCreateLibro_SinCategoria()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testCreateLibro_ConCategoria()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.007"/>
+  <testcase name="testGetAllLibros_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.005"/>
+  <testcase name="testDeleteLibro_NotFound()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testBuscarLibros_SinCategoria()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.003"/>
+  <testcase name="testGetLibroById_Found()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.005"/>
+  <testcase name="testDeleteLibro_ConEjemplares()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testBuscarLibros_ConCategoriaIncluyeSubcategorias()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.004"/>
+  <testcase name="testCreateLibro_IsbnDuplicado()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.007"/>
+  <testcase name="testUpdateLibro_ReclasificaEnOtraCategoria()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.003"/>
+  <testcase name="testUpdateLibro_IsbnDuplicado()" classname="com.taller.bibliotecas.businessLayer.LibroServiceTest" time="0.005"/>
+  <system-out><![CDATA[15:08:35.141 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+15:08:35.193 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+15:08:35.207 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+15:08:35.284 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

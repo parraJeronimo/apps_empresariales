@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="PrestamoService - Unit Tests (RF-11 a RF-17, RF-25)" tests="38" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:35.453Z" hostname="SEBASTIAN" time="0.793">
+  <properties/>
+  <testcase name="testRegistrarDevolucion_ConRetrasoCalculaLosDias()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.177"/>
+  <testcase name="[1] dias=0" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.037"/>
+  <testcase name="[2] dias=-1" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.003"/>
+  <testcase name="[3] dias=31" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.003"/>
+  <testcase name="[4] dias=100" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testGetHistorialByCliente_ClienteNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testGetPrestamosByCliente_ClienteNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testGetPrestamosByCliente_Vencidos()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.011"/>
+  <testcase name="testRegistrarDevolucion_EnLimiteDeLaFechaNoEsRetraso()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testCreatePrestamo_SedeDesactivada()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testCreatePrestamo_PlazoPorDefecto()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testRegistrarDevolucion_PrestamoNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testGetPrestamoById_NotFound()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testCreatePrestamo_EjemplarNoDisponible()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testGetDevolucionesPorRango()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testGetAllPrestamos_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testRegistrarDevolucion_PrestamoYaFinalizado()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testGetPrestamosByCliente_Activos()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testGetPrestamosPorRangoDeInicio()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testGetPrestamoById_FinalizadoNuncaEstaVencido()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testGetPrestamoById_VencidoCalculaDiasDeRetraso()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.003"/>
+  <testcase name="testCreatePrestamo_EjemplarNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testCreatePrestamo_EjemplarEnOtraSede()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testCreatePrestamo_ClienteNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testRegistrarDevolucion_SedeDesactivada()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testGetPrestamosVencidos_SoloLosQueSuperaronLaFechaLimite()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testGetPrestamosActivos_IncluyeVigentesYVencidos()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testRegistrarDevolucion_EnSedeDiferenteDejaElEjemplarEnEsaSede()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.009"/>
+  <testcase name="testRegistrarDevolucion_ATiempoEnLaMismaSede()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testRegistrarDevolucion_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.006"/>
+  <testcase name="testGetPrestamoById_Vigente()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testGetHistorialByCliente_OrdenadoDelMasRecienteAlMasAntiguo()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testCreatePrestamo_PlazoPersonalizado()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.008"/>
+  <testcase name="testGetPrestamosByCliente_SinFiltroDevuelveTodos()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <testcase name="testRegistrarDevolucion_PrestamoDesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.005"/>
+  <testcase name="testCreatePrestamo_EjemplarEnTrasladoNoSePuedePrestar()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testCreatePrestamo_MarcaElEjemplarComoPrestadoYRegistraMovimiento()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.007"/>
+  <testcase name="testGetPrestamosByCliente_Finalizados()" classname="com.taller.bibliotecas.businessLayer.PrestamoServiceTest" time="0.004"/>
+  <system-out><![CDATA[15:08:35.623 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:35.629 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: true)
+15:08:35.778 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.798 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.807 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.816 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.870 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:35.871 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:35.880 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.891 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.891 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+15:08:35.905 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 99 en la sede ID: 3
+15:08:35.928 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:35.969 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.044 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.058 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.069 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.081 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 4
+15:08:36.118 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 4
+15:08:36.120 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:36.133 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.135 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Devolucion registrada para el prestamo ID: 5 (retraso: false)
+15:08:36.146 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 77
+15:08:36.181 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.185 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+15:08:36.208 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando devolucion del prestamo ID: 5 en la sede ID: 3
+15:08:36.221 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.234 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Registrando prestamo del ejemplar ID: 1 al cliente ID: 2
+15:08:36.236 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.PrestamoServiceImpl -- Prestamo registrado con ID: 10
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

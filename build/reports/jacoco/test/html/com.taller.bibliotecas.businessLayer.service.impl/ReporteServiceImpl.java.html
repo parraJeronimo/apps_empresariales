@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReporteServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">ReporteServiceImpl.java</span></div><h1>ReporteServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.ClienteDTO;
+import com.taller.bibliotecas.businessLayer.dto.ConteoLibroDTO;
+import com.taller.bibliotecas.businessLayer.dto.LibroDTO;
+import com.taller.bibliotecas.businessLayer.dto.LibroSolicitadoDTO;
+import com.taller.bibliotecas.businessLayer.dto.PrestamoDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReporteClientesDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReporteDevolucionesDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReporteLibrosDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReporteMovimientosDTO;
+import com.taller.bibliotecas.businessLayer.dto.ReportePrestamosDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.dto.TrasladoDTO;
+import com.taller.bibliotecas.businessLayer.service.ClienteService;
+import com.taller.bibliotecas.businessLayer.service.LibroService;
+import com.taller.bibliotecas.businessLayer.service.PrestamoService;
+import com.taller.bibliotecas.businessLayer.service.ReporteService;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.businessLayer.service.TrasladoService;
+import com.taller.bibliotecas.persistenceLayer.dao.ClienteDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.EjemplarDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.LibroDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.PrestamoDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.ReservaDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoPrestamo;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoTraslado;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+<span class="fc" id="L49">@Slf4j</span>
+public class ReporteServiceImpl implements ReporteService {
+
+    private final PrestamoService prestamoService;
+    private final TrasladoService trasladoService;
+    private final ClienteService clienteService;
+    private final SedeService sedeService;
+    private final LibroService libroService;
+    private final PrestamoDAO prestamoDAO;
+    private final ReservaDAO reservaDAO;
+    private final LibroDAO libroDAO;
+    private final EjemplarDAO ejemplarDAO;
+    private final ClienteDAO clienteDAO;
+
+    @Override
+    public ReportePrestamosDTO generarReportePrestamos(LocalDate desde, LocalDate hasta, Long sedeId) {
+<span class="fc" id="L65">        validarRango(desde, hasta);</span>
+<span class="fc" id="L66">        validarSede(sedeId);</span>
+
+<span class="fc" id="L68">        List&lt;PrestamoDTO&gt; prestamos = prestamoService.getPrestamosPorRangoDeInicio(desde, hasta).stream()</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">                .filter(p -&gt; sedeId == null || sedeId.equals(p.getSedePrestamoId()))</span>
+<span class="fc" id="L70">                .toList();</span>
+
+<span class="fc" id="L72">        ReportePrestamosDTO reporte = new ReportePrestamosDTO();</span>
+<span class="fc" id="L73">        reporte.setDesde(desde);</span>
+<span class="fc" id="L74">        reporte.setHasta(hasta);</span>
+<span class="fc" id="L75">        reporte.setSedeId(sedeId);</span>
+<span class="fc" id="L76">        reporte.setTotalPrestamos(prestamos.size());</span>
+<span class="fc" id="L77">        reporte.setActivos((int) prestamos.stream()</span>
+<span class="fc bfc" id="L78" title="All 4 branches covered.">                .filter(p -&gt; p.getEstado() == EstadoPrestamo.ACTIVO &amp;&amp; !Boolean.TRUE.equals(p.getVencido())).count());</span>
+<span class="fc" id="L79">        reporte.setVencidos((int) prestamos.stream().filter(p -&gt; Boolean.TRUE.equals(p.getVencido())).count());</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        reporte.setFinalizados((int) prestamos.stream().filter(p -&gt; p.getEstado() == EstadoPrestamo.FINALIZADO).count());</span>
+<span class="fc" id="L81">        reporte.setDevueltosConRetraso((int) prestamos.stream()</span>
+<span class="fc bfc" id="L82" title="All 4 branches covered.">                .filter(p -&gt; p.getEstado() == EstadoPrestamo.FINALIZADO &amp;&amp; Boolean.TRUE.equals(p.getDevueltoConRetraso()))</span>
+<span class="fc" id="L83">                .count());</span>
+<span class="fc" id="L84">        reporte.setPrestamos(prestamos);</span>
+<span class="fc" id="L85">        return reporte;</span>
+    }
+
+    @Override
+    public ReporteDevolucionesDTO generarReporteDevoluciones(LocalDate desde, LocalDate hasta, Long sedeId) {
+<span class="fc" id="L90">        validarRango(desde, hasta);</span>
+<span class="fc" id="L91">        validarSede(sedeId);</span>
+
+<span class="fc" id="L93">        List&lt;PrestamoDTO&gt; devoluciones = prestamoService.getDevolucionesPorRango(desde, hasta).stream()</span>
+<span class="fc bfc" id="L94" title="All 4 branches covered.">                .filter(p -&gt; sedeId == null || sedeId.equals(p.getSedeDevolucionId()))</span>
+<span class="fc" id="L95">                .toList();</span>
+
+<span class="fc" id="L97">        int conRetraso = (int) devoluciones.stream().filter(p -&gt; Boolean.TRUE.equals(p.getDevueltoConRetraso())).count();</span>
+
+<span class="fc" id="L99">        ReporteDevolucionesDTO reporte = new ReporteDevolucionesDTO();</span>
+<span class="fc" id="L100">        reporte.setDesde(desde);</span>
+<span class="fc" id="L101">        reporte.setHasta(hasta);</span>
+<span class="fc" id="L102">        reporte.setSedeId(sedeId);</span>
+<span class="fc" id="L103">        reporte.setTotalDevoluciones(devoluciones.size());</span>
+<span class="fc" id="L104">        reporte.setConRetraso(conRetraso);</span>
+<span class="fc" id="L105">        reporte.setATiempo(devoluciones.size() - conRetraso);</span>
+<span class="fc" id="L106">        reporte.setEnSedeDiferente((int) devoluciones.stream()</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                .filter(p -&gt; !Objects.equals(p.getSedePrestamoId(), p.getSedeDevolucionId())).count());</span>
+<span class="fc" id="L108">        reporte.setDevoluciones(devoluciones);</span>
+<span class="fc" id="L109">        return reporte;</span>
+    }
+
+    @Override
+    public ReporteLibrosDTO generarReporteLibros() {
+<span class="fc" id="L114">        Map&lt;EstadoEjemplar, Long&gt; porEstado = new EnumMap&lt;&gt;(EstadoEjemplar.class);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (EstadoEjemplar estado : EstadoEjemplar.values()) {</span>
+<span class="fc" id="L116">            porEstado.put(estado, ejemplarDAO.countByEstado(estado));</span>
+        }
+
+<span class="fc" id="L119">        Map&lt;String, Long&gt; porSede = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        for (SedeDTO sede : sedeService.getAllSedes()) {</span>
+<span class="fc" id="L121">            porSede.put(sede.getNombre(), ejemplarDAO.countBySedeActualId(sede.getId()));</span>
+<span class="fc" id="L122">        }</span>
+
+<span class="fc" id="L124">        ReporteLibrosDTO reporte = new ReporteLibrosDTO();</span>
+<span class="fc" id="L125">        reporte.setTotalLibros(libroDAO.count());</span>
+<span class="fc" id="L126">        reporte.setTotalEjemplares(ejemplarDAO.count());</span>
+<span class="fc" id="L127">        reporte.setEjemplaresPorEstado(porEstado);</span>
+<span class="fc" id="L128">        reporte.setEjemplaresPorSede(porSede);</span>
+<span class="fc" id="L129">        return reporte;</span>
+    }
+
+    @Override
+    public ReporteClientesDTO generarReporteClientes() {
+<span class="fc" id="L134">        List&lt;PrestamoDTO&gt; activos = prestamoService.getPrestamosActivos();</span>
+
+<span class="fc" id="L136">        Set&lt;Long&gt; clientesConActivos = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc" id="L137">        Set&lt;Long&gt; clientesConVencidos = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        for (PrestamoDTO prestamo : activos) {</span>
+<span class="fc" id="L139">            clientesConActivos.add(prestamo.getClienteId());</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (Boolean.TRUE.equals(prestamo.getVencido())) {</span>
+<span class="fc" id="L141">                clientesConVencidos.add(prestamo.getClienteId());</span>
+            }
+<span class="fc" id="L143">        }</span>
+
+<span class="fc" id="L145">        List&lt;ClienteDTO&gt; conRetraso = clientesConVencidos.stream().map(clienteService::getClienteById).toList();</span>
+
+<span class="fc" id="L147">        ReporteClientesDTO reporte = new ReporteClientesDTO();</span>
+<span class="fc" id="L148">        reporte.setTotalClientes(clienteDAO.count());</span>
+<span class="fc" id="L149">        reporte.setClientesConPrestamosActivos(clientesConActivos.size());</span>
+<span class="fc" id="L150">        reporte.setClientesConPrestamosVencidos(clientesConVencidos.size());</span>
+<span class="fc" id="L151">        reporte.setClientesConRetraso(conRetraso);</span>
+<span class="fc" id="L152">        return reporte;</span>
+    }
+
+    @Override
+    public ReporteMovimientosDTO generarReporteMovimientos(LocalDate desde, LocalDate hasta, Long sedeId) {
+<span class="fc" id="L157">        validarRango(desde, hasta);</span>
+<span class="fc" id="L158">        validarSede(sedeId);</span>
+
+<span class="fc" id="L160">        List&lt;TrasladoDTO&gt; traslados = trasladoService.getTrasladosPorRango(desde, hasta).stream()</span>
+<span class="fc bfc" id="L161" title="All 6 branches covered.">                .filter(t -&gt; sedeId == null || sedeId.equals(t.getSedeOrigenId()) || sedeId.equals(t.getSedeDestinoId()))</span>
+<span class="fc" id="L162">                .toList();</span>
+
+<span class="fc" id="L164">        ReporteMovimientosDTO reporte = new ReporteMovimientosDTO();</span>
+<span class="fc" id="L165">        reporte.setDesde(desde);</span>
+<span class="fc" id="L166">        reporte.setHasta(hasta);</span>
+<span class="fc" id="L167">        reporte.setSedeId(sedeId);</span>
+<span class="fc" id="L168">        reporte.setTotalTraslados(traslados.size());</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        reporte.setEnTransito((int) traslados.stream().filter(t -&gt; t.getEstado() == EstadoTraslado.EN_TRANSITO).count());</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        reporte.setRecibidos((int) traslados.stream().filter(t -&gt; t.getEstado() == EstadoTraslado.RECIBIDO).count());</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        reporte.setCancelados((int) traslados.stream().filter(t -&gt; t.getEstado() == EstadoTraslado.CANCELADO).count());</span>
+<span class="fc" id="L172">        reporte.setTraslados(traslados);</span>
+<span class="fc" id="L173">        return reporte;</span>
+    }
+
+    @Override
+    public List&lt;LibroSolicitadoDTO&gt; getLibrosMasSolicitados(int limite) {
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (limite &lt;= 0) {</span>
+<span class="fc" id="L179">            throw new SolicitudInvalidaException(&quot;El limite debe ser mayor a cero&quot;);</span>
+        }
+
+        // libroId -&gt; [prestamos, reservas]
+<span class="fc" id="L183">        Map&lt;Long, long[]&gt; acumulado = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (ConteoLibroDTO conteo : prestamoDAO.contarPrestamosPorLibro()) {</span>
+<span class="fc" id="L185">            acumulado.computeIfAbsent(conteo.getLibroId(), k -&gt; new long[2])[0] = conteo.getTotal();</span>
+<span class="fc" id="L186">        }</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        for (ConteoLibroDTO conteo : reservaDAO.contarReservasPorLibro()) {</span>
+<span class="fc" id="L188">            acumulado.computeIfAbsent(conteo.getLibroId(), k -&gt; new long[2])[1] = conteo.getTotal();</span>
+<span class="fc" id="L189">        }</span>
+
+<span class="fc" id="L191">        return acumulado.entrySet().stream()</span>
+<span class="fc" id="L192">                .sorted(Comparator</span>
+<span class="fc" id="L193">                        .comparingLong((Map.Entry&lt;Long, long[]&gt; e) -&gt; e.getValue()[0] + e.getValue()[1])</span>
+<span class="fc" id="L194">                        .reversed()</span>
+<span class="fc" id="L195">                        .thenComparing(e -&gt; e.getKey()))</span>
+<span class="fc" id="L196">                .limit(limite)</span>
+<span class="fc" id="L197">                .map(e -&gt; {</span>
+<span class="fc" id="L198">                    LibroDTO libro = libroService.getLibroById(e.getKey());</span>
+<span class="fc" id="L199">                    LibroSolicitadoDTO dto = new LibroSolicitadoDTO();</span>
+<span class="fc" id="L200">                    dto.setLibroId(libro.getId());</span>
+<span class="fc" id="L201">                    dto.setTitulo(libro.getTitulo());</span>
+<span class="fc" id="L202">                    dto.setAutor(libro.getAutor());</span>
+<span class="fc" id="L203">                    dto.setTotalPrestamos(e.getValue()[0]);</span>
+<span class="fc" id="L204">                    dto.setTotalReservas(e.getValue()[1]);</span>
+<span class="fc" id="L205">                    dto.setTotalSolicitudes(e.getValue()[0] + e.getValue()[1]);</span>
+<span class="fc" id="L206">                    return dto;</span>
+                })
+<span class="fc" id="L208">                .toList();</span>
+    }
+
+    private void validarRango(LocalDate desde, LocalDate hasta) {
+<span class="fc bfc" id="L212" title="All 4 branches covered.">        if (desde == null || hasta == null) {</span>
+<span class="fc" id="L213">            throw new SolicitudInvalidaException(&quot;Las fechas desde y hasta son obligatorias&quot;);</span>
+        }
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (desde.isAfter(hasta)) {</span>
+<span class="fc" id="L216">            throw new SolicitudInvalidaException(&quot;La fecha desde no puede ser posterior a la fecha hasta&quot;);</span>
+        }
+<span class="fc" id="L218">    }</span>
+
+    private void validarSede(Long sedeId) {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (sedeId != null) {</span>
+<span class="fc" id="L222">            sedeService.getSedeById(sedeId);</span>
+        }
+<span class="fc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

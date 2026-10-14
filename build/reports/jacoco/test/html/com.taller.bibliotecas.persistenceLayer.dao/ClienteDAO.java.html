@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClienteDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.dao</a> &gt; <span class="el_source">ClienteDAO.java</span></div><h1>ClienteDAO.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.dao;
+
+import com.taller.bibliotecas.businessLayer.dto.ClienteCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.ClienteDTO;
+import com.taller.bibliotecas.businessLayer.dto.ClienteUpdateDTO;
+import com.taller.bibliotecas.persistenceLayer.entity.ClienteEntity;
+import com.taller.bibliotecas.persistenceLayer.mapper.ClienteMapper;
+import com.taller.bibliotecas.persistenceLayer.repository.ClienteRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class ClienteDAO {
+
+    private final ClienteRepository clienteRepository;
+    private final ClienteMapper clienteMapper;
+
+    public ClienteDTO save(ClienteCreateDTO createDTO) {
+<span class="nc" id="L23">        ClienteEntity entity = clienteMapper.toEntity(createDTO);</span>
+<span class="nc" id="L24">        return clienteMapper.toDTO(clienteRepository.save(entity));</span>
+    }
+
+    public Optional&lt;ClienteDTO&gt; findById(Long id) {
+<span class="nc" id="L28">        return clienteRepository.findById(id).map(clienteMapper::toDTO);</span>
+    }
+
+    public Optional&lt;ClienteDTO&gt; findByDocumento(String documento) {
+<span class="nc" id="L32">        return clienteRepository.findByDocumento(documento).map(clienteMapper::toDTO);</span>
+    }
+
+    public List&lt;ClienteDTO&gt; findAll() {
+<span class="nc" id="L36">        return clienteMapper.toDTOList(clienteRepository.findAll());</span>
+    }
+
+    public Optional&lt;ClienteDTO&gt; update(Long id, ClienteUpdateDTO updateDTO) {
+<span class="nc" id="L40">        return clienteRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L41">            clienteMapper.updateEntityFromDTO(updateDTO, existing);</span>
+<span class="nc" id="L42">            return clienteMapper.toDTO(clienteRepository.save(existing));</span>
+        });
+    }
+
+    public boolean existsByEmail(String email) {
+<span class="nc" id="L47">        return clienteRepository.existsByEmail(email);</span>
+    }
+
+    public boolean existsByEmailAndIdNot(String email, Long id) {
+<span class="nc" id="L51">        return clienteRepository.existsByEmailAndIdNot(email, id);</span>
+    }
+
+    public boolean existsByDocumento(String documento) {
+<span class="nc" id="L55">        return clienteRepository.existsByDocumento(documento);</span>
+    }
+
+    public long count() {
+<span class="nc" id="L59">        return clienteRepository.count();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

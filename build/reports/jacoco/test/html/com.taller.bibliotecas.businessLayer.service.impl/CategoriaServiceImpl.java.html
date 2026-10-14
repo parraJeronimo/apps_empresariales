@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">CategoriaServiceImpl.java</span></div><h1>CategoriaServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.CategoriaCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.CategoriaDTO;
+import com.taller.bibliotecas.businessLayer.dto.CategoriaUpdateDTO;
+import com.taller.bibliotecas.businessLayer.service.CategoriaService;
+import com.taller.bibliotecas.persistenceLayer.dao.CategoriaDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.LibroDAO;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L24">@Slf4j</span>
+public class CategoriaServiceImpl implements CategoriaService {
+
+    private final CategoriaDAO categoriaDAO;
+    private final LibroDAO libroDAO;
+
+    @Override
+    public CategoriaDTO createCategoria(CategoriaCreateDTO createDTO) {
+<span class="fc" id="L32">        log.info(&quot;Creando categoria: {}&quot;, createDTO.getNombre());</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (createDTO.getCategoriaPadreId() != null) {</span>
+            // Valida que la categoria padre exista (404 si no)
+<span class="fc" id="L35">            getCategoriaById(createDTO.getCategoriaPadreId());</span>
+        }
+<span class="fc" id="L37">        return categoriaDAO.save(createDTO);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CategoriaDTO getCategoriaById(Long id) {
+<span class="fc" id="L43">        return categoriaDAO.findById(id)</span>
+<span class="fc" id="L44">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Categoria no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CategoriaDTO&gt; getAllCategorias() {
+<span class="fc" id="L50">        return categoriaDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CategoriaDTO&gt; getCategoriasRaiz() {
+<span class="fc" id="L56">        return categoriaDAO.findRaices();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CategoriaDTO&gt; getSubcategorias(Long categoriaPadreId) {
+<span class="fc" id="L62">        getCategoriaById(categoriaPadreId);</span>
+<span class="fc" id="L63">        return categoriaDAO.findByPadreId(categoriaPadreId);</span>
+    }
+
+    @Override
+    public CategoriaDTO updateCategoria(Long id, CategoriaUpdateDTO updateDTO) {
+<span class="fc" id="L68">        return categoriaDAO.update(id, updateDTO)</span>
+<span class="fc" id="L69">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Categoria no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public void deleteCategoria(Long id) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (!categoriaDAO.existsById(id)) {</span>
+<span class="fc" id="L75">            throw new RecursoNoEncontradoException(&quot;Categoria no encontrada con ID: &quot; + id);</span>
+        }
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (categoriaDAO.existsByPadreId(id)) {</span>
+<span class="fc" id="L78">            throw new SolicitudInvalidaException(&quot;No se puede eliminar la categoria porque tiene subcategorias&quot;);</span>
+        }
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (libroDAO.existsByCategoriaId(id)) {</span>
+<span class="fc" id="L81">            throw new SolicitudInvalidaException(&quot;No se puede eliminar la categoria porque tiene libros asociados&quot;);</span>
+        }
+<span class="fc" id="L83">        categoriaDAO.deleteById(id);</span>
+<span class="fc" id="L84">    }</span>
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;Long&gt; getIdsConDescendientes(Long categoriaId) {
+<span class="fc" id="L89">        getCategoriaById(categoriaId);</span>
+<span class="fc" id="L90">        List&lt;Long&gt; ids = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L91">        Deque&lt;Long&gt; pendientes = new ArrayDeque&lt;&gt;();</span>
+<span class="fc" id="L92">        pendientes.add(categoriaId);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        while (!pendientes.isEmpty()) {</span>
+<span class="fc" id="L94">            Long actual = pendientes.poll();</span>
+<span class="fc" id="L95">            ids.add(actual);</span>
+<span class="fc" id="L96">            categoriaDAO.findByPadreId(actual).forEach(hija -&gt; pendientes.add(hija.getId()));</span>
+<span class="fc" id="L97">        }</span>
+<span class="fc" id="L98">        return ids;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

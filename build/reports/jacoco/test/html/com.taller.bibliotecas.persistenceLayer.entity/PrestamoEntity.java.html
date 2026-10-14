@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrestamoEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.entity</a> &gt; <span class="el_source">PrestamoEntity.java</span></div><h1>PrestamoEntity.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;prestamos&quot;)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PrestamoEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;ejemplar_id&quot;, nullable = false)
+    private EjemplarEntity ejemplarEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;cliente_id&quot;, nullable = false)
+    private ClienteEntity clienteEntity;
+
+    /** Sede donde se realizo el prestamo */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;sede_prestamo_id&quot;, nullable = false)
+    private SedeEntity sedePrestamoEntity;
+
+    /** Sede donde se realizo la devolucion (null mientras el prestamo siga activo) */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;sede_devolucion_id&quot;)
+    private SedeEntity sedeDevolucionEntity;
+
+    @Column(name = &quot;fecha_inicio&quot;, nullable = false)
+    private LocalDate fechaInicio;
+
+    @Column(name = &quot;fecha_limite&quot;, nullable = false)
+    private LocalDate fechaLimite;
+
+    @Column(name = &quot;fecha_devolucion&quot;)
+    private LocalDate fechaDevolucion;
+
+    @Column(name = &quot;devuelto_con_retraso&quot;)
+    private Boolean devueltoConRetraso;
+
+    @Column(name = &quot;dias_retraso&quot;)
+    private Integer diasRetraso;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoPrestamo estado;
+
+    @Column(name = &quot;created_at&quot;)
+    private LocalDateTime createdAt;
+
+    @Column(name = &quot;updated_at&quot;)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L67">        this.createdAt = LocalDateTime.now();</span>
+<span class="nc" id="L68">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (this.estado == null) {</span>
+<span class="nc" id="L70">            this.estado = EstadoPrestamo.ACTIVO;</span>
+        }
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (this.devueltoConRetraso == null) {</span>
+<span class="nc" id="L73">            this.devueltoConRetraso = Boolean.FALSE;</span>
+        }
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (this.diasRetraso == null) {</span>
+<span class="nc" id="L76">            this.diasRetraso = 0;</span>
+        }
+<span class="nc" id="L78">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L82">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

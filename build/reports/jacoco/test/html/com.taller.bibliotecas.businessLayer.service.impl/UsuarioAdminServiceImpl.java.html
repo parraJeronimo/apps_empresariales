@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioAdminServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">UsuarioAdminServiceImpl.java</span></div><h1>UsuarioAdminServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminDTO;
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminUpdateDTO;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.businessLayer.service.UsuarioAdminService;
+import com.taller.bibliotecas.persistenceLayer.dao.UsuarioAdminDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.RolUsuario;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L22">@Slf4j</span>
+public class UsuarioAdminServiceImpl implements UsuarioAdminService {
+
+    private final UsuarioAdminDAO usuarioAdminDAO;
+    private final SedeService sedeService;
+
+    @Override
+    public UsuarioAdminDTO createUsuario(UsuarioAdminCreateDTO createDTO) {
+<span class="fc" id="L30">        log.info(&quot;Registrando usuario administrativo: {}&quot;, createDTO.getEmail());</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (usuarioAdminDAO.existsByEmail(createDTO.getEmail())) {</span>
+<span class="fc" id="L32">            throw new SolicitudInvalidaException(&quot;Ya existe un usuario registrado con el email: &quot; + createDTO.getEmail());</span>
+        }
+<span class="fc" id="L34">        validarSedeSegunRol(createDTO.getRol(), createDTO.getSedeId());</span>
+<span class="fc" id="L35">        return usuarioAdminDAO.save(createDTO);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UsuarioAdminDTO getUsuarioById(Long id) {
+<span class="fc" id="L41">        return usuarioAdminDAO.findById(id)</span>
+<span class="fc" id="L42">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Usuario no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;UsuarioAdminDTO&gt; getAllUsuarios() {
+<span class="fc" id="L48">        return usuarioAdminDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;UsuarioAdminDTO&gt; getUsuariosBySede(Long sedeId) {
+<span class="fc" id="L54">        sedeService.getSedeById(sedeId);</span>
+<span class="fc" id="L55">        return usuarioAdminDAO.findBySedeId(sedeId);</span>
+    }
+
+    @Override
+    public UsuarioAdminDTO updateUsuario(Long id, UsuarioAdminUpdateDTO updateDTO) {
+<span class="fc" id="L60">        UsuarioAdminDTO actual = getUsuarioById(id);</span>
+
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">        if (updateDTO.getEmail() != null &amp;&amp; usuarioAdminDAO.existsByEmailAndIdNot(updateDTO.getEmail(), id)) {</span>
+<span class="fc" id="L63">            throw new SolicitudInvalidaException(&quot;Ya existe otro usuario registrado con el email: &quot; + updateDTO.getEmail());</span>
+        }
+
+        // Se valida la combinacion rol/sede que quedaria despues de la actualizacion
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        RolUsuario rolFinal = updateDTO.getRol() != null ? updateDTO.getRol() : actual.getRol();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        Long sedeFinal = updateDTO.getSedeId() != null ? updateDTO.getSedeId() : actual.getSedeId();</span>
+<span class="fc" id="L69">        validarSedeSegunRol(rolFinal, sedeFinal);</span>
+
+<span class="fc" id="L71">        return usuarioAdminDAO.update(id, updateDTO)</span>
+<span class="fc" id="L72">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Usuario no encontrado con ID: &quot; + id));</span>
+    }
+
+    /** Todos los roles, salvo ADMINISTRADOR_GENERAL, deben pertenecer a una sede existente. */
+    private void validarSedeSegunRol(RolUsuario rol, Long sedeId) {
+<span class="fc bfc" id="L77" title="All 4 branches covered.">        if (rol != RolUsuario.ADMINISTRADOR_GENERAL &amp;&amp; sedeId == null) {</span>
+<span class="fc" id="L78">            throw new SolicitudInvalidaException(&quot;Los usuarios con rol &quot; + rol + &quot; deben estar asociados a una sede&quot;);</span>
+        }
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (sedeId != null) {</span>
+<span class="fc" id="L81">            sedeService.getSedeById(sedeId);</span>
+        }
+<span class="fc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

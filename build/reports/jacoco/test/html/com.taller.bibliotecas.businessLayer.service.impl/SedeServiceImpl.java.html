@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SedeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">SedeServiceImpl.java</span></div><h1>SedeServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.SedeCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeUpdateDTO;
+import com.taller.bibliotecas.businessLayer.service.SedeService;
+import com.taller.bibliotecas.persistenceLayer.dao.EjemplarDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.SedeDAO;
+import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L22">@Slf4j</span>
+public class SedeServiceImpl implements SedeService {
+
+    private final SedeDAO sedeDAO;
+    private final EjemplarDAO ejemplarDAO;
+
+    @Override
+    public SedeDTO createSede(SedeCreateDTO createDTO) {
+<span class="fc" id="L30">        log.info(&quot;Registrando nueva sede: {}&quot;, createDTO.getNombre());</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (sedeDAO.existsByNombre(createDTO.getNombre())) {</span>
+<span class="fc" id="L32">            throw new SolicitudInvalidaException(&quot;Ya existe una sede registrada con el nombre: &quot; + createDTO.getNombre());</span>
+        }
+<span class="fc" id="L34">        return sedeDAO.save(createDTO);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SedeDTO getSedeById(Long id) {
+<span class="fc" id="L40">        return sedeDAO.findById(id)</span>
+<span class="fc" id="L41">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Sede no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;SedeDTO&gt; getAllSedes() {
+<span class="fc" id="L47">        return sedeDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;SedeDTO&gt; getSedesActivas() {
+<span class="fc" id="L53">        return sedeDAO.findByActiva(true);</span>
+    }
+
+    @Override
+    public SedeDTO updateSede(Long id, SedeUpdateDTO updateDTO) {
+<span class="fc bfc" id="L58" title="All 4 branches covered.">        if (updateDTO.getNombre() != null &amp;&amp; sedeDAO.existsByNombreAndIdNot(updateDTO.getNombre(), id)) {</span>
+<span class="fc" id="L59">            throw new SolicitudInvalidaException(&quot;Ya existe otra sede registrada con el nombre: &quot; + updateDTO.getNombre());</span>
+        }
+<span class="fc" id="L61">        return sedeDAO.update(id, updateDTO)</span>
+<span class="fc" id="L62">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Sede no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public SedeDTO desactivarSede(Long id) {
+<span class="fc" id="L67">        log.info(&quot;Desactivando sede ID: {}&quot;, id);</span>
+<span class="fc" id="L68">        SedeDTO sede = getSedeById(id);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (!Boolean.TRUE.equals(sede.getActiva())) {</span>
+<span class="fc" id="L70">            throw new SolicitudInvalidaException(&quot;La sede ya se encuentra desactivada&quot;);</span>
+        }
+<span class="fc" id="L72">        long ejemplaresFuera = ejemplarDAO.countBySedeActualIdAndEstadoNot(id, EstadoEjemplar.DISPONIBLE);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (ejemplaresFuera &gt; 0) {</span>
+<span class="fc" id="L74">            throw new SolicitudInvalidaException(</span>
+                    &quot;No se puede desactivar la sede: tiene &quot; + ejemplaresFuera + &quot; ejemplar(es) prestados o en traslado&quot;);
+        }
+<span class="fc" id="L77">        return sedeDAO.cambiarEstado(id, false)</span>
+<span class="fc" id="L78">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Sede no encontrada con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public SedeDTO activarSede(Long id) {
+<span class="fc" id="L83">        log.info(&quot;Activando sede ID: {}&quot;, id);</span>
+<span class="fc" id="L84">        SedeDTO sede = getSedeById(id);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (Boolean.TRUE.equals(sede.getActiva())) {</span>
+<span class="fc" id="L86">            throw new SolicitudInvalidaException(&quot;La sede ya se encuentra activa&quot;);</span>
+        }
+<span class="fc" id="L88">        return sedeDAO.cambiarEstado(id, true)</span>
+<span class="fc" id="L89">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Sede no encontrada con ID: &quot; + id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

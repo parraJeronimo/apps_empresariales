@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.presentationLayer.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.presentationLayer.exception;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Manejador global de excepciones.
+ * Centraliza la traduccion de errores de negocio/validacion a codigos HTTP:
+ * 400 Bad Request, 404 Not Found y 500 Internal Server Error.
+ */
+@RestControllerAdvice
+<span class="nc" id="L23">@Slf4j</span>
+<span class="nc" id="L24">public class GlobalExceptionHandler {</span>
+
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(RecursoNoEncontradoException ex) {
+<span class="nc" id="L28">        log.warn(&quot;Recurso no encontrado: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L29">        return build(HttpStatus.NOT_FOUND, ex.getMessage(), null);</span>
+    }
+
+    @ExceptionHandler({SolicitudInvalidaException.class, IllegalArgumentException.class})
+    public ResponseEntity&lt;ErrorResponse&gt; handleBadRequest(RuntimeException ex) {
+<span class="nc" id="L34">        log.warn(&quot;Solicitud invalida: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L35">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);</span>
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex) {
+<span class="nc" id="L40">        List&lt;String&gt; detalles = ex.getBindingResult().getFieldErrors().stream()</span>
+<span class="nc" id="L41">                .map(FieldError::getDefaultMessage)</span>
+<span class="nc" id="L42">                .toList();</span>
+<span class="nc" id="L43">        log.warn(&quot;Errores de validacion: {}&quot;, detalles);</span>
+<span class="nc" id="L44">        return build(HttpStatus.BAD_REQUEST, &quot;Datos de entrada invalidos&quot;, detalles);</span>
+    }
+
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class,
+            MissingServletRequestParameterException.class,
+            HttpMessageNotReadableException.class})
+    public ResponseEntity&lt;ErrorResponse&gt; handleParametrosInvalidos(Exception ex) {
+<span class="nc" id="L51">        log.warn(&quot;Parametros o cuerpo de la peticion invalidos: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L52">        return build(HttpStatus.BAD_REQUEST, &quot;Parametros o cuerpo de la peticion invalidos&quot;, null);</span>
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGeneric(Exception ex) {
+<span class="nc" id="L57">        log.error(&quot;Error inesperado en el servidor&quot;, ex);</span>
+<span class="nc" id="L58">        return build(HttpStatus.INTERNAL_SERVER_ERROR, &quot;Ocurrio un error inesperado en el servidor&quot;, null);</span>
+    }
+
+    private ResponseEntity&lt;ErrorResponse&gt; build(HttpStatus status, String message, List&lt;String&gt; detalles) {
+<span class="nc" id="L62">        ErrorResponse body = new ErrorResponse(</span>
+<span class="nc" id="L63">                LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, detalles);</span>
+<span class="nc" id="L64">        return ResponseEntity.status(status).body(body);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SedeDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.persistenceLayer.dao</a> &gt; <span class="el_source">SedeDAO.java</span></div><h1>SedeDAO.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.persistenceLayer.dao;
+
+import com.taller.bibliotecas.businessLayer.dto.SedeCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
+import com.taller.bibliotecas.businessLayer.dto.SedeUpdateDTO;
+import com.taller.bibliotecas.persistenceLayer.entity.SedeEntity;
+import com.taller.bibliotecas.persistenceLayer.mapper.SedeMapper;
+import com.taller.bibliotecas.persistenceLayer.repository.SedeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class SedeDAO {
+
+    private final SedeRepository sedeRepository;
+    private final SedeMapper sedeMapper;
+
+    public SedeDTO save(SedeCreateDTO createDTO) {
+<span class="nc" id="L23">        SedeEntity entity = sedeMapper.toEntity(createDTO);</span>
+<span class="nc" id="L24">        return sedeMapper.toDTO(sedeRepository.save(entity));</span>
+    }
+
+    public Optional&lt;SedeDTO&gt; findById(Long id) {
+<span class="nc" id="L28">        return sedeRepository.findById(id).map(sedeMapper::toDTO);</span>
+    }
+
+    public List&lt;SedeDTO&gt; findAll() {
+<span class="nc" id="L32">        return sedeMapper.toDTOList(sedeRepository.findAll());</span>
+    }
+
+    public List&lt;SedeDTO&gt; findByActiva(boolean activa) {
+<span class="nc" id="L36">        return sedeMapper.toDTOList(sedeRepository.findByActiva(activa));</span>
+    }
+
+    public Optional&lt;SedeDTO&gt; update(Long id, SedeUpdateDTO updateDTO) {
+<span class="nc" id="L40">        return sedeRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L41">            sedeMapper.updateEntityFromDTO(updateDTO, existing);</span>
+<span class="nc" id="L42">            return sedeMapper.toDTO(sedeRepository.save(existing));</span>
+        });
+    }
+
+    public Optional&lt;SedeDTO&gt; cambiarEstado(Long id, boolean activa) {
+<span class="nc" id="L47">        return sedeRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L48">            existing.setActiva(activa);</span>
+<span class="nc" id="L49">            return sedeMapper.toDTO(sedeRepository.save(existing));</span>
+        });
+    }
+
+    public boolean existsById(Long id) {
+<span class="nc" id="L54">        return sedeRepository.existsById(id);</span>
+    }
+
+    public boolean existsByNombre(String nombre) {
+<span class="nc" id="L58">        return sedeRepository.existsByNombre(nombre);</span>
+    }
+
+    public boolean existsByNombreAndIdNot(String nombre, Long id) {
+<span class="nc" id="L62">        return sedeRepository.existsByNombreAndIdNot(nombre, id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

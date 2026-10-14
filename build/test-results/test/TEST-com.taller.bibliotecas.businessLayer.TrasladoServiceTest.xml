@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TrasladoService - Unit Tests (RF-18, RF-19)" tests="25" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:37.411Z" hostname="SEBASTIAN" time="0.229">
+  <properties/>
+  <testcase name="testCancelarTraslado_ElEjemplarVuelveAEstarDisponibleEnSuOrigen()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.05"/>
+  <testcase name="testConfirmarRecepcion_SedeDestinoDesactivada()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.004"/>
+  <testcase name="testCreateTraslado_SedeDestinoNoExiste()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.004"/>
+  <testcase name="testCancelarTraslado_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="[1] estado=PRESTADO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="[2] estado=EN_TRASLADO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="testGetTrasladosBySede_SedeNoExiste()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="testGetTrasladosBySede_FiltraPorEstado()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="testCancelarTraslado_NotFound()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.001"/>
+  <testcase name="testConfirmarRecepcion_DesaparecioAlActualizar()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.004"/>
+  <testcase name="testConfirmarRecepcion_ActualizaLaUbicacionDelEjemplar()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="testGetTrasladosPorRango_CubreElDiaCompleto()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testGetTrasladoById_NotFound()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="[1] estado=RECIBIDO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="[2] estado=CANCELADO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testGetAllTraslados_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testConfirmarRecepcion_NotFound()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="testCreateTraslado_SedeDestinoDesactivada()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testGetTrasladosBySede_SinFiltroDeEstado()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testGetTrasladoById_Found()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testCreateTraslado_EjemplarNoExiste()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testCreateTraslado_DestinoIgualALaSedeActual()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <testcase name="[1] estado=RECIBIDO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="[2] estado=CANCELADO" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.002"/>
+  <testcase name="testCreateTraslado_Success()" classname="com.taller.bibliotecas.businessLayer.TrasladoServiceTest" time="0.003"/>
+  <system-out><![CDATA[15:08:37.461 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Traslado ID: 7 cancelado
+15:08:37.480 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.499 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.508 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.544 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Recepcion confirmada para el traslado ID: 7
+15:08:37.591 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.611 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.617 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.640 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Registrando traslado del ejemplar ID: 1 hacia la sede ID: 2
+15:08:37.640 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.TrasladoServiceImpl -- Traslado registrado con ID: 7
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

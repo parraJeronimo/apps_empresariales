@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ClienteService - Unit Tests (RF-09, RF-10)" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-10T20:08:33.846Z" hostname="SEBASTIAN" time="0.215">
+  <properties/>
+  <testcase name="testUpdateCliente_NotFound()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.068"/>
+  <testcase name="testCreateCliente_Success()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.007"/>
+  <testcase name="testGetClienteByDocumento_NotFound()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.008"/>
+  <testcase name="testCreateCliente_DocumentoDuplicado()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.005"/>
+  <testcase name="testUpdateCliente_CambiaEmailDisponible()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.008"/>
+  <testcase name="testGetClienteByDocumento_Found()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.003"/>
+  <testcase name="testGetClientById_Found()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.005"/>
+  <testcase name="testCreateCliente_EmailDuplicado()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.006"/>
+  <testcase name="testUpdateCliente_Success_SinCambiarEmail()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.005"/>
+  <testcase name="testGetAllClientes_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.004"/>
+  <testcase name="testGetClientById_NotFound()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.004"/>
+  <testcase name="testUpdateCliente_EmailDeOtroCliente()" classname="com.taller.bibliotecas.businessLayer.ClienteServiceTest" time="0.005"/>
+  <system-out><![CDATA[15:08:33.926 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ClienteServiceImpl -- Registrando nuevo cliente: juan@gmail.com
+15:08:33.954 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ClienteServiceImpl -- Registrando nuevo cliente: juan@gmail.com
+15:08:34.007 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.ClienteServiceImpl -- Registrando nuevo cliente: juan@gmail.com
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LibroServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bibliotecas</a> &gt; <a href="index.source.html" class="el_package">com.taller.bibliotecas.businessLayer.service.impl</a> &gt; <span class="el_source">LibroServiceImpl.java</span></div><h1>LibroServiceImpl.java</h1><pre class="source lang-java linenums">package com.taller.bibliotecas.businessLayer.service.impl;
+
+import com.taller.bibliotecas.businessLayer.dto.LibroCreateDTO;
+import com.taller.bibliotecas.businessLayer.dto.LibroDTO;
+import com.taller.bibliotecas.businessLayer.dto.LibroUpdateDTO;
+import com.taller.bibliotecas.businessLayer.service.CategoriaService;
+import com.taller.bibliotecas.businessLayer.service.LibroService;
+import com.taller.bibliotecas.persistenceLayer.dao.EjemplarDAO;
+import com.taller.bibliotecas.persistenceLayer.dao.LibroDAO;
+import com.taller.bibliotecas.presentationLayer.exception.RecursoNoEncontradoException;
+import com.taller.bibliotecas.presentationLayer.exception.SolicitudInvalidaException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+<span class="fc" id="L22">@Slf4j</span>
+public class LibroServiceImpl implements LibroService {
+
+    private final LibroDAO libroDAO;
+    private final CategoriaService categoriaService;
+    private final EjemplarDAO ejemplarDAO;
+
+    @Override
+    public LibroDTO createLibro(LibroCreateDTO createDTO) {
+<span class="fc" id="L31">        log.info(&quot;Registrando libro: {}&quot;, createDTO.getTitulo());</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (libroDAO.existsByIsbn(createDTO.getIsbn())) {</span>
+<span class="fc" id="L33">            throw new SolicitudInvalidaException(&quot;Ya existe un libro registrado con el ISBN: &quot; + createDTO.getIsbn());</span>
+        }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (createDTO.getCategoriaId() != null) {</span>
+<span class="fc" id="L36">            categoriaService.getCategoriaById(createDTO.getCategoriaId());</span>
+        }
+<span class="fc" id="L38">        return libroDAO.save(createDTO);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LibroDTO getLibroById(Long id) {
+<span class="fc" id="L44">        return libroDAO.findById(id)</span>
+<span class="fc" id="L45">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;LibroDTO&gt; getAllLibros() {
+<span class="fc" id="L51">        return libroDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;LibroDTO&gt; getCatalogo() {
+<span class="fc" id="L57">        return libroDAO.findConEjemplaresDisponibles();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;LibroDTO&gt; buscarLibros(String titulo, String autor, String isbn, Long categoriaId, String codigoEjemplar) {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        List&lt;Long&gt; categoriaIds = categoriaId == null ? null : categoriaService.getIdsConDescendientes(categoriaId);</span>
+<span class="fc" id="L64">        return libroDAO.buscar(titulo, autor, isbn, categoriaIds, codigoEjemplar);</span>
+    }
+
+    @Override
+    public LibroDTO updateLibro(Long id, LibroUpdateDTO updateDTO) {
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (updateDTO.getIsbn() != null &amp;&amp; libroDAO.existsByIsbnAndIdNot(updateDTO.getIsbn(), id)) {</span>
+<span class="fc" id="L70">            throw new SolicitudInvalidaException(&quot;Ya existe otro libro registrado con el ISBN: &quot; + updateDTO.getIsbn());</span>
+        }
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (updateDTO.getCategoriaId() != null) {</span>
+<span class="fc" id="L73">            categoriaService.getCategoriaById(updateDTO.getCategoriaId());</span>
+        }
+<span class="fc" id="L75">        return libroDAO.update(id, updateDTO)</span>
+<span class="fc" id="L76">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
+    }
+
+    @Override
+    public void deleteLibro(Long id) {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (!libroDAO.existsById(id)) {</span>
+<span class="fc" id="L82">            throw new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id);</span>
+        }
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (ejemplarDAO.existsByLibroId(id)) {</span>
+<span class="fc" id="L85">            throw new SolicitudInvalidaException(&quot;No se puede eliminar el libro porque tiene ejemplares registrados&quot;);</span>
+        }
+<span class="fc" id="L87">        libroDAO.deleteById(id);</span>
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

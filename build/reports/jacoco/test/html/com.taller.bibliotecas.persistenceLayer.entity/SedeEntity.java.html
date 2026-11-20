@@ -41,12 +41,12 @@ public class SedeEntity {
 
     @PrePersist
     protected void onCreate() {
-<span class="nc" id="L44">        this.createdAt = LocalDateTime.now();</span>
-<span class="nc" id="L45">        this.updatedAt = LocalDateTime.now();</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (this.activa == null) {</span>
-<span class="nc" id="L47">            this.activa = Boolean.TRUE;</span>
+<span class="fc" id="L44">        this.createdAt = LocalDateTime.now();</span>
+<span class="fc" id="L45">        this.updatedAt = LocalDateTime.now();</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (this.activa == null) {</span>
+<span class="fc" id="L47">            this.activa = Boolean.TRUE;</span>
         }
-<span class="nc" id="L49">    }</span>
+<span class="fc" id="L49">    }</span>
 
     @PreUpdate
     protected void onUpdate() {

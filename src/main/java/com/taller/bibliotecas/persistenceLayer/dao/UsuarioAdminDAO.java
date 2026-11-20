@@ -3,12 +3,14 @@ package com.taller.bibliotecas.persistenceLayer.dao;
 import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminCreateDTO;
 import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminDTO;
 import com.taller.bibliotecas.businessLayer.dto.UsuarioAdminUpdateDTO;
+import com.taller.bibliotecas.businessLayer.dto.UsuarioAuthDTO;
 import com.taller.bibliotecas.persistenceLayer.entity.UsuarioAdminEntity;
 import com.taller.bibliotecas.persistenceLayer.mapper.UsuarioAdminMapper;
 import com.taller.bibliotecas.persistenceLayer.repository.SedeRepository;
 import com.taller.bibliotecas.persistenceLayer.repository.UsuarioAdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,23 @@ public class UsuarioAdminDAO {
 
     public Optional<UsuarioAdminDTO> findById(Long id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDTO);
+    }
+
+    /** Datos para autenticar (incluye el hash de la contrasena). Solo lo usa la capa de seguridad. */
+    @Transactional(readOnly = true)
+    public Optional<UsuarioAuthDTO> findAuthByEmail(String email) {
+        return usuarioRepository.findByEmail(email).map(u -> new UsuarioAuthDTO(
+                u.getId(),
+                u.getNombre(),
+                u.getEmail(),
+                u.getPassword(),
+                u.getRol(),
+                u.getSedeEntity() != null ? u.getSedeEntity().getId() : null,
+                u.getActivo()));
+    }
+
+    public Optional<UsuarioAdminDTO> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email).map(usuarioMapper::toDTO);
     }
 
     public List<UsuarioAdminDTO> findAll() {

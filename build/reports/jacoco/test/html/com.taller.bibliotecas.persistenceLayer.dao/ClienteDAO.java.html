@@ -33,7 +33,7 @@ public class ClienteDAO {
     }
 
     public List&lt;ClienteDTO&gt; findAll() {
-<span class="nc" id="L36">        return clienteMapper.toDTOList(clienteRepository.findAll());</span>
+<span class="fc" id="L36">        return clienteMapper.toDTOList(clienteRepository.findAll());</span>
     }
 
     public Optional&lt;ClienteDTO&gt; update(Long id, ClienteUpdateDTO updateDTO) {

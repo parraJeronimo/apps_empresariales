@@ -1,0 +1,10 @@
+# Secretos locales
+.env
+
+# Gradle / IDE
+.gradle/
+build/
+.idea/
+*.iml
+.vscode/
+out/

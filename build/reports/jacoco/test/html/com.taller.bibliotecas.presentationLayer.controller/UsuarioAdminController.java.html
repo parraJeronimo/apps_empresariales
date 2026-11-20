@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(&quot;/api/v1/usuarios-admin&quot;)
 @RequiredArgsConstructor
-<span class="nc" id="L24">@Slf4j</span>
+<span class="fc" id="L24">@Slf4j</span>
 @Tag(name = &quot;Usuarios administrativos&quot;, description = &quot;RF-23: usuarios administrativos y asignacion de roles&quot;)
 public class UsuarioAdminController {
 
@@ -36,14 +36,14 @@ public class UsuarioAdminController {
             @ApiResponse(responseCode = &quot;404&quot;, description = &quot;La sede indicada no existe&quot;)
     })
     public ResponseEntity&lt;UsuarioAdminDTO&gt; crear(@Valid @RequestBody UsuarioAdminCreateDTO createDTO) {
-<span class="nc" id="L39">        log.info(&quot;POST /api/v1/usuarios-admin - {}&quot;, createDTO.getEmail());</span>
-<span class="nc" id="L40">        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioAdminService.createUsuario(createDTO));</span>
+<span class="fc" id="L39">        log.info(&quot;POST /api/v1/usuarios-admin - {}&quot;, createDTO.getEmail());</span>
+<span class="fc" id="L40">        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioAdminService.createUsuario(createDTO));</span>
     }
 
     @GetMapping
     @Operation(summary = &quot;Listar usuarios administrativos&quot;)
     public ResponseEntity&lt;List&lt;UsuarioAdminDTO&gt;&gt; listar() {
-<span class="nc" id="L46">        return ResponseEntity.ok(usuarioAdminService.getAllUsuarios());</span>
+<span class="fc" id="L46">        return ResponseEntity.ok(usuarioAdminService.getAllUsuarios());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
@@ -65,7 +65,7 @@ public class UsuarioAdminController {
     public ResponseEntity&lt;UsuarioAdminDTO&gt; actualizar(
             @Parameter(description = &quot;ID del usuario&quot;, example = &quot;1&quot;) @PathVariable Long id,
             @Valid @RequestBody UsuarioAdminUpdateDTO updateDTO) {
-<span class="nc" id="L68">        return ResponseEntity.ok(usuarioAdminService.updateUsuario(id, updateDTO));</span>
+<span class="fc" id="L68">        return ResponseEntity.ok(usuarioAdminService.updateUsuario(id, updateDTO));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

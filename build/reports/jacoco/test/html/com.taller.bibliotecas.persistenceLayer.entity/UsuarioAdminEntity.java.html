@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,11 @@ public class UsuarioAdminEntity {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
+    /** Hash BCrypt de la contrasena (60 caracteres). Nunca se guarda ni se devuelve en texto plano (RNF-03). */
+    @Column(length = 100)
+    @ToString.Exclude
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private RolUsuario rol;
@@ -45,16 +51,16 @@ public class UsuarioAdminEntity {
 
     @PrePersist
     protected void onCreate() {
-<span class="nc" id="L48">        this.createdAt = LocalDateTime.now();</span>
-<span class="nc" id="L49">        this.updatedAt = LocalDateTime.now();</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (this.activo == null) {</span>
-<span class="nc" id="L51">            this.activo = Boolean.TRUE;</span>
+<span class="fc" id="L54">        this.createdAt = LocalDateTime.now();</span>
+<span class="fc" id="L55">        this.updatedAt = LocalDateTime.now();</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (this.activo == null) {</span>
+<span class="fc" id="L57">            this.activo = Boolean.TRUE;</span>
         }
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L59">    }</span>
 
     @PreUpdate
     protected void onUpdate() {
-<span class="nc" id="L57">        this.updatedAt = LocalDateTime.now();</span>
-<span class="nc" id="L58">    }</span>
+<span class="fc" id="L63">        this.updatedAt = LocalDateTime.now();</span>
+<span class="fc" id="L64">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

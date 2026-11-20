@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -20,48 +23,68 @@ import java.util.List;
  * 400 Bad Request, 404 Not Found y 500 Internal Server Error.
  */
 @RestControllerAdvice
-<span class="nc" id="L23">@Slf4j</span>
-<span class="nc" id="L24">public class GlobalExceptionHandler {</span>
+<span class="fc" id="L26">@Slf4j</span>
+<span class="fc" id="L27">public class GlobalExceptionHandler {</span>
 
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(RecursoNoEncontradoException ex) {
-<span class="nc" id="L28">        log.warn(&quot;Recurso no encontrado: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L29">        return build(HttpStatus.NOT_FOUND, ex.getMessage(), null);</span>
+<span class="nc" id="L31">        log.warn(&quot;Recurso no encontrado: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L32">        return build(HttpStatus.NOT_FOUND, ex.getMessage(), null);</span>
     }
 
     @ExceptionHandler({SolicitudInvalidaException.class, IllegalArgumentException.class})
     public ResponseEntity&lt;ErrorResponse&gt; handleBadRequest(RuntimeException ex) {
-<span class="nc" id="L34">        log.warn(&quot;Solicitud invalida: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L35">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);</span>
+<span class="nc" id="L37">        log.warn(&quot;Solicitud invalida: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L38">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);</span>
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex) {
-<span class="nc" id="L40">        List&lt;String&gt; detalles = ex.getBindingResult().getFieldErrors().stream()</span>
-<span class="nc" id="L41">                .map(FieldError::getDefaultMessage)</span>
-<span class="nc" id="L42">                .toList();</span>
-<span class="nc" id="L43">        log.warn(&quot;Errores de validacion: {}&quot;, detalles);</span>
-<span class="nc" id="L44">        return build(HttpStatus.BAD_REQUEST, &quot;Datos de entrada invalidos&quot;, detalles);</span>
+<span class="fc" id="L43">        List&lt;String&gt; detalles = ex.getBindingResult().getFieldErrors().stream()</span>
+<span class="fc" id="L44">                .map(FieldError::getDefaultMessage)</span>
+<span class="fc" id="L45">                .toList();</span>
+<span class="fc" id="L46">        log.warn(&quot;Errores de validacion: {}&quot;, detalles);</span>
+<span class="fc" id="L47">        return build(HttpStatus.BAD_REQUEST, &quot;Datos de entrada invalidos&quot;, detalles);</span>
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class,
             MissingServletRequestParameterException.class,
             HttpMessageNotReadableException.class})
     public ResponseEntity&lt;ErrorResponse&gt; handleParametrosInvalidos(Exception ex) {
-<span class="nc" id="L51">        log.warn(&quot;Parametros o cuerpo de la peticion invalidos: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L52">        return build(HttpStatus.BAD_REQUEST, &quot;Parametros o cuerpo de la peticion invalidos&quot;, null);</span>
+<span class="nc" id="L54">        log.warn(&quot;Parametros o cuerpo de la peticion invalidos: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L55">        return build(HttpStatus.BAD_REQUEST, &quot;Parametros o cuerpo de la peticion invalidos&quot;, null);</span>
+    }
+
+    /** Credenciales incorrectas en el login. Mensaje unico para no revelar si el email existe. */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleBadCredentials(BadCredentialsException ex) {
+<span class="fc" id="L61">        log.warn(&quot;Inicio de sesion fallido&quot;);</span>
+<span class="fc" id="L62">        return build(HttpStatus.UNAUTHORIZED, &quot;Email o contrasena incorrectos&quot;, null);</span>
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleDisabled(DisabledException ex) {
+<span class="fc" id="L67">        log.warn(&quot;Inicio de sesion con cuenta desactivada&quot;);</span>
+<span class="fc" id="L68">        return build(HttpStatus.FORBIDDEN, &quot;La cuenta esta desactivada&quot;, null);</span>
+    }
+
+    /** Sin esto, un @PreAuthorize que niega el acceso caeria en el handler generico y responderia 500. */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleAccessDenied(AccessDeniedException ex) {
+<span class="nc" id="L74">        log.warn(&quot;Acceso denegado: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L75">        return build(HttpStatus.FORBIDDEN, &quot;No tiene permisos para acceder a este recurso&quot;, null);</span>
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity&lt;ErrorResponse&gt; handleGeneric(Exception ex) {
-<span class="nc" id="L57">        log.error(&quot;Error inesperado en el servidor&quot;, ex);</span>
-<span class="nc" id="L58">        return build(HttpStatus.INTERNAL_SERVER_ERROR, &quot;Ocurrio un error inesperado en el servidor&quot;, null);</span>
+<span class="nc" id="L80">        log.error(&quot;Error inesperado en el servidor&quot;, ex);</span>
+<span class="nc" id="L81">        return build(HttpStatus.INTERNAL_SERVER_ERROR, &quot;Ocurrio un error inesperado en el servidor&quot;, null);</span>
     }
 
     private ResponseEntity&lt;ErrorResponse&gt; build(HttpStatus status, String message, List&lt;String&gt; detalles) {
-<span class="nc" id="L62">        ErrorResponse body = new ErrorResponse(</span>
-<span class="nc" id="L63">                LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, detalles);</span>
-<span class="nc" id="L64">        return ResponseEntity.status(status).body(body);</span>
+<span class="fc" id="L85">        ErrorResponse body = new ErrorResponse(</span>
+<span class="fc" id="L86">                LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, detalles);</span>
+<span class="fc" id="L87">        return ResponseEntity.status(status).body(body);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

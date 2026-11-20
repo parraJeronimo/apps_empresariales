@@ -20,16 +20,16 @@ public class SedeDAO {
     private final SedeMapper sedeMapper;
 
     public SedeDTO save(SedeCreateDTO createDTO) {
-<span class="nc" id="L23">        SedeEntity entity = sedeMapper.toEntity(createDTO);</span>
-<span class="nc" id="L24">        return sedeMapper.toDTO(sedeRepository.save(entity));</span>
+<span class="fc" id="L23">        SedeEntity entity = sedeMapper.toEntity(createDTO);</span>
+<span class="fc" id="L24">        return sedeMapper.toDTO(sedeRepository.save(entity));</span>
     }
 
     public Optional&lt;SedeDTO&gt; findById(Long id) {
-<span class="nc" id="L28">        return sedeRepository.findById(id).map(sedeMapper::toDTO);</span>
+<span class="fc" id="L28">        return sedeRepository.findById(id).map(sedeMapper::toDTO);</span>
     }
 
     public List&lt;SedeDTO&gt; findAll() {
-<span class="nc" id="L32">        return sedeMapper.toDTOList(sedeRepository.findAll());</span>
+<span class="fc" id="L32">        return sedeMapper.toDTOList(sedeRepository.findAll());</span>
     }
 
     public List&lt;SedeDTO&gt; findByActiva(boolean activa) {
@@ -55,7 +55,7 @@ public class SedeDAO {
     }
 
     public boolean existsByNombre(String nombre) {
-<span class="nc" id="L58">        return sedeRepository.existsByNombre(nombre);</span>
+<span class="fc" id="L58">        return sedeRepository.existsByNombre(nombre);</span>
     }
 
     public boolean existsByNombreAndIdNot(String nombre, Long id) {

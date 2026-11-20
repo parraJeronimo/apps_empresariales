@@ -1,9 +1,12 @@
 package com.taller.bibliotecas.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,11 +31,18 @@ import org.springframework.context.annotation.Configuration;
                         url = "https://opensource.org/licenses/MIT"
                 )
         ),
+        security = @SecurityRequirement(name = "bearerAuth"),   // todos los endpoints piden token salvo los marcados con @SecurityRequirements
         servers = {
                 @Server(url = "http://localhost:8080/bibliotecas", description = "Servidor de Desarrollo"),
                 @Server(url = "http://localhost:8090/bibliotecas", description = "Servidor de Pruebas"),
                 @Server(url = "http://localhost:8099/bibliotecas", description = "Servidor de Produccion")
         }
 )
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT",
+        description = "Token obtenido en POST /api/v1/auth/login. Se pega sin la palabra 'Bearer'")
 public class OpenApiConfig {
 }

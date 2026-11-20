@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -50,6 +53,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleParametrosInvalidos(Exception ex) {
         log.warn("Parametros o cuerpo de la peticion invalidos: {}", ex.getMessage());
         return build(HttpStatus.BAD_REQUEST, "Parametros o cuerpo de la peticion invalidos", null);
+    }
+
+    /** Credenciales incorrectas en el login. Mensaje unico para no revelar si el email existe. */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        log.warn("Inicio de sesion fallido");
+        return build(HttpStatus.UNAUTHORIZED, "Email o contrasena incorrectos", null);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponse> handleDisabled(DisabledException ex) {
+        log.warn("Inicio de sesion con cuenta desactivada");
+        return build(HttpStatus.FORBIDDEN, "La cuenta esta desactivada", null);
+    }
+
+    /** Sin esto, un @PreAuthorize que niega el acceso caeria en el handler generico y responderia 500. */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        log.warn("Acceso denegado: {}", ex.getMessage());
+        return build(HttpStatus.FORBIDDEN, "No tiene permisos para acceder a este recurso", null);
     }
 
     @ExceptionHandler(Exception.class)

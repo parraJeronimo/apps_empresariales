@@ -4,16 +4,18 @@ API REST (Spring Boot 3.5 / Java 21) para administrar una red de bibliotecas con
 ejemplares, clientes, prestamos, devoluciones en cualquier sede, reservas, traslados entre sedes, usuarios
 administrativos y reportes.
 
-Este proyecto implementa **solo los requerimientos funcionales (RF-01 a RF-25)** del documento
-`Requerimientos_Sistema_Gestion_Multiples_Bibliotecas.docx`. Los requerimientos no funcionales (seguridad, auditoria,
-rendimiento, etc.) y los puntos "en analisis" quedan pendientes (ver el final de este documento).
+Este proyecto implementa los requerimientos funcionales (RF-01 a RF-25) y la **seguridad con Spring Security + JWT**
+(RNF-01 a RNF-03) del documento `Requerimientos_Sistema_Gestion_Multiples_Bibliotecas.docx`. Los demas requerimientos
+no funcionales (auditoria, respaldos, etc.) y los puntos "en analisis" quedan pendientes (ver el final de este documento).
 
 ## Estructura de carpetas
 
 ```
 src/main/java/com/taller/bibliotecas
 ├── BibliotecasApplication.java
-├── config/                 OpenApiConfig (Swagger)
+├── config/                 OpenApiConfig (Swagger + esquema Bearer), DataSeeder (administrador general inicial)
+├── security/               Capa de seguridad: SecurityConfig, JwtService, JwtAuthenticationFilter,
+│                           CustomUserDetailsService, JwtAuthenticationEntryPoint (401), JwtAccessDeniedHandler (403)
 ├── presentationLayer/
 │   ├── controller/         Controladores REST (uno por modulo)
 │   └── exception/          GlobalExceptionHandler, RecursoNoEncontradoException, SolicitudInvalidaException
@@ -44,8 +46,51 @@ src/test/java/com/taller/bibliotecas/businessLayer
 | `prestamos` (+ `/{id}/devolucion`, `/cliente/{id}`, `/cliente/{id}/historial`) | RF-11 a RF-17, RF-25 |
 | `reservas` (+ `/sede/{id}`, `/{id}/aprobar`, `/rechazar`, `/cancelar`) | RF-21, RF-22 y gestion de solicitudes por sede |
 | `traslados` (+ `/{id}/recepcion`, `/{id}/cancelar`) | RF-18, RF-19 |
+| `auth` (`/login`, `/me`) | RNF-01, RNF-02 |
 | `usuarios-admin` | RF-23 |
 | `reportes` (+ `/libros-mas-solicitados`) | RF-24 y ranking de libros mas solicitados |
+
+## Seguridad (Spring Security + JWT)
+
+La API es **stateless**: el usuario inicia sesion, recibe un token JWT (HS256) y lo envia en cada peticion con el header
+`Authorization: Bearer <token>`. Las contrasenas se guardan con BCrypt y nunca se devuelven en las respuestas.
+
+```bash
+# 1. Iniciar sesion (el DataSeeder crea admin@biblioteca.com / Admin12345 al arrancar)
+curl -s -X POST http://localhost:8090/bibliotecas/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@biblioteca.com","password":"Admin12345"}'
+
+# 2. Usar el token
+curl http://localhost:8090/bibliotecas/api/v1/sedes -H "Authorization: Bearer <token>"
+```
+
+En Swagger UI: ejecutar `POST /api/v1/auth/login`, copiar `token`, pulsar **Authorize** y pegarlo (sin la palabra `Bearer`).
+
+| Ruta | Quien puede |
+|---|---|
+| `POST /auth/login`, Swagger, `/error`, consola H2 (perfil test) | Publico |
+| `/usuarios-admin/**`, `POST/PUT/PATCH/DELETE /sedes/**` | `ADMINISTRADOR_GENERAL` |
+| `/reportes/**`, `DELETE /categorias/**`, `DELETE /libros/**` | `ADMINISTRADOR_GENERAL`, `ADMINISTRADOR_SEDE` |
+| Resto de `/api/v1/**` (clientes, libros, ejemplares, prestamos, reservas, traslados...) | Cualquier usuario autenticado |
+
+Respuestas de seguridad (mismo JSON `timestamp/status/error/message/detalles` del resto de la API):
+`401` sin token, token invalido/expirado o credenciales incorrectas; `403` rol sin permiso o cuenta desactivada.
+Un usuario desactivado pierde el acceso de inmediato aunque su token siga vigente (el filtro consulta la BD en cada peticion).
+
+**Usuarios y contrasenas.** `POST /usuarios-admin` exige `password` (8 a 72 caracteres) y `PUT /usuarios-admin/{id}` permite
+restablecerla enviando `password`. No hay registro publico: solo el administrador general crea usuarios. Los usuarios que
+existian antes de agregar la seguridad no tienen contrasena y no pueden iniciar sesion hasta que se les asigne una.
+
+**Variables de entorno** (se leen del sistema o de un archivo `.env` en la raiz, que no se sube a Git; plantilla en `.env.example`):
+
+| Variable | Uso | Por defecto |
+|---|---|---|
+| `JWT_SECRET` | Clave HS256 en Base64 (minimo 32 bytes: `openssl rand -base64 32`) | clave de desarrollo; **obligatoria en `prod`** |
+| `JWT_EXPIRATION` | Vigencia del token en ms | 3600000 (1 h); 900000 en `prod` |
+| `CORS_ALLOWED_ORIGINS` | Frontends permitidos, separados por coma | `localhost:4200`, `5173` y `3000`; obligatoria en `prod` |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Administrador general inicial | `admin@biblioteca.com` / `Admin12345`; en `prod` si no hay `ADMIN_PASSWORD` no se crea |
+| `DB_USERNAME` / `DB_PASSWORD` | MySQL en `prod` | `root` / `changeme` |
 
 ## Reglas de negocio implementadas
 
@@ -90,6 +135,8 @@ Requisitos: JDK 21. (Los perfiles `dev` y `prod` usan MySQL; el perfil `test` us
 ./gradlew test
 ```
 
+Las pruebas de seguridad estan en `src/test/java/.../security` (`JwtServiceTest`, `CustomUserDetailsServiceTest` y
+`SecurityIntegrationTest`, esta ultima levanta la aplicacion completa con H2 y prueba 401/403/200 de punta a punta).
 Cada servicio tiene su clase de pruebas en `src/test/java/.../businessLayer` (Mockito sobre los DAO y servicios
 colaboradores). Al terminar `test` se genera el reporte de Jacoco (`build/reports/jacoco/test/html/index.html`) y se
 ejecuta `jacocoTestCoverageVerification`, que exige:
@@ -108,10 +155,14 @@ cambiar:
 2. Un ejemplar devuelto en otra sede **se queda en esa sede**; para regresarlo a su sede de origen se usa un traslado.
 3. Una reserva se hace sobre un **libro** y una **sede de recogida**; no reserva un ejemplar especifico.
 4. No hay multas ni notificaciones; solo se informa si hubo retraso y cuantos dias.
-5. Los roles de usuario existen como datos, pero todavia no restringen el acceso a los endpoints.
+5. Los permisos por rol de la seccion "Seguridad" son una propuesta (los niveles exactos estan "en analisis"); se ajustan
+   en `security/SecurityConfig.java`. Los roles no limitan por sede: un `ADMINISTRADOR_SEDE` puede operar sobre cualquier sede.
+6. Solo el personal administrativo inicia sesion. Los clientes no tienen cuenta (no hay login de clientes ni recuperacion de clave).
 
 ## Pendiente (fuera del alcance actual)
 
-- Requerimientos no funcionales: autenticacion y control de acceso por rol (RNF), contrasenas cifradas, auditoria,
-  respaldos, etc.
+- Requerimientos no funcionales restantes: auditoria de operaciones, respaldos, etc.
+- Login de clientes, registro publico y recuperacion de contrasena por correo (requiere definir el medio de notificacion).
+- Paginacion de los listados (hoy los `GET` devuelven arreglos JSON completos) y los modulos de multas, renovacion de
+  prestamos y copias de seguridad que aparecen en el mapa de navegacion pero no en los requerimientos funcionales.
 - Decisiones de la seccion 3 del documento de requerimientos.

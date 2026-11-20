@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +24,12 @@ public class UsuarioAdminCreateDTO {
     @Size(max = 150)
     @Schema(description = "Correo electronico del usuario", example = "maria.lopez@biblioteca.com")
     private String email;
+
+    @NotBlank(message = "La contrasena es obligatoria")
+    @Size(min = 8, max = 72, message = "La contrasena debe tener entre 8 y 72 caracteres")
+    @ToString.Exclude
+    @Schema(description = "Contrasena inicial (minimo 8 caracteres). Se almacena cifrada con BCrypt", example = "Clave12345", accessMode = Schema.AccessMode.WRITE_ONLY)
+    private String password;
 
     @NotNull(message = "El rol del usuario es obligatorio")
     @Schema(description = "Rol asignado al usuario", example = "ADMINISTRADOR_SEDE")

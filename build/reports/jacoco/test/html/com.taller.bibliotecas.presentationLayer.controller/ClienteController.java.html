@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(&quot;/api/v1/clientes&quot;)
 @RequiredArgsConstructor
-<span class="nc" id="L24">@Slf4j</span>
+<span class="fc" id="L24">@Slf4j</span>
 @Tag(name = &quot;Clientes&quot;, description = &quot;RF-09 y RF-10: registro, consulta y actualizacion de clientes&quot;)
 public class ClienteController {
 
@@ -41,7 +41,7 @@ public class ClienteController {
     @GetMapping
     @Operation(summary = &quot;RF-10: Listar clientes&quot;)
     public ResponseEntity&lt;List&lt;ClienteDTO&gt;&gt; listar() {
-<span class="nc" id="L44">        return ResponseEntity.ok(clienteService.getAllClientes());</span>
+<span class="fc" id="L44">        return ResponseEntity.ok(clienteService.getAllClientes());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)

@@ -1,10 +1,220 @@
 {
   "info": {
     "name": "Bibliotecas - Sistema de gestion de multiples bibliotecas",
-    "description": "Flujo completo de los requerimientos funcionales. Ejecutar en orden (Collection Runner) con el perfil test: gradlew bootRun --args='--spring.profiles.active=test'. Los IDs se guardan automaticamente en variables de coleccion.",
+    "description": "Flujo completo de los requerimientos funcionales. Ejecutar en orden (Collection Runner) con el perfil test: gradlew bootRun --args='--spring.profiles.active=test'. La carpeta 00 inicia sesion con el administrador general creado por el DataSeeder (admin@biblioteca.com / Admin12345) y guarda el token en la variable {{token}}, que el resto de la coleccion envia como Bearer. Los IDs se guardan automaticamente en variables de coleccion.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "00 - Autenticacion (RNF-01, RNF-02)",
+      "item": [
+        {
+          "name": "Login administrador general (guarda el token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@biblioteca.com\",\n  \"password\": \"Admin12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { pm.collectionVariables.set(\"token\", pm.response.json().token); }",
+                  "pm.test(\"Rol ADMINISTRADOR_GENERAL\", function () { pm.expect(pm.response.json().rol).to.eql(\"ADMINISTRADOR_GENERAL\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login con contrasena incorrecta (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@biblioteca.com\",\n  \"password\": \"incorrecta1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login con datos invalidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"no-es-un-email\",\n  \"password\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Usuario autenticado (me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sin token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "01 - Sedes (RF-01, RF-02)",
       "item": [
@@ -1118,7 +1328,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Laura Gomez\",\n  \"email\": \"laura@biblioteca.com\",\n  \"rol\": \"ADMINISTRADOR_GENERAL\"\n}",
+              "raw": "{\n  \"nombre\": \"Laura Gomez\",\n  \"email\": \"laura@biblioteca.com\",\n  \"password\": \"Clave12345\",\n  \"rol\": \"ADMINISTRADOR_GENERAL\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1162,7 +1372,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Maria Lopez\",\n  \"email\": \"maria@biblioteca.com\",\n  \"rol\": \"ADMINISTRADOR_SEDE\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
+              "raw": "{\n  \"nombre\": \"Maria Lopez\",\n  \"email\": \"maria@biblioteca.com\",\n  \"password\": \"Clave12345\",\n  \"rol\": \"ADMINISTRADOR_SEDE\",\n  \"sedeId\": \"{{sedeNorteId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1206,7 +1416,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Pedro\",\n  \"email\": \"pedro@biblioteca.com\",\n  \"rol\": \"BIBLIOTECARIO\"\n}",
+              "raw": "{\n  \"nombre\": \"Pedro\",\n  \"email\": \"pedro@biblioteca.com\",\n  \"password\": \"Clave12345\",\n  \"rol\": \"BIBLIOTECARIO\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2551,6 +2761,20 @@
     {
       "key": "baseUrl",
       "value": "http://localhost:8090/bibliotecas"
+    },
+    {
+      "key": "token",
+      "value": ""
     }
-  ]
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  }
 }

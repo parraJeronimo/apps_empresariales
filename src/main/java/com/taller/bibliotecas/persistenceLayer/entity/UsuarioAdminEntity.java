@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,11 @@ public class UsuarioAdminEntity {
 
     @Column(nullable = false, unique = true, length = 150)
     private String email;
+
+    /** Hash BCrypt de la contrasena (60 caracteres). Nunca se guarda ni se devuelve en texto plano (RNF-03). */
+    @Column(length = 100)
+    @ToString.Exclude
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,9 @@ class UsuarioAdminServiceTest {
     @Mock
     private SedeService sedeService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UsuarioAdminServiceImpl usuarioService;
 
@@ -41,6 +45,7 @@ class UsuarioAdminServiceTest {
         UsuarioAdminCreateDTO dto = new UsuarioAdminCreateDTO();
         dto.setNombre("Maria Lopez");
         dto.setEmail("maria@biblioteca.com");
+        dto.setPassword("Clave12345");
         dto.setRol(rol);
         dto.setSedeId(sedeId);
         return dto;
@@ -108,6 +113,22 @@ class UsuarioAdminServiceTest {
         assertThrows(RecursoNoEncontradoException.class, () -> usuarioService.createUsuario(dto));
 
         verify(usuarioDao, never()).save(any());
+    }
+
+    @Test
+    void testCreateUsuario_CifraLaContrasenaYNormalizaElEmail() {
+        UsuarioAdminCreateDTO dto = crearDto(RolUsuario.ADMINISTRADOR_GENERAL, null);
+        dto.setEmail("  Maria@Biblioteca.COM ");
+        when(usuarioDao.existsByEmail("maria@biblioteca.com")).thenReturn(false);
+        when(passwordEncoder.encode("Clave12345")).thenReturn("$2a$10$hashDeEjemplo");
+        when(usuarioDao.save(dto)).thenReturn(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null));
+
+        usuarioService.createUsuario(dto);
+
+        // RNF-03: lo que llega al DAO es el hash, nunca la contrasena original
+        assertEquals("$2a$10$hashDeEjemplo", dto.getPassword());
+        assertEquals("maria@biblioteca.com", dto.getEmail());
+        verify(passwordEncoder, times(1)).encode("Clave12345");
     }
 
     // ---------- consultas ----------
@@ -222,6 +243,44 @@ class UsuarioAdminServiceTest {
         when(usuarioDao.update(1L, dto)).thenReturn(Optional.of(desactivado));
 
         assertFalse(usuarioService.updateUsuario(1L, dto).getActivo());
+    }
+
+    @Test
+    void testUpdateUsuario_RestableceLaContrasenaCifrada() {
+        UsuarioAdminUpdateDTO dto = new UsuarioAdminUpdateDTO();
+        dto.setPassword("NuevaClave1");
+        when(usuarioDao.findById(1L)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+        when(passwordEncoder.encode("NuevaClave1")).thenReturn("$2a$10$otroHash");
+        when(usuarioDao.update(1L, dto)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+
+        usuarioService.updateUsuario(1L, dto);
+
+        assertEquals("$2a$10$otroHash", dto.getPassword());
+    }
+
+    @Test
+    void testUpdateUsuario_SinContrasenaNoLaCifra() {
+        UsuarioAdminUpdateDTO dto = new UsuarioAdminUpdateDTO();
+        dto.setNombre("Otro Nombre");
+        when(usuarioDao.findById(1L)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+        when(usuarioDao.update(1L, dto)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+
+        usuarioService.updateUsuario(1L, dto);
+
+        verifyNoInteractions(passwordEncoder);
+    }
+
+    @Test
+    void testUpdateUsuario_NormalizaElEmail() {
+        UsuarioAdminUpdateDTO dto = new UsuarioAdminUpdateDTO();
+        dto.setEmail("  Nuevo@Biblioteca.com ");
+        when(usuarioDao.findById(1L)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+        when(usuarioDao.existsByEmailAndIdNot("nuevo@biblioteca.com", 1L)).thenReturn(false);
+        when(usuarioDao.update(1L, dto)).thenReturn(Optional.of(usuario(1L, RolUsuario.ADMINISTRADOR_GENERAL, null)));
+
+        usuarioService.updateUsuario(1L, dto);
+
+        assertEquals("nuevo@biblioteca.com", dto.getEmail());
     }
 
     @Test

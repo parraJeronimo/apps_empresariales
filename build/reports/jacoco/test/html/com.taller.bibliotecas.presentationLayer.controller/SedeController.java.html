@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(&quot;/api/v1/sedes&quot;)
 @RequiredArgsConstructor
-<span class="nc" id="L24">@Slf4j</span>
+<span class="fc" id="L24">@Slf4j</span>
 @Tag(name = &quot;Sedes&quot;, description = &quot;RF-01 y RF-02: registro, consulta, modificacion y desactivacion de sedes&quot;)
 public class SedeController {
 
@@ -34,14 +34,14 @@ public class SedeController {
             @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Datos invalidos o nombre repetido&quot;)
     })
     public ResponseEntity&lt;SedeDTO&gt; crear(@Valid @RequestBody SedeCreateDTO createDTO) {
-<span class="nc" id="L37">        log.info(&quot;POST /api/v1/sedes - {}&quot;, createDTO.getNombre());</span>
-<span class="nc" id="L38">        return ResponseEntity.status(HttpStatus.CREATED).body(sedeService.createSede(createDTO));</span>
+<span class="fc" id="L37">        log.info(&quot;POST /api/v1/sedes - {}&quot;, createDTO.getNombre());</span>
+<span class="fc" id="L38">        return ResponseEntity.status(HttpStatus.CREATED).body(sedeService.createSede(createDTO));</span>
     }
 
     @GetMapping
     @Operation(summary = &quot;RF-02: Listar sedes&quot;, description = &quot;Retorna todas las sedes, activas e inactivas&quot;)
     public ResponseEntity&lt;List&lt;SedeDTO&gt;&gt; listar() {
-<span class="nc" id="L44">        return ResponseEntity.ok(sedeService.getAllSedes());</span>
+<span class="fc" id="L44">        return ResponseEntity.ok(sedeService.getAllSedes());</span>
     }
 
     @GetMapping(&quot;/activas&quot;)

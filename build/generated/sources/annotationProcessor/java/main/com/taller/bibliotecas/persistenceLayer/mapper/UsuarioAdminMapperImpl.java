@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-10-10T15:08:17-0500",
+    date = "2026-11-20T18:25:04-0500",
     comments = "version: 1.6.3, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.14.3.jar, environment: Java 21.0.12 (Oracle Corporation)"
 )
 @Component
@@ -63,6 +63,7 @@ public class UsuarioAdminMapperImpl implements UsuarioAdminMapper {
 
         usuarioAdminEntity.setNombre( createDTO.getNombre() );
         usuarioAdminEntity.setEmail( createDTO.getEmail() );
+        usuarioAdminEntity.setPassword( createDTO.getPassword() );
         usuarioAdminEntity.setRol( createDTO.getRol() );
 
         return usuarioAdminEntity;
@@ -79,6 +80,9 @@ public class UsuarioAdminMapperImpl implements UsuarioAdminMapper {
         }
         if ( updateDTO.getEmail() != null ) {
             entity.setEmail( updateDTO.getEmail() );
+        }
+        if ( updateDTO.getPassword() != null ) {
+            entity.setPassword( updateDTO.getPassword() );
         }
         if ( updateDTO.getRol() != null ) {
             entity.setRol( updateDTO.getRol() );

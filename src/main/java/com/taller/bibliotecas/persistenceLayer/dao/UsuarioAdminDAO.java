@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -54,6 +56,11 @@ public class UsuarioAdminDAO {
 
     public List<UsuarioAdminDTO> findAll() {
         return usuarioMapper.toDTOList(usuarioRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<UsuarioAdminDTO> findAll(Pageable pageable) {
+        return usuarioRepository.findAll(pageable).map(usuarioMapper::toDTO);
     }
 
     public List<UsuarioAdminDTO> findBySedeId(Long sedeId) {

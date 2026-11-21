@@ -241,4 +241,20 @@ class SedeServiceTest {
 
         assertThrows(RecursoNoEncontradoException.class, () -> sedeService.activarSede(1L));
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllSedes_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(sedeDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.sede(1L, "Central", true), TestData.sede(2L, "Norte", true)), pageable, 5));
+
+        var result = sedeService.getAllSedes(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(sedeDao, times(1)).findAll(pageable);
+    }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
 
 /**
  * Reglas de acceso (RNF-01 y RNF-02). Se evaluan de arriba hacia abajo y gana la primera que coincide.
@@ -125,6 +126,9 @@ public class SecurityConfig {
         config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        // sin esto el navegador (frontend en otro origen) no deja leer los headers de paginacion
+        config.setExposedHeaders(List.of(Paginacion.HEADER_TOTAL_COUNT, Paginacion.HEADER_TOTAL_PAGES,
+                Paginacion.HEADER_PAGE, Paginacion.HEADER_PAGE_SIZE));
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

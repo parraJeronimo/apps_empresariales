@@ -17,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/usuarios-admin")
@@ -42,8 +45,16 @@ public class UsuarioAdminController {
 
     @GetMapping
     @Operation(summary = "Listar usuarios administrativos")
-    public ResponseEntity<List<UsuarioAdminDTO>> listar() {
-        return ResponseEntity.ok(usuarioAdminService.getAllUsuarios());
+    public ResponseEntity<List<UsuarioAdminDTO>> listar(
+            @Parameter(description = "Numero de pagina (desde 0). Si se omiten page y size se devuelve todo el listado")
+            @RequestParam(required = false) Integer page,
+            @Parameter(description = "Elementos por pagina (1-100, por defecto 20 si solo se envia page)")
+            @RequestParam(required = false) Integer size) {
+        Optional<Pageable> pageable = Paginacion.resolver(page, size);
+        if (pageable.isEmpty()) {
+            return ResponseEntity.ok(usuarioAdminService.getAllUsuarios());
+        }
+        return Paginacion.respuesta(usuarioAdminService.getAllUsuarios(pageable.get()));
     }
 
     @GetMapping("/{id}")

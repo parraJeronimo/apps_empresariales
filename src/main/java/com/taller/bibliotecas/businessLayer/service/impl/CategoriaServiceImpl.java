@@ -17,6 +17,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -48,6 +50,12 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public List<CategoriaDTO> getAllCategorias() {
         return categoriaDAO.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CategoriaDTO> getAllCategorias(Pageable pageable) {
+        return categoriaDAO.findAll(pageable);
     }
 
     @Override

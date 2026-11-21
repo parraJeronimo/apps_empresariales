@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,6 +36,11 @@ public class ClienteDAO {
 
     public List<ClienteDTO> findAll() {
         return clienteMapper.toDTOList(clienteRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<ClienteDTO> findAll(Pageable pageable) {
+        return clienteRepository.findAll(pageable).map(clienteMapper::toDTO);
     }
 
     public Optional<ClienteDTO> update(Long id, ClienteUpdateDTO updateDTO) {

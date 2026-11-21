@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,6 +43,11 @@ public class TrasladoDAO {
 
     public List<TrasladoDTO> findAll() {
         return trasladoMapper.toDTOList(trasladoRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<TrasladoDTO> findAll(Pageable pageable) {
+        return trasladoRepository.findAll(pageable).map(trasladoMapper::toDTO);
     }
 
     /** Traslados donde la sede es origen o destino */

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,6 +46,11 @@ public class PrestamoDAO {
 
     public List<PrestamoDTO> findAll() {
         return prestamoMapper.toDTOList(prestamoRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<PrestamoDTO> findAll(Pageable pageable) {
+        return prestamoRepository.findAll(pageable).map(prestamoMapper::toDTO);
     }
 
     public List<PrestamoDTO> findByClienteId(Long clienteId) {

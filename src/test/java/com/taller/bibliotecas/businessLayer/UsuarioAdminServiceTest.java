@@ -301,4 +301,20 @@ class UsuarioAdminServiceTest {
 
         assertThrows(RecursoNoEncontradoException.class, () -> usuarioService.updateUsuario(1L, dto));
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllUsuarios_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(usuarioDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.usuario(1L, RolUsuario.BIBLIOTECARIO, 1L), TestData.usuario(2L, RolUsuario.BIBLIOTECARIO, 1L)), pageable, 5));
+
+        var result = usuarioService.getAllUsuarios(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(usuarioDao, times(1)).findAll(pageable);
+    }
 }

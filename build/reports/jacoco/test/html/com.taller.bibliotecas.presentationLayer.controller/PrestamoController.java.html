@@ -18,11 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(&quot;/api/v1/prestamos&quot;)
 @RequiredArgsConstructor
-<span class="fc" id="L25">@Slf4j</span>
+<span class="fc" id="L28">@Slf4j</span>
 @Tag(name = &quot;Prestamos y devoluciones&quot;, description = &quot;RF-11 a RF-17 y RF-25: prestamos, devoluciones (incluso en otra sede) e historial&quot;)
 public class PrestamoController {
 
@@ -37,20 +40,28 @@ public class PrestamoController {
             @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Ejemplar, cliente o sede inexistente&quot;)
     })
     public ResponseEntity&lt;PrestamoDTO&gt; crear(@Valid @RequestBody PrestamoCreateDTO createDTO) {
-<span class="nc" id="L40">        log.info(&quot;POST /api/v1/prestamos - ejemplarId={}, clienteId={}&quot;, createDTO.getEjemplarId(), createDTO.getClienteId());</span>
-<span class="nc" id="L41">        return ResponseEntity.status(HttpStatus.CREATED).body(prestamoService.createPrestamo(createDTO));</span>
+<span class="nc" id="L43">        log.info(&quot;POST /api/v1/prestamos - ejemplarId={}, clienteId={}&quot;, createDTO.getEjemplarId(), createDTO.getClienteId());</span>
+<span class="nc" id="L44">        return ResponseEntity.status(HttpStatus.CREATED).body(prestamoService.createPrestamo(createDTO));</span>
     }
 
     @GetMapping
     @Operation(summary = &quot;Listar todos los prestamos&quot;)
-    public ResponseEntity&lt;List&lt;PrestamoDTO&gt;&gt; listar() {
-<span class="nc" id="L47">        return ResponseEntity.ok(prestamoService.getAllPrestamos());</span>
+    public ResponseEntity&lt;List&lt;PrestamoDTO&gt;&gt; listar(
+            @Parameter(description = &quot;Numero de pagina (desde 0). Si se omiten page y size se devuelve todo el listado&quot;)
+            @RequestParam(required = false) Integer page,
+            @Parameter(description = &quot;Elementos por pagina (1-100, por defecto 20 si solo se envia page)&quot;)
+            @RequestParam(required = false) Integer size) {
+<span class="fc" id="L54">        Optional&lt;Pageable&gt; pageable = Paginacion.resolver(page, size);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (pageable.isEmpty()) {</span>
+<span class="fc" id="L56">            return ResponseEntity.ok(prestamoService.getAllPrestamos());</span>
+        }
+<span class="fc" id="L58">        return Paginacion.respuesta(prestamoService.getAllPrestamos(pageable.get()));</span>
     }
 
     @GetMapping(&quot;/vencidos&quot;)
     @Operation(summary = &quot;Listar prestamos vencidos de todas las sedes&quot;)
     public ResponseEntity&lt;List&lt;PrestamoDTO&gt;&gt; listarVencidos() {
-<span class="nc" id="L53">        return ResponseEntity.ok(prestamoService.getPrestamosVencidos());</span>
+<span class="nc" id="L64">        return ResponseEntity.ok(prestamoService.getPrestamosVencidos());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
@@ -61,7 +72,7 @@ public class PrestamoController {
     })
     public ResponseEntity&lt;PrestamoDTO&gt; obtenerPorId(
             @Parameter(description = &quot;ID del prestamo&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L64">        return ResponseEntity.ok(prestamoService.getPrestamoById(id));</span>
+<span class="nc" id="L75">        return ResponseEntity.ok(prestamoService.getPrestamoById(id));</span>
     }
 
     @GetMapping(&quot;/cliente/{clienteId}&quot;)
@@ -70,14 +81,14 @@ public class PrestamoController {
     public ResponseEntity&lt;List&lt;PrestamoDTO&gt;&gt; listarPorCliente(
             @Parameter(description = &quot;ID del cliente&quot;, example = &quot;1&quot;) @PathVariable Long clienteId,
             @RequestParam(required = false) FiltroPrestamo filtro) {
-<span class="nc" id="L73">        return ResponseEntity.ok(prestamoService.getPrestamosByCliente(clienteId, filtro));</span>
+<span class="nc" id="L84">        return ResponseEntity.ok(prestamoService.getPrestamosByCliente(clienteId, filtro));</span>
     }
 
     @GetMapping(&quot;/cliente/{clienteId}/historial&quot;)
     @Operation(summary = &quot;RF-25: Historial de prestamos y devoluciones de un cliente&quot;)
     public ResponseEntity&lt;List&lt;PrestamoDTO&gt;&gt; historial(
             @Parameter(description = &quot;ID del cliente&quot;, example = &quot;1&quot;) @PathVariable Long clienteId) {
-<span class="nc" id="L80">        return ResponseEntity.ok(prestamoService.getHistorialByCliente(clienteId));</span>
+<span class="nc" id="L91">        return ResponseEntity.ok(prestamoService.getHistorialByCliente(clienteId));</span>
     }
 
     @PostMapping(&quot;/{id}/devolucion&quot;)
@@ -91,7 +102,7 @@ public class PrestamoController {
     public ResponseEntity&lt;PrestamoDTO&gt; devolver(
             @Parameter(description = &quot;ID del prestamo&quot;, example = &quot;1&quot;) @PathVariable Long id,
             @Valid @RequestBody DevolucionDTO devolucionDTO) {
-<span class="nc" id="L94">        return ResponseEntity.ok(prestamoService.registrarDevolucion(id, devolucionDTO));</span>
+<span class="nc" id="L105">        return ResponseEntity.ok(prestamoService.registrarDevolucion(id, devolucionDTO));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

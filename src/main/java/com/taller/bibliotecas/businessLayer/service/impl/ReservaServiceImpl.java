@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -74,6 +76,12 @@ public class ReservaServiceImpl implements ReservaService {
     @Transactional(readOnly = true)
     public List<ReservaDTO> getAllReservas() {
         return reservaDAO.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ReservaDTO> getAllReservas(Pageable pageable) {
+        return reservaDAO.findAll(pageable);
     }
 
     @Override

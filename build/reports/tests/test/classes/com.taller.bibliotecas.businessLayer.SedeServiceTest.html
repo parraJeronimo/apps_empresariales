@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">17</div>
+<div class="counter">18</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.093s</div>
+<div class="counter">0.195s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,42 +79,42 @@
 </thead>
 <tr>
 <td class="success">testActivarSede_CambioDeEstadoNoEncontrado()</td>
-<td class="success">0.003s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testActivarSede_Success()</td>
-<td class="success">0.002s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testActivarSede_YaActiva()</td>
-<td class="success">0.002s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateSede_NombreDuplicado()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateSede_Success()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDesactivarSede_CambioDeEstadoNoEncontrado()</td>
-<td class="success">0.005s</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDesactivarSede_ConEjemplaresPrestadosOEnTraslado()</td>
-<td class="success">0.005s</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDesactivarSede_NotFound()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -124,42 +124,47 @@
 </tr>
 <tr>
 <td class="success">testDesactivarSede_YaDesactivada()</td>
-<td class="success">0.002s</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testGetAllSedes_ReturnsList()</td>
-<td class="success">0.051s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetSedeById_Found()</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetSedeById_NotFound()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetSedesActivas_ReturnsOnlyActive()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateSede_NombreDuplicado()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateSede_NotFound()</td>
+<td class="success">testGetAllSedes_Paginado()</td>
 <td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">testGetAllSedes_ReturnsList()</td>
+<td class="success">0.108s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetSedeById_Found()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetSedeById_NotFound()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetSedesActivas_ReturnsOnlyActive()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateSede_NombreDuplicado()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateSede_NotFound()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">testUpdateSede_Success_SinCambiarNombre()</td>
-<td class="success">0.001s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -167,16 +172,16 @@
 <div class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>18:25:22.145 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.153 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
-18:25:22.191 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.210 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 99
-18:25:22.226 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
-18:25:22.234 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
-18:25:22.241 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
-18:25:22.249 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.260 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.274 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+<pre>19:53:19.454 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.480 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
+19:53:19.546 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.581 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 99
+19:53:19.603 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+19:53:19.613 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+19:53:19.624 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
+19:53:19.639 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.652 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.669 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
 </pre>
 </span>
 </div>
@@ -188,7 +193,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 6:25:43 p. m.</p>
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 7:54:07 p. m.</p>
 </div>
 </div>
 </body>

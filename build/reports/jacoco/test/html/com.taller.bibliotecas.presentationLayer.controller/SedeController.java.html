@@ -17,11 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(&quot;/api/v1/sedes&quot;)
 @RequiredArgsConstructor
-<span class="fc" id="L24">@Slf4j</span>
+<span class="fc" id="L27">@Slf4j</span>
 @Tag(name = &quot;Sedes&quot;, description = &quot;RF-01 y RF-02: registro, consulta, modificacion y desactivacion de sedes&quot;)
 public class SedeController {
 
@@ -34,20 +37,28 @@ public class SedeController {
             @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Datos invalidos o nombre repetido&quot;)
     })
     public ResponseEntity&lt;SedeDTO&gt; crear(@Valid @RequestBody SedeCreateDTO createDTO) {
-<span class="fc" id="L37">        log.info(&quot;POST /api/v1/sedes - {}&quot;, createDTO.getNombre());</span>
-<span class="fc" id="L38">        return ResponseEntity.status(HttpStatus.CREATED).body(sedeService.createSede(createDTO));</span>
+<span class="fc" id="L40">        log.info(&quot;POST /api/v1/sedes - {}&quot;, createDTO.getNombre());</span>
+<span class="fc" id="L41">        return ResponseEntity.status(HttpStatus.CREATED).body(sedeService.createSede(createDTO));</span>
     }
 
     @GetMapping
     @Operation(summary = &quot;RF-02: Listar sedes&quot;, description = &quot;Retorna todas las sedes, activas e inactivas&quot;)
-    public ResponseEntity&lt;List&lt;SedeDTO&gt;&gt; listar() {
-<span class="fc" id="L44">        return ResponseEntity.ok(sedeService.getAllSedes());</span>
+    public ResponseEntity&lt;List&lt;SedeDTO&gt;&gt; listar(
+            @Parameter(description = &quot;Numero de pagina (desde 0). Si se omiten page y size se devuelve todo el listado&quot;)
+            @RequestParam(required = false) Integer page,
+            @Parameter(description = &quot;Elementos por pagina (1-100, por defecto 20 si solo se envia page)&quot;)
+            @RequestParam(required = false) Integer size) {
+<span class="fc" id="L51">        Optional&lt;Pageable&gt; pageable = Paginacion.resolver(page, size);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (pageable.isEmpty()) {</span>
+<span class="fc" id="L53">            return ResponseEntity.ok(sedeService.getAllSedes());</span>
+        }
+<span class="fc" id="L55">        return Paginacion.respuesta(sedeService.getAllSedes(pageable.get()));</span>
     }
 
     @GetMapping(&quot;/activas&quot;)
     @Operation(summary = &quot;RF-02: Listar sedes activas&quot;)
     public ResponseEntity&lt;List&lt;SedeDTO&gt;&gt; listarActivas() {
-<span class="nc" id="L50">        return ResponseEntity.ok(sedeService.getSedesActivas());</span>
+<span class="nc" id="L61">        return ResponseEntity.ok(sedeService.getSedesActivas());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
@@ -58,7 +69,7 @@ public class SedeController {
     })
     public ResponseEntity&lt;SedeDTO&gt; obtenerPorId(
             @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L61">        return ResponseEntity.ok(sedeService.getSedeById(id));</span>
+<span class="nc" id="L72">        return ResponseEntity.ok(sedeService.getSedeById(id));</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
@@ -71,7 +82,7 @@ public class SedeController {
     public ResponseEntity&lt;SedeDTO&gt; actualizar(
             @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long id,
             @Valid @RequestBody SedeUpdateDTO updateDTO) {
-<span class="nc" id="L74">        return ResponseEntity.ok(sedeService.updateSede(id, updateDTO));</span>
+<span class="nc" id="L85">        return ResponseEntity.ok(sedeService.updateSede(id, updateDTO));</span>
     }
 
     @PatchMapping(&quot;/{id}/desactivar&quot;)
@@ -83,14 +94,14 @@ public class SedeController {
     })
     public ResponseEntity&lt;SedeDTO&gt; desactivar(
             @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L86">        return ResponseEntity.ok(sedeService.desactivarSede(id));</span>
+<span class="nc" id="L97">        return ResponseEntity.ok(sedeService.desactivarSede(id));</span>
     }
 
     @PatchMapping(&quot;/{id}/activar&quot;)
     @Operation(summary = &quot;RF-02: Reactivar sede&quot;)
     public ResponseEntity&lt;SedeDTO&gt; activar(
             @Parameter(description = &quot;ID de la sede&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L93">        return ResponseEntity.ok(sedeService.activarSede(id));</span>
+<span class="nc" id="L104">        return ResponseEntity.ok(sedeService.activarSede(id));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

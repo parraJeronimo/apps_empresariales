@@ -5,6 +5,8 @@ import com.taller.bibliotecas.businessLayer.dto.EjemplarDTO;
 import com.taller.bibliotecas.persistenceLayer.entity.EstadoEjemplar;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EjemplarService {
 
@@ -14,6 +16,9 @@ public interface EjemplarService {
     EjemplarDTO getEjemplarById(Long id);
 
     List<EjemplarDTO> getAllEjemplares();
+
+    /** Igual que getAllEjemplares() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<EjemplarDTO> getAllEjemplares(Pageable pageable);
 
     EjemplarDTO getEjemplarByCodigo(String codigo);
 

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,58 +26,63 @@ public class UsuarioAdminDAO {
     private final UsuarioAdminMapper usuarioMapper;
 
     public UsuarioAdminDTO save(UsuarioAdminCreateDTO createDTO) {
-<span class="fc" id="L27">        UsuarioAdminEntity entity = usuarioMapper.toEntity(createDTO);</span>
-<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (createDTO.getSedeId() != null) {</span>
-<span class="fc" id="L29">            entity.setSedeEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
+<span class="fc" id="L29">        UsuarioAdminEntity entity = usuarioMapper.toEntity(createDTO);</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (createDTO.getSedeId() != null) {</span>
+<span class="fc" id="L31">            entity.setSedeEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
         }
-<span class="fc" id="L31">        return usuarioMapper.toDTO(usuarioRepository.save(entity));</span>
+<span class="fc" id="L33">        return usuarioMapper.toDTO(usuarioRepository.save(entity));</span>
     }
 
     public Optional&lt;UsuarioAdminDTO&gt; findById(Long id) {
-<span class="fc" id="L35">        return usuarioRepository.findById(id).map(usuarioMapper::toDTO);</span>
+<span class="fc" id="L37">        return usuarioRepository.findById(id).map(usuarioMapper::toDTO);</span>
     }
 
     /** Datos para autenticar (incluye el hash de la contrasena). Solo lo usa la capa de seguridad. */
     @Transactional(readOnly = true)
     public Optional&lt;UsuarioAuthDTO&gt; findAuthByEmail(String email) {
-<span class="fc" id="L41">        return usuarioRepository.findByEmail(email).map(u -&gt; new UsuarioAuthDTO(</span>
-<span class="fc" id="L42">                u.getId(),</span>
-<span class="fc" id="L43">                u.getNombre(),</span>
-<span class="fc" id="L44">                u.getEmail(),</span>
-<span class="fc" id="L45">                u.getPassword(),</span>
-<span class="fc" id="L46">                u.getRol(),</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">                u.getSedeEntity() != null ? u.getSedeEntity().getId() : null,</span>
-<span class="fc" id="L48">                u.getActivo()));</span>
+<span class="fc" id="L43">        return usuarioRepository.findByEmail(email).map(u -&gt; new UsuarioAuthDTO(</span>
+<span class="fc" id="L44">                u.getId(),</span>
+<span class="fc" id="L45">                u.getNombre(),</span>
+<span class="fc" id="L46">                u.getEmail(),</span>
+<span class="fc" id="L47">                u.getPassword(),</span>
+<span class="fc" id="L48">                u.getRol(),</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                u.getSedeEntity() != null ? u.getSedeEntity().getId() : null,</span>
+<span class="fc" id="L50">                u.getActivo()));</span>
     }
 
     public Optional&lt;UsuarioAdminDTO&gt; findByEmail(String email) {
-<span class="fc" id="L52">        return usuarioRepository.findByEmail(email).map(usuarioMapper::toDTO);</span>
+<span class="fc" id="L54">        return usuarioRepository.findByEmail(email).map(usuarioMapper::toDTO);</span>
     }
 
     public List&lt;UsuarioAdminDTO&gt; findAll() {
-<span class="fc" id="L56">        return usuarioMapper.toDTOList(usuarioRepository.findAll());</span>
+<span class="fc" id="L58">        return usuarioMapper.toDTOList(usuarioRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;UsuarioAdminDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L63">        return usuarioRepository.findAll(pageable).map(usuarioMapper::toDTO);</span>
     }
 
     public List&lt;UsuarioAdminDTO&gt; findBySedeId(Long sedeId) {
-<span class="nc" id="L60">        return usuarioMapper.toDTOList(usuarioRepository.findBySedeEntityId(sedeId));</span>
+<span class="nc" id="L67">        return usuarioMapper.toDTOList(usuarioRepository.findBySedeEntityId(sedeId));</span>
     }
 
     public Optional&lt;UsuarioAdminDTO&gt; update(Long id, UsuarioAdminUpdateDTO updateDTO) {
-<span class="fc" id="L64">        return usuarioRepository.findById(id).map(existing -&gt; {</span>
-<span class="fc" id="L65">            usuarioMapper.updateEntityFromDTO(updateDTO, existing);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (updateDTO.getSedeId() != null) {</span>
-<span class="nc" id="L67">                existing.setSedeEntity(sedeRepository.getReferenceById(updateDTO.getSedeId()));</span>
+<span class="fc" id="L71">        return usuarioRepository.findById(id).map(existing -&gt; {</span>
+<span class="fc" id="L72">            usuarioMapper.updateEntityFromDTO(updateDTO, existing);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if (updateDTO.getSedeId() != null) {</span>
+<span class="nc" id="L74">                existing.setSedeEntity(sedeRepository.getReferenceById(updateDTO.getSedeId()));</span>
             }
-<span class="fc" id="L69">            return usuarioMapper.toDTO(usuarioRepository.save(existing));</span>
+<span class="fc" id="L76">            return usuarioMapper.toDTO(usuarioRepository.save(existing));</span>
         });
     }
 
     public boolean existsByEmail(String email) {
-<span class="fc" id="L74">        return usuarioRepository.existsByEmail(email);</span>
+<span class="fc" id="L81">        return usuarioRepository.existsByEmail(email);</span>
     }
 
     public boolean existsByEmailAndIdNot(String email, Long id) {
-<span class="nc" id="L78">        return usuarioRepository.existsByEmailAndIdNot(email, id);</span>
+<span class="nc" id="L85">        return usuarioRepository.existsByEmailAndIdNot(email, id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

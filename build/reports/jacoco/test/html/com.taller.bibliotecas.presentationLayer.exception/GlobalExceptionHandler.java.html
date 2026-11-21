@@ -34,8 +34,8 @@ import java.util.List;
 
     @ExceptionHandler({SolicitudInvalidaException.class, IllegalArgumentException.class})
     public ResponseEntity&lt;ErrorResponse&gt; handleBadRequest(RuntimeException ex) {
-<span class="nc" id="L37">        log.warn(&quot;Solicitud invalida: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L38">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);</span>
+<span class="fc" id="L37">        log.warn(&quot;Solicitud invalida: {}&quot;, ex.getMessage());</span>
+<span class="fc" id="L38">        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);</span>
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -51,8 +51,8 @@ import java.util.List;
             MissingServletRequestParameterException.class,
             HttpMessageNotReadableException.class})
     public ResponseEntity&lt;ErrorResponse&gt; handleParametrosInvalidos(Exception ex) {
-<span class="nc" id="L54">        log.warn(&quot;Parametros o cuerpo de la peticion invalidos: {}&quot;, ex.getMessage());</span>
-<span class="nc" id="L55">        return build(HttpStatus.BAD_REQUEST, &quot;Parametros o cuerpo de la peticion invalidos&quot;, null);</span>
+<span class="fc" id="L54">        log.warn(&quot;Parametros o cuerpo de la peticion invalidos: {}&quot;, ex.getMessage());</span>
+<span class="fc" id="L55">        return build(HttpStatus.BAD_REQUEST, &quot;Parametros o cuerpo de la peticion invalidos&quot;, null);</span>
     }
 
     /** Credenciales incorrectas en el login. Mensaje unico para no revelar si el email existe. */

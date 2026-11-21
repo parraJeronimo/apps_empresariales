@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,43 +22,48 @@ public class ClienteDAO {
     private final ClienteMapper clienteMapper;
 
     public ClienteDTO save(ClienteCreateDTO createDTO) {
-<span class="nc" id="L23">        ClienteEntity entity = clienteMapper.toEntity(createDTO);</span>
-<span class="nc" id="L24">        return clienteMapper.toDTO(clienteRepository.save(entity));</span>
+<span class="nc" id="L25">        ClienteEntity entity = clienteMapper.toEntity(createDTO);</span>
+<span class="nc" id="L26">        return clienteMapper.toDTO(clienteRepository.save(entity));</span>
     }
 
     public Optional&lt;ClienteDTO&gt; findById(Long id) {
-<span class="nc" id="L28">        return clienteRepository.findById(id).map(clienteMapper::toDTO);</span>
+<span class="nc" id="L30">        return clienteRepository.findById(id).map(clienteMapper::toDTO);</span>
     }
 
     public Optional&lt;ClienteDTO&gt; findByDocumento(String documento) {
-<span class="nc" id="L32">        return clienteRepository.findByDocumento(documento).map(clienteMapper::toDTO);</span>
+<span class="nc" id="L34">        return clienteRepository.findByDocumento(documento).map(clienteMapper::toDTO);</span>
     }
 
     public List&lt;ClienteDTO&gt; findAll() {
-<span class="fc" id="L36">        return clienteMapper.toDTOList(clienteRepository.findAll());</span>
+<span class="fc" id="L38">        return clienteMapper.toDTOList(clienteRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;ClienteDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L43">        return clienteRepository.findAll(pageable).map(clienteMapper::toDTO);</span>
     }
 
     public Optional&lt;ClienteDTO&gt; update(Long id, ClienteUpdateDTO updateDTO) {
-<span class="nc" id="L40">        return clienteRepository.findById(id).map(existing -&gt; {</span>
-<span class="nc" id="L41">            clienteMapper.updateEntityFromDTO(updateDTO, existing);</span>
-<span class="nc" id="L42">            return clienteMapper.toDTO(clienteRepository.save(existing));</span>
+<span class="nc" id="L47">        return clienteRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L48">            clienteMapper.updateEntityFromDTO(updateDTO, existing);</span>
+<span class="nc" id="L49">            return clienteMapper.toDTO(clienteRepository.save(existing));</span>
         });
     }
 
     public boolean existsByEmail(String email) {
-<span class="nc" id="L47">        return clienteRepository.existsByEmail(email);</span>
+<span class="nc" id="L54">        return clienteRepository.existsByEmail(email);</span>
     }
 
     public boolean existsByEmailAndIdNot(String email, Long id) {
-<span class="nc" id="L51">        return clienteRepository.existsByEmailAndIdNot(email, id);</span>
+<span class="nc" id="L58">        return clienteRepository.existsByEmailAndIdNot(email, id);</span>
     }
 
     public boolean existsByDocumento(String documento) {
-<span class="nc" id="L55">        return clienteRepository.existsByDocumento(documento);</span>
+<span class="nc" id="L62">        return clienteRepository.existsByDocumento(documento);</span>
     }
 
     public long count() {
-<span class="nc" id="L59">        return clienteRepository.count();</span>
+<span class="nc" id="L66">        return clienteRepository.count();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

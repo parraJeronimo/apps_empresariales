@@ -5,6 +5,8 @@ import com.taller.bibliotecas.businessLayer.dto.SedeDTO;
 import com.taller.bibliotecas.businessLayer.dto.SedeUpdateDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SedeService {
 
@@ -16,6 +18,9 @@ public interface SedeService {
 
     /** RF-02: Consultar todas las sedes, activas e inactivas */
     List<SedeDTO> getAllSedes();
+
+    /** Igual que getAllSedes() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<SedeDTO> getAllSedes(Pageable pageable);
 
     /** RF-02: Consultar solo las sedes activas */
     List<SedeDTO> getSedesActivas();

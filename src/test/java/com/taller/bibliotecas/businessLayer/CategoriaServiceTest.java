@@ -222,4 +222,20 @@ class CategoriaServiceTest {
 
         assertThrows(RecursoNoEncontradoException.class, () -> categoriaService.getIdsConDescendientes(99L));
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllCategorias_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(categoriaDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.categoria(1L, "Literatura", null), TestData.categoria(2L, "Ciencia", null)), pageable, 5));
+
+        var result = categoriaService.getAllCategorias(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(categoriaDao, times(1)).findAll(pageable);
+    }
 }

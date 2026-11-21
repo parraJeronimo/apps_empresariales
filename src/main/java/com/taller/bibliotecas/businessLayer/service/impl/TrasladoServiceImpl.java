@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -80,6 +82,12 @@ public class TrasladoServiceImpl implements TrasladoService {
     @Transactional(readOnly = true)
     public List<TrasladoDTO> getAllTraslados() {
         return trasladoDAO.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TrasladoDTO> getAllTraslados(Pageable pageable) {
+        return trasladoDAO.findAll(pageable);
     }
 
     @Override

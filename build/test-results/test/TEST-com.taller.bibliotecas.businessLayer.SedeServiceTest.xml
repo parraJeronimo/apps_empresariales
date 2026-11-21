@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="SedeService - Unit Tests (RF-01, RF-02)" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-11-20T23:25:22.087Z" hostname="SEBASTIAN" time="0.188">
+<testsuite name="SedeService - Unit Tests (RF-01, RF-02)" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-11-21T00:53:19.334Z" hostname="SEBASTIAN" time="0.341">
   <properties/>
-  <testcase name="testGetAllSedes_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.051"/>
-  <testcase name="testDesactivarSede_CambioDeEstadoNoEncontrado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.005"/>
-  <testcase name="testCreateSede_Success()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testUpdateSede_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testGetSedeById_Found()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.001"/>
-  <testcase name="testDesactivarSede_YaDesactivada()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <testcase name="testGetSedeById_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <testcase name="testUpdateSede_Success_SinCambiarNombre()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.001"/>
-  <testcase name="testDesactivarSede_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testGetSedesActivas_ReturnsOnlyActive()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <testcase name="testActivarSede_CambioDeEstadoNoEncontrado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testActivarSede_YaActiva()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <testcase name="testCreateSede_NombreDuplicado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testDesactivarSede_ConEjemplaresPrestadosOEnTraslado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.005"/>
+  <testcase name="testGetAllSedes_ReturnsList()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.108"/>
+  <testcase name="testDesactivarSede_CambioDeEstadoNoEncontrado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.01"/>
+  <testcase name="testGetAllSedes_Paginado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
+  <testcase name="testCreateSede_Success()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testUpdateSede_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.007"/>
+  <testcase name="testGetSedeById_Found()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testDesactivarSede_YaDesactivada()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.01"/>
+  <testcase name="testGetSedeById_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testUpdateSede_Success_SinCambiarNombre()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testDesactivarSede_NotFound()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testGetSedesActivas_ReturnsOnlyActive()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testActivarSede_CambioDeEstadoNoEncontrado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.006"/>
+  <testcase name="testActivarSede_YaActiva()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testCreateSede_NombreDuplicado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testDesactivarSede_ConEjemplaresPrestadosOEnTraslado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.009"/>
   <testcase name="testDesactivarSede_Success()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
-  <testcase name="testUpdateSede_NombreDuplicado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <testcase name="testActivarSede_Success()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.002"/>
-  <system-out><![CDATA[18:25:22.145 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.153 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
-18:25:22.191 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.210 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 99
-18:25:22.226 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
-18:25:22.234 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
-18:25:22.241 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
-18:25:22.249 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.260 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
-18:25:22.274 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+  <testcase name="testUpdateSede_NombreDuplicado()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.004"/>
+  <testcase name="testActivarSede_Success()" classname="com.taller.bibliotecas.businessLayer.SedeServiceTest" time="0.003"/>
+  <system-out><![CDATA[19:53:19.454 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.480 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
+19:53:19.546 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.581 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 99
+19:53:19.603 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+19:53:19.613 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
+19:53:19.624 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Registrando nueva sede: Sede Central
+19:53:19.639 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.652 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Desactivando sede ID: 1
+19:53:19.669 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.SedeServiceImpl -- Activando sede ID: 1
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

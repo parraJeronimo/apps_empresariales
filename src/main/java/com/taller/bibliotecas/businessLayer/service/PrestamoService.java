@@ -7,6 +7,8 @@ import com.taller.bibliotecas.businessLayer.dto.PrestamoDTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PrestamoService {
 
@@ -16,6 +18,9 @@ public interface PrestamoService {
     PrestamoDTO getPrestamoById(Long id);
 
     List<PrestamoDTO> getAllPrestamos();
+
+    /** Igual que getAllPrestamos() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<PrestamoDTO> getAllPrestamos(Pageable pageable);
 
     /** RF-13: Prestamos de un cliente filtrados (activos, vencidos o finalizados); sin filtro devuelve todos */
     List<PrestamoDTO> getPrestamosByCliente(Long clienteId, FiltroPrestamo filtro);

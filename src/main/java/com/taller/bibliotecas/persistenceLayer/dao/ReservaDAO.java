@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,6 +45,11 @@ public class ReservaDAO {
 
     public List<ReservaDTO> findAll() {
         return reservaMapper.toDTOList(reservaRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<ReservaDTO> findAll(Pageable pageable) {
+        return reservaRepository.findAll(pageable).map(reservaMapper::toDTO);
     }
 
     public List<ReservaDTO> findByClienteId(Long clienteId) {

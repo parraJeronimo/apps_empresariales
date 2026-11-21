@@ -17,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/clientes")
@@ -40,8 +43,16 @@ public class ClienteController {
 
     @GetMapping
     @Operation(summary = "RF-10: Listar clientes")
-    public ResponseEntity<List<ClienteDTO>> listar() {
-        return ResponseEntity.ok(clienteService.getAllClientes());
+    public ResponseEntity<List<ClienteDTO>> listar(
+            @Parameter(description = "Numero de pagina (desde 0). Si se omiten page y size se devuelve todo el listado")
+            @RequestParam(required = false) Integer page,
+            @Parameter(description = "Elementos por pagina (1-100, por defecto 20 si solo se envia page)")
+            @RequestParam(required = false) Integer size) {
+        Optional<Pageable> pageable = Paginacion.resolver(page, size);
+        if (pageable.isEmpty()) {
+            return ResponseEntity.ok(clienteService.getAllClientes());
+        }
+        return Paginacion.respuesta(clienteService.getAllClientes(pageable.get()));
     }
 
     @GetMapping("/{id}")

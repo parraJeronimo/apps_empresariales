@@ -195,4 +195,20 @@ class ClienteServiceTest {
 
         assertEquals("Cliente no encontrado con ID: 99", ex.getMessage());
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllClientes_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(clienteDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.cliente(1L, "Ana"), TestData.cliente(2L, "Luis")), pageable, 5));
+
+        var result = clienteService.getAllClientes(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(clienteDao, times(1)).findAll(pageable);
+    }
 }

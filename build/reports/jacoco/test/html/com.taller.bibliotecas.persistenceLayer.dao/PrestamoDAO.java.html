@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,54 +30,59 @@ public class PrestamoDAO {
     private final PrestamoMapper prestamoMapper;
 
     public PrestamoDTO save(PrestamoCreateDTO createDTO, LocalDate fechaInicio, LocalDate fechaLimite) {
-<span class="nc" id="L31">        PrestamoEntity entity = new PrestamoEntity();</span>
-<span class="nc" id="L32">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
-<span class="nc" id="L33">        entity.setClienteEntity(clienteRepository.getReferenceById(createDTO.getClienteId()));</span>
-<span class="nc" id="L34">        entity.setSedePrestamoEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
-<span class="nc" id="L35">        entity.setFechaInicio(fechaInicio);</span>
-<span class="nc" id="L36">        entity.setFechaLimite(fechaLimite);</span>
-<span class="nc" id="L37">        entity.setEstado(EstadoPrestamo.ACTIVO);</span>
-<span class="nc" id="L38">        return prestamoMapper.toDTO(prestamoRepository.save(entity));</span>
+<span class="nc" id="L33">        PrestamoEntity entity = new PrestamoEntity();</span>
+<span class="nc" id="L34">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
+<span class="nc" id="L35">        entity.setClienteEntity(clienteRepository.getReferenceById(createDTO.getClienteId()));</span>
+<span class="nc" id="L36">        entity.setSedePrestamoEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
+<span class="nc" id="L37">        entity.setFechaInicio(fechaInicio);</span>
+<span class="nc" id="L38">        entity.setFechaLimite(fechaLimite);</span>
+<span class="nc" id="L39">        entity.setEstado(EstadoPrestamo.ACTIVO);</span>
+<span class="nc" id="L40">        return prestamoMapper.toDTO(prestamoRepository.save(entity));</span>
     }
 
     public Optional&lt;PrestamoDTO&gt; findById(Long id) {
-<span class="nc" id="L42">        return prestamoRepository.findById(id).map(prestamoMapper::toDTO);</span>
+<span class="nc" id="L44">        return prestamoRepository.findById(id).map(prestamoMapper::toDTO);</span>
     }
 
     public List&lt;PrestamoDTO&gt; findAll() {
-<span class="nc" id="L46">        return prestamoMapper.toDTOList(prestamoRepository.findAll());</span>
+<span class="fc" id="L48">        return prestamoMapper.toDTOList(prestamoRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;PrestamoDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L53">        return prestamoRepository.findAll(pageable).map(prestamoMapper::toDTO);</span>
     }
 
     public List&lt;PrestamoDTO&gt; findByClienteId(Long clienteId) {
-<span class="nc" id="L50">        return prestamoMapper.toDTOList(prestamoRepository.findByClienteEntityId(clienteId));</span>
+<span class="nc" id="L57">        return prestamoMapper.toDTOList(prestamoRepository.findByClienteEntityId(clienteId));</span>
     }
 
     public List&lt;PrestamoDTO&gt; findByEstado(EstadoPrestamo estado) {
-<span class="nc" id="L54">        return prestamoMapper.toDTOList(prestamoRepository.findByEstado(estado));</span>
+<span class="nc" id="L61">        return prestamoMapper.toDTOList(prestamoRepository.findByEstado(estado));</span>
     }
 
     public List&lt;PrestamoDTO&gt; findByFechaInicioBetween(LocalDate desde, LocalDate hasta) {
-<span class="nc" id="L58">        return prestamoMapper.toDTOList(prestamoRepository.findByFechaInicioBetween(desde, hasta));</span>
+<span class="nc" id="L65">        return prestamoMapper.toDTOList(prestamoRepository.findByFechaInicioBetween(desde, hasta));</span>
     }
 
     public List&lt;PrestamoDTO&gt; findByFechaDevolucionBetween(LocalDate desde, LocalDate hasta) {
-<span class="nc" id="L62">        return prestamoMapper.toDTOList(prestamoRepository.findByFechaDevolucionBetween(desde, hasta));</span>
+<span class="nc" id="L69">        return prestamoMapper.toDTOList(prestamoRepository.findByFechaDevolucionBetween(desde, hasta));</span>
     }
 
     public Optional&lt;PrestamoDTO&gt; registrarDevolucion(Long id, Long sedeDevolucionId, LocalDate fechaDevolucion,
                                                      boolean conRetraso, int diasRetraso) {
-<span class="nc" id="L67">        return prestamoRepository.findById(id).map(existing -&gt; {</span>
-<span class="nc" id="L68">            existing.setSedeDevolucionEntity(sedeRepository.getReferenceById(sedeDevolucionId));</span>
-<span class="nc" id="L69">            existing.setFechaDevolucion(fechaDevolucion);</span>
-<span class="nc" id="L70">            existing.setDevueltoConRetraso(conRetraso);</span>
-<span class="nc" id="L71">            existing.setDiasRetraso(diasRetraso);</span>
-<span class="nc" id="L72">            existing.setEstado(EstadoPrestamo.FINALIZADO);</span>
-<span class="nc" id="L73">            return prestamoMapper.toDTO(prestamoRepository.save(existing));</span>
+<span class="nc" id="L74">        return prestamoRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L75">            existing.setSedeDevolucionEntity(sedeRepository.getReferenceById(sedeDevolucionId));</span>
+<span class="nc" id="L76">            existing.setFechaDevolucion(fechaDevolucion);</span>
+<span class="nc" id="L77">            existing.setDevueltoConRetraso(conRetraso);</span>
+<span class="nc" id="L78">            existing.setDiasRetraso(diasRetraso);</span>
+<span class="nc" id="L79">            existing.setEstado(EstadoPrestamo.FINALIZADO);</span>
+<span class="nc" id="L80">            return prestamoMapper.toDTO(prestamoRepository.save(existing));</span>
         });
     }
 
     public List&lt;ConteoLibroDTO&gt; contarPrestamosPorLibro() {
-<span class="nc" id="L78">        return prestamoRepository.contarPrestamosPorLibro();</span>
+<span class="nc" id="L85">        return prestamoRepository.contarPrestamosPorLibro();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

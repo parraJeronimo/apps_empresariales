@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">19</div>
+<div class="counter">20</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.123s</div>
+<div class="counter">0.203s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,27 +79,27 @@
 </thead>
 <tr>
 <td class="success">testBuscarLibros_CategoriaNoExiste()</td>
-<td class="success">0.055s</td>
+<td class="success">0.095s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testBuscarLibros_ConCategoriaIncluyeSubcategorias()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testBuscarLibros_SinCategoria()</td>
-<td class="success">0.005s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateLibro_CategoriaNoExiste()</td>
-<td class="success">0.006s</td>
+<td class="success">0.011s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateLibro_ConCategoria()</td>
-<td class="success">0.004s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -109,57 +109,62 @@
 </tr>
 <tr>
 <td class="success">testCreateLibro_SinCategoria()</td>
-<td class="success">0.003s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDeleteLibro_ConEjemplares()</td>
-<td class="success">0.003s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDeleteLibro_NotFound()</td>
-<td class="success">0.003s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testDeleteLibro_Success()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetAllLibros_Paginado()</td>
 <td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetAllLibros_ReturnsList()</td>
-<td class="success">0.003s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetCatalogo_ReturnsBooksWithAvailableCopies()</td>
-<td class="success">0.003s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetLibroById_Found()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testGetLibroById_NotFound()</td>
-<td class="success">0.004s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateLibro_CategoriaNoExiste()</td>
 <td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testUpdateLibro_IsbnDuplicado()</td>
+<td class="success">testGetCatalogo_ReturnsBooksWithAvailableCopies()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetLibroById_Found()</td>
 <td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">testGetLibroById_NotFound()</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateLibro_CategoriaNoExiste()</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateLibro_IsbnDuplicado()</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">testUpdateLibro_NotFound()</td>
-<td class="success">0.004s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -169,7 +174,7 @@
 </tr>
 <tr>
 <td class="success">testUpdateLibro_Success()</td>
-<td class="success">0.003s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -177,10 +182,10 @@
 <div class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>18:25:20.039 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
-18:25:20.068 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
-18:25:20.083 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
-18:25:20.168 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+<pre>19:53:15.931 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+19:53:15.991 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+19:53:16.004 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
+19:53:16.114 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.LibroServiceImpl -- Registrando libro: Cien anios de soledad
 </pre>
 </span>
 </div>
@@ -192,7 +197,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 6:25:43 p. m.</p>
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 7:54:07 p. m.</p>
 </div>
 </div>
 </body>

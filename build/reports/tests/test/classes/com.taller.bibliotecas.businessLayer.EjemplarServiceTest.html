@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">20</div>
+<div class="counter">21</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.327s</div>
+<div class="counter">0.550s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,102 +79,107 @@
 </thead>
 <tr>
 <td class="success">testActualizarEstadoYUbicacion_NotFound()</td>
-<td class="success">0.006s</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testActualizarEstadoYUbicacion_Success()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testContarEjemplaresDisponibles()</td>
-<td class="success">0.005s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_CodigoDuplicado()</td>
-<td class="success">0.004s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_ConCodigoPropio()</td>
-<td class="success">0.004s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testCreateEjemplar_GeneraCodigoSaltandoLosOcupados()</td>
 <td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">testCreateEjemplar_GeneraCodigoSaltandoLosOcupados()</td>
+<td class="success">0.013s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">testCreateEjemplar_GeneraCodigoUnico()</td>
-<td class="success">0.005s</td>
+<td class="success">0.039s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_LibroNoExiste()</td>
-<td class="success">0.004s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_RecortaEspaciosDelCodigo()</td>
-<td class="success">0.004s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_SedeDesactivada()</td>
-<td class="success">0.005s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateEjemplar_SedeNoExiste()</td>
-<td class="success">0.006s</td>
+<td class="success">0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetAllEjemplares_Paginado()</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetAllEjemplares_ReturnsList()</td>
-<td class="success">0.243s</td>
+<td class="success">0.366s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplarByCodigo_Found()</td>
-<td class="success">0.004s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplarByCodigo_NotFound()</td>
-<td class="success">0.005s</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplarById_Found()</td>
-<td class="success">0.004s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplarById_NotFound()</td>
-<td class="success">0.003s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplaresByLibro_LibroNoExiste()</td>
-<td class="success">0.003s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplaresByLibro_Success()</td>
-<td class="success">0.004s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplaresBySede_SedeNoExiste()</td>
-<td class="success">0.004s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetEjemplaresBySede_Success()</td>
-<td class="success">0.004s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -182,18 +187,18 @@
 <div class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>18:25:19.742 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.752 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.756 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 9782-003
-18:25:19.765 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.765 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: EJ-001
-18:25:19.774 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.784 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.784 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 97803074747-001
-18:25:19.805 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.852 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
-18:25:19.853 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 11 y codigo: EJ-002
-18:25:19.862 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+<pre>19:53:15.329 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.345 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.354 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 9782-003
+19:53:15.367 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.369 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: EJ-001
+19:53:15.383 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.399 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.431 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 10 y codigo: 97803074747-001
+19:53:15.485 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.582 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
+19:53:15.584 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Ejemplar registrado con ID: 11 y codigo: EJ-002
+19:53:15.617 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.EjemplarServiceImpl -- Registrando ejemplar del libro ID: 1
 </pre>
 </span>
 </div>
@@ -205,7 +210,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 6:25:43 p. m.</p>
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 7:54:07 p. m.</p>
 </div>
 </div>
 </body>

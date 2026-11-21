@@ -6,6 +6,8 @@ import com.taller.bibliotecas.businessLayer.dto.ReservaRechazoDTO;
 import com.taller.bibliotecas.persistenceLayer.entity.EstadoReserva;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReservaService {
 
@@ -16,6 +18,9 @@ public interface ReservaService {
     ReservaDTO getReservaById(Long id);
 
     List<ReservaDTO> getAllReservas();
+
+    /** Igual que getAllReservas() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<ReservaDTO> getAllReservas(Pageable pageable);
 
     /** RF-22: Reservas realizadas por un cliente */
     List<ReservaDTO> getReservasByCliente(Long clienteId);

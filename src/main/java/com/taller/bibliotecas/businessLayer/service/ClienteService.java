@@ -5,6 +5,8 @@ import com.taller.bibliotecas.businessLayer.dto.ClienteDTO;
 import com.taller.bibliotecas.businessLayer.dto.ClienteUpdateDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClienteService {
 
@@ -17,6 +19,9 @@ public interface ClienteService {
     ClienteDTO getClienteByDocumento(String documento);
 
     List<ClienteDTO> getAllClientes();
+
+    /** Igual que getAllClientes() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<ClienteDTO> getAllClientes(Pageable pageable);
 
     /** RF-10: Actualizar los datos de un cliente */
     ClienteDTO updateCliente(Long id, ClienteUpdateDTO updateDTO);

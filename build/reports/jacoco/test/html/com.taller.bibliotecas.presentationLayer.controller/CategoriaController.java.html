@@ -17,11 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.taller.bibliotecas.presentationLayer.pagination.Paginacion;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(&quot;/api/v1/categorias&quot;)
 @RequiredArgsConstructor
-<span class="fc" id="L24">@Slf4j</span>
+<span class="fc" id="L27">@Slf4j</span>
 @Tag(name = &quot;Categorias&quot;, description = &quot;RF-05: categorias y subcategorias para clasificar libros&quot;)
 public class CategoriaController {
 
@@ -34,34 +37,42 @@ public class CategoriaController {
             @ApiResponse(responseCode = &quot;404&quot;, description = &quot;La categoria padre no existe&quot;)
     })
     public ResponseEntity&lt;CategoriaDTO&gt; crear(@Valid @RequestBody CategoriaCreateDTO createDTO) {
-<span class="nc" id="L37">        log.info(&quot;POST /api/v1/categorias - {}&quot;, createDTO.getNombre());</span>
-<span class="nc" id="L38">        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.createCategoria(createDTO));</span>
+<span class="nc" id="L40">        log.info(&quot;POST /api/v1/categorias - {}&quot;, createDTO.getNombre());</span>
+<span class="nc" id="L41">        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.createCategoria(createDTO));</span>
     }
 
     @GetMapping
     @Operation(summary = &quot;Listar todas las categorias&quot;)
-    public ResponseEntity&lt;List&lt;CategoriaDTO&gt;&gt; listar() {
-<span class="nc" id="L44">        return ResponseEntity.ok(categoriaService.getAllCategorias());</span>
+    public ResponseEntity&lt;List&lt;CategoriaDTO&gt;&gt; listar(
+            @Parameter(description = &quot;Numero de pagina (desde 0). Si se omiten page y size se devuelve todo el listado&quot;)
+            @RequestParam(required = false) Integer page,
+            @Parameter(description = &quot;Elementos por pagina (1-100, por defecto 20 si solo se envia page)&quot;)
+            @RequestParam(required = false) Integer size) {
+<span class="fc" id="L51">        Optional&lt;Pageable&gt; pageable = Paginacion.resolver(page, size);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (pageable.isEmpty()) {</span>
+<span class="fc" id="L53">            return ResponseEntity.ok(categoriaService.getAllCategorias());</span>
+        }
+<span class="fc" id="L55">        return Paginacion.respuesta(categoriaService.getAllCategorias(pageable.get()));</span>
     }
 
     @GetMapping(&quot;/raiz&quot;)
     @Operation(summary = &quot;Listar categorias de primer nivel&quot;)
     public ResponseEntity&lt;List&lt;CategoriaDTO&gt;&gt; listarRaiz() {
-<span class="nc" id="L50">        return ResponseEntity.ok(categoriaService.getCategoriasRaiz());</span>
+<span class="nc" id="L61">        return ResponseEntity.ok(categoriaService.getCategoriasRaiz());</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
     @Operation(summary = &quot;Obtener categoria por ID&quot;)
     public ResponseEntity&lt;CategoriaDTO&gt; obtenerPorId(
             @Parameter(description = &quot;ID de la categoria&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L57">        return ResponseEntity.ok(categoriaService.getCategoriaById(id));</span>
+<span class="nc" id="L68">        return ResponseEntity.ok(categoriaService.getCategoriaById(id));</span>
     }
 
     @GetMapping(&quot;/{id}/subcategorias&quot;)
     @Operation(summary = &quot;Listar subcategorias directas de una categoria&quot;)
     public ResponseEntity&lt;List&lt;CategoriaDTO&gt;&gt; listarSubcategorias(
             @Parameter(description = &quot;ID de la categoria padre&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L64">        return ResponseEntity.ok(categoriaService.getSubcategorias(id));</span>
+<span class="nc" id="L75">        return ResponseEntity.ok(categoriaService.getSubcategorias(id));</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
@@ -69,7 +80,7 @@ public class CategoriaController {
     public ResponseEntity&lt;CategoriaDTO&gt; actualizar(
             @Parameter(description = &quot;ID de la categoria&quot;, example = &quot;1&quot;) @PathVariable Long id,
             @Valid @RequestBody CategoriaUpdateDTO updateDTO) {
-<span class="nc" id="L72">        return ResponseEntity.ok(categoriaService.updateCategoria(id, updateDTO));</span>
+<span class="nc" id="L83">        return ResponseEntity.ok(categoriaService.updateCategoria(id, updateDTO));</span>
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
@@ -81,8 +92,8 @@ public class CategoriaController {
     })
     public ResponseEntity&lt;Void&gt; eliminar(
             @Parameter(description = &quot;ID de la categoria&quot;, example = &quot;1&quot;) @PathVariable Long id) {
-<span class="nc" id="L84">        categoriaService.deleteCategoria(id);</span>
-<span class="nc" id="L85">        return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L95">        categoriaService.deleteCategoria(id);</span>
+<span class="nc" id="L96">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

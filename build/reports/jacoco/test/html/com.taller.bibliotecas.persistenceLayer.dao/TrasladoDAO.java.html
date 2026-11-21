@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,39 +27,44 @@ public class TrasladoDAO {
     private final TrasladoMapper trasladoMapper;
 
     public TrasladoDTO save(TrasladoCreateDTO createDTO, Long sedeOrigenId) {
-<span class="nc" id="L28">        TrasladoEntity entity = new TrasladoEntity();</span>
-<span class="nc" id="L29">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
-<span class="nc" id="L30">        entity.setSedeOrigenEntity(sedeRepository.getReferenceById(sedeOrigenId));</span>
-<span class="nc" id="L31">        entity.setSedeDestinoEntity(sedeRepository.getReferenceById(createDTO.getSedeDestinoId()));</span>
-<span class="nc" id="L32">        entity.setObservaciones(createDTO.getObservaciones());</span>
-<span class="nc" id="L33">        entity.setEstado(EstadoTraslado.EN_TRANSITO);</span>
-<span class="nc" id="L34">        entity.setFechaSolicitud(LocalDateTime.now());</span>
-<span class="nc" id="L35">        return trasladoMapper.toDTO(trasladoRepository.save(entity));</span>
+<span class="nc" id="L30">        TrasladoEntity entity = new TrasladoEntity();</span>
+<span class="nc" id="L31">        entity.setEjemplarEntity(ejemplarRepository.getReferenceById(createDTO.getEjemplarId()));</span>
+<span class="nc" id="L32">        entity.setSedeOrigenEntity(sedeRepository.getReferenceById(sedeOrigenId));</span>
+<span class="nc" id="L33">        entity.setSedeDestinoEntity(sedeRepository.getReferenceById(createDTO.getSedeDestinoId()));</span>
+<span class="nc" id="L34">        entity.setObservaciones(createDTO.getObservaciones());</span>
+<span class="nc" id="L35">        entity.setEstado(EstadoTraslado.EN_TRANSITO);</span>
+<span class="nc" id="L36">        entity.setFechaSolicitud(LocalDateTime.now());</span>
+<span class="nc" id="L37">        return trasladoMapper.toDTO(trasladoRepository.save(entity));</span>
     }
 
     public Optional&lt;TrasladoDTO&gt; findById(Long id) {
-<span class="nc" id="L39">        return trasladoRepository.findById(id).map(trasladoMapper::toDTO);</span>
+<span class="nc" id="L41">        return trasladoRepository.findById(id).map(trasladoMapper::toDTO);</span>
     }
 
     public List&lt;TrasladoDTO&gt; findAll() {
-<span class="nc" id="L43">        return trasladoMapper.toDTOList(trasladoRepository.findAll());</span>
+<span class="fc" id="L45">        return trasladoMapper.toDTOList(trasladoRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;TrasladoDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L50">        return trasladoRepository.findAll(pageable).map(trasladoMapper::toDTO);</span>
     }
 
     /** Traslados donde la sede es origen o destino */
     public List&lt;TrasladoDTO&gt; findBySedeId(Long sedeId) {
-<span class="nc" id="L48">        return trasladoMapper.toDTOList(</span>
-<span class="nc" id="L49">                trasladoRepository.findBySedeOrigenEntityIdOrSedeDestinoEntityId(sedeId, sedeId));</span>
+<span class="nc" id="L55">        return trasladoMapper.toDTOList(</span>
+<span class="nc" id="L56">                trasladoRepository.findBySedeOrigenEntityIdOrSedeDestinoEntityId(sedeId, sedeId));</span>
     }
 
     public List&lt;TrasladoDTO&gt; findByFechaSolicitudBetween(LocalDateTime desde, LocalDateTime hasta) {
-<span class="nc" id="L53">        return trasladoMapper.toDTOList(trasladoRepository.findByFechaSolicitudBetween(desde, hasta));</span>
+<span class="nc" id="L60">        return trasladoMapper.toDTOList(trasladoRepository.findByFechaSolicitudBetween(desde, hasta));</span>
     }
 
     public Optional&lt;TrasladoDTO&gt; actualizarEstado(Long id, EstadoTraslado estado, LocalDateTime fechaRecepcion) {
-<span class="nc" id="L57">        return trasladoRepository.findById(id).map(existing -&gt; {</span>
-<span class="nc" id="L58">            existing.setEstado(estado);</span>
-<span class="nc" id="L59">            existing.setFechaRecepcion(fechaRecepcion);</span>
-<span class="nc" id="L60">            return trasladoMapper.toDTO(trasladoRepository.save(existing));</span>
+<span class="nc" id="L64">        return trasladoRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L65">            existing.setEstado(estado);</span>
+<span class="nc" id="L66">            existing.setFechaRecepcion(fechaRecepcion);</span>
+<span class="nc" id="L67">            return trasladoMapper.toDTO(trasladoRepository.save(existing));</span>
         });
     }
 }

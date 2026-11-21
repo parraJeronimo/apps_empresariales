@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,6 +35,11 @@ public class CategoriaDAO {
 
     public List<CategoriaDTO> findAll() {
         return categoriaMapper.toDTOList(categoriaRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<CategoriaDTO> findAll(Pageable pageable) {
+        return categoriaRepository.findAll(pageable).map(categoriaMapper::toDTO);
     }
 
     public List<CategoriaDTO> findRaices() {

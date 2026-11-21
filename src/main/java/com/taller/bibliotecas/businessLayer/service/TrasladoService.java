@@ -6,6 +6,8 @@ import com.taller.bibliotecas.persistenceLayer.entity.EstadoTraslado;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TrasladoService {
 
@@ -15,6 +17,9 @@ public interface TrasladoService {
     TrasladoDTO getTrasladoById(Long id);
 
     List<TrasladoDTO> getAllTraslados();
+
+    /** Igual que getAllTraslados() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<TrasladoDTO> getAllTraslados(Pageable pageable);
 
     /** Traslados en los que participa una sede (como origen o destino); estado opcional */
     List<TrasladoDTO> getTrasladosBySede(Long sedeId, EstadoTraslado estado);

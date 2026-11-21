@@ -562,4 +562,22 @@ class PrestamoServiceTest {
 
         verifyNoInteractions(ejemplarService, movimientoService);
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllPrestamos_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(prestamoDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.prestamo(1L, EstadoPrestamo.ACTIVO, hoy, hoy.plusDays(14)), TestData.prestamo(2L, EstadoPrestamo.ACTIVO, hoy.minusDays(30), hoy.minusDays(16))), pageable, 5));
+
+        var result = prestamoService.getAllPrestamos(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(prestamoDao, times(1)).findAll(pageable);
+        assertFalse(result.getContent().get(0).getVencido());
+        assertTrue(result.getContent().get(1).getVencido());
+    }
 }

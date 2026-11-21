@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-<span class="fc" id="L22">@Slf4j</span>
+<span class="fc" id="L24">@Slf4j</span>
 public class LibroServiceImpl implements LibroService {
 
     private final LibroDAO libroDAO;
@@ -28,63 +30,69 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     public LibroDTO createLibro(LibroCreateDTO createDTO) {
-<span class="fc" id="L31">        log.info(&quot;Registrando libro: {}&quot;, createDTO.getTitulo());</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (libroDAO.existsByIsbn(createDTO.getIsbn())) {</span>
-<span class="fc" id="L33">            throw new SolicitudInvalidaException(&quot;Ya existe un libro registrado con el ISBN: &quot; + createDTO.getIsbn());</span>
+<span class="fc" id="L33">        log.info(&quot;Registrando libro: {}&quot;, createDTO.getTitulo());</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (libroDAO.existsByIsbn(createDTO.getIsbn())) {</span>
+<span class="fc" id="L35">            throw new SolicitudInvalidaException(&quot;Ya existe un libro registrado con el ISBN: &quot; + createDTO.getIsbn());</span>
         }
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (createDTO.getCategoriaId() != null) {</span>
-<span class="fc" id="L36">            categoriaService.getCategoriaById(createDTO.getCategoriaId());</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (createDTO.getCategoriaId() != null) {</span>
+<span class="fc" id="L38">            categoriaService.getCategoriaById(createDTO.getCategoriaId());</span>
         }
-<span class="fc" id="L38">        return libroDAO.save(createDTO);</span>
+<span class="fc" id="L40">        return libroDAO.save(createDTO);</span>
     }
 
     @Override
     @Transactional(readOnly = true)
     public LibroDTO getLibroById(Long id) {
-<span class="fc" id="L44">        return libroDAO.findById(id)</span>
-<span class="fc" id="L45">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
+<span class="fc" id="L46">        return libroDAO.findById(id)</span>
+<span class="fc" id="L47">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
     }
 
     @Override
     @Transactional(readOnly = true)
     public List&lt;LibroDTO&gt; getAllLibros() {
-<span class="fc" id="L51">        return libroDAO.findAll();</span>
+<span class="fc" id="L53">        return libroDAO.findAll();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page&lt;LibroDTO&gt; getAllLibros(Pageable pageable) {
+<span class="fc" id="L59">        return libroDAO.findAll(pageable);</span>
     }
 
     @Override
     @Transactional(readOnly = true)
     public List&lt;LibroDTO&gt; getCatalogo() {
-<span class="fc" id="L57">        return libroDAO.findConEjemplaresDisponibles();</span>
+<span class="fc" id="L65">        return libroDAO.findConEjemplaresDisponibles();</span>
     }
 
     @Override
     @Transactional(readOnly = true)
     public List&lt;LibroDTO&gt; buscarLibros(String titulo, String autor, String isbn, Long categoriaId, String codigoEjemplar) {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        List&lt;Long&gt; categoriaIds = categoriaId == null ? null : categoriaService.getIdsConDescendientes(categoriaId);</span>
-<span class="fc" id="L64">        return libroDAO.buscar(titulo, autor, isbn, categoriaIds, codigoEjemplar);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        List&lt;Long&gt; categoriaIds = categoriaId == null ? null : categoriaService.getIdsConDescendientes(categoriaId);</span>
+<span class="fc" id="L72">        return libroDAO.buscar(titulo, autor, isbn, categoriaIds, codigoEjemplar);</span>
     }
 
     @Override
     public LibroDTO updateLibro(Long id, LibroUpdateDTO updateDTO) {
-<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (updateDTO.getIsbn() != null &amp;&amp; libroDAO.existsByIsbnAndIdNot(updateDTO.getIsbn(), id)) {</span>
-<span class="fc" id="L70">            throw new SolicitudInvalidaException(&quot;Ya existe otro libro registrado con el ISBN: &quot; + updateDTO.getIsbn());</span>
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">        if (updateDTO.getIsbn() != null &amp;&amp; libroDAO.existsByIsbnAndIdNot(updateDTO.getIsbn(), id)) {</span>
+<span class="fc" id="L78">            throw new SolicitudInvalidaException(&quot;Ya existe otro libro registrado con el ISBN: &quot; + updateDTO.getIsbn());</span>
         }
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (updateDTO.getCategoriaId() != null) {</span>
-<span class="fc" id="L73">            categoriaService.getCategoriaById(updateDTO.getCategoriaId());</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (updateDTO.getCategoriaId() != null) {</span>
+<span class="fc" id="L81">            categoriaService.getCategoriaById(updateDTO.getCategoriaId());</span>
         }
-<span class="fc" id="L75">        return libroDAO.update(id, updateDTO)</span>
-<span class="fc" id="L76">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
+<span class="fc" id="L83">        return libroDAO.update(id, updateDTO)</span>
+<span class="fc" id="L84">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id));</span>
     }
 
     @Override
     public void deleteLibro(Long id) {
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (!libroDAO.existsById(id)) {</span>
-<span class="fc" id="L82">            throw new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (!libroDAO.existsById(id)) {</span>
+<span class="fc" id="L90">            throw new RecursoNoEncontradoException(&quot;Libro no encontrado con ID: &quot; + id);</span>
         }
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (ejemplarDAO.existsByLibroId(id)) {</span>
-<span class="fc" id="L85">            throw new SolicitudInvalidaException(&quot;No se puede eliminar el libro porque tiene ejemplares registrados&quot;);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (ejemplarDAO.existsByLibroId(id)) {</span>
+<span class="fc" id="L93">            throw new SolicitudInvalidaException(&quot;No se puede eliminar el libro porque tiene ejemplares registrados&quot;);</span>
         }
-<span class="fc" id="L87">        libroDAO.deleteById(id);</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L95">        libroDAO.deleteById(id);</span>
+<span class="fc" id="L96">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

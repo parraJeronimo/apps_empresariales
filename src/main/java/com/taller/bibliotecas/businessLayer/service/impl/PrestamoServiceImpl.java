@@ -29,6 +29,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -100,6 +102,12 @@ public class PrestamoServiceImpl implements PrestamoService {
     @Transactional(readOnly = true)
     public List<PrestamoDTO> getAllPrestamos() {
         return prestamoDAO.findAll().stream().map(this::enriquecer).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoDTO> getAllPrestamos(Pageable pageable) {
+        return prestamoDAO.findAll(pageable).map(this::enriquecer);
     }
 
     @Override

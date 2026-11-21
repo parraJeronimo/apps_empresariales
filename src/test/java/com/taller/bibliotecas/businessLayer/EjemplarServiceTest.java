@@ -289,4 +289,20 @@ class EjemplarServiceTest {
 
         assertEquals("Ejemplar no encontrado con ID: 99", ex.getMessage());
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllEjemplares_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(ejemplarDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.ejemplar(1L, "A-1", EstadoEjemplar.DISPONIBLE, 1L, 1L), TestData.ejemplar(2L, "A-2", EstadoEjemplar.DISPONIBLE, 1L, 1L)), pageable, 5));
+
+        var result = ejemplarService.getAllEjemplares(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(ejemplarDao, times(1)).findAll(pageable);
+    }
 }

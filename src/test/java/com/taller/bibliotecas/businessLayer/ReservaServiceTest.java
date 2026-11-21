@@ -383,4 +383,20 @@ class ReservaServiceTest {
 
         assertThrows(RecursoNoEncontradoException.class, () -> reservaService.cancelarReserva(1L));
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllReservas_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(reservaDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.reserva(1L, EstadoReserva.PENDIENTE), TestData.reserva(2L, EstadoReserva.PENDIENTE)), pageable, 5));
+
+        var result = reservaService.getAllReservas(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(reservaDao, times(1)).findAll(pageable);
+    }
 }

@@ -5,6 +5,8 @@ import com.taller.bibliotecas.businessLayer.dto.LibroDTO;
 import com.taller.bibliotecas.businessLayer.dto.LibroUpdateDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface LibroService {
 
@@ -15,6 +17,9 @@ public interface LibroService {
 
     /** Todos los libros registrados */
     List<LibroDTO> getAllLibros();
+
+    /** Igual que getAllLibros() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<LibroDTO> getAllLibros(Pageable pageable);
 
     /** RF-06: Catalogo general: libros con al menos un ejemplar disponible en cualquier sede */
     List<LibroDTO> getCatalogo();

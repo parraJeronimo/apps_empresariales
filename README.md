@@ -92,6 +92,35 @@ existian antes de agregar la seguridad no tienen contrasena y no pueden iniciar 
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Administrador general inicial | `admin@biblioteca.com` / `Admin12345`; en `prod` si no hay `ADMIN_PASSWORD` no se crea |
 | `DB_USERNAME` / `DB_PASSWORD` | MySQL en `prod` | `root` / `changeme` |
 
+## Paginacion opcional (headers)
+
+Los `GET` de listado base (`/sedes`, `/categorias`, `/libros`, `/ejemplares`, `/clientes`, `/prestamos`, `/reservas`,
+`/traslados`, `/usuarios-admin`) **siguen devolviendo un arreglo JSON** y solo paginan cuando se envia `page` y/o `size`.
+Asi ningun caso existente del plan de pruebas cambia.
+
+| Peticion | Resultado |
+|---|---|
+| `GET /sedes` | Arreglo completo, igual que siempre, **sin** headers de paginacion |
+| `GET /sedes?page=0&size=10` | Arreglo con solo esa pagina + headers |
+| `GET /sedes?size=10` | `page` vale 0 |
+| `GET /sedes?page=2` | `size` vale 20 |
+
+- `page` empieza en 0; `size` va de 1 a 100. Valores fuera de rango o no numericos responden `400` con el JSON estandar de errores.
+- Las paginas se ordenan por `id` ascendente (estable: no repiten ni saltan elementos). Una pagina fuera de rango devuelve `[]` con `200`.
+- La consulta se limita en la base de datos (`LIMIT/OFFSET`); no se carga la tabla completa en memoria.
+
+Headers de la respuesta paginada (expuestos por CORS para que el navegador los pueda leer):
+
+| Header | Contenido |
+|---|---|
+| `X-Total-Count` | Total de elementos del listado |
+| `X-Total-Pages` | Total de paginas con el `size` pedido |
+| `X-Page` | Pagina devuelta (desde 0) |
+| `X-Page-Size` | Tamano de pagina aplicado |
+
+Los listados auxiliares (`/sedes/activas`, `/categorias/raiz`, `/libros/catalogo`, `/libros/buscar`, `/prestamos/vencidos`,
+`/*/sede/{id}`, `/*/cliente/{id}`) no cambian y devuelven siempre el arreglo completo.
+
 ## Reglas de negocio implementadas
 
 - **Ejemplares**: nacen `DISPONIBLE` en la sede donde se registran (`sedePropietaria` = `sedeActual`). Si no se envia
@@ -163,6 +192,5 @@ cambiar:
 
 - Requerimientos no funcionales restantes: auditoria de operaciones, respaldos, etc.
 - Login de clientes, registro publico y recuperacion de contrasena por correo (requiere definir el medio de notificacion).
-- Paginacion de los listados (hoy los `GET` devuelven arreglos JSON completos) y los modulos de multas, renovacion de
-  prestamos y copias de seguridad que aparecen en el mapa de navegacion pero no en los requerimientos funcionales.
+- Los modulos de multas, renovacion de prestamos y copias de seguridad que aparecen en el mapa de navegacion pero no en los requerimientos funcionales.
 - Decisiones de la seccion 3 del documento de requerimientos.

@@ -5,6 +5,8 @@ import com.taller.bibliotecas.businessLayer.dto.CategoriaDTO;
 import com.taller.bibliotecas.businessLayer.dto.CategoriaUpdateDTO;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CategoriaService {
 
@@ -14,6 +16,9 @@ public interface CategoriaService {
     CategoriaDTO getCategoriaById(Long id);
 
     List<CategoriaDTO> getAllCategorias();
+
+    /** Igual que getAllCategorias() pero devuelve solo la pagina pedida (el controlador la expone por headers). */
+    Page<CategoriaDTO> getAllCategorias(Pageable pageable);
 
     /** Categorias de primer nivel (sin padre) */
     List<CategoriaDTO> getCategoriasRaiz();

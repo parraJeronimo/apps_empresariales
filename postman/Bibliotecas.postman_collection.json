@@ -2755,6 +2755,676 @@
           ]
         }
       ]
+    },
+    {
+      "name": "12 - Paginacion opcional por headers (listados base)",
+      "item": [
+        {
+          "name": "Sedes sin page ni size: arreglo completo, sin headers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Sin headers de paginacion\", function () { pm.expect(pm.response.headers.has(\"X-Total-Count\")).to.be.false; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes page=0&size=1: 1 elemento y datos en headers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Solo 1 elemento\", function () { pm.expect(pm.response.json().length).to.eql(1); });",
+                  "pm.test(\"X-Total-Count >= 2\", function () { pm.expect(parseInt(pm.response.headers.get(\"X-Total-Count\"))).to.be.at.least(2); });",
+                  "pm.test(\"X-Total-Pages >= 2\", function () { pm.expect(parseInt(pm.response.headers.get(\"X-Total-Pages\"))).to.be.at.least(2); });",
+                  "pm.test(\"X-Page = 0 y X-Page-Size = 1\", function () { pm.expect(pm.response.headers.get(\"X-Page\")).to.eql(\"0\"); pm.expect(pm.response.headers.get(\"X-Page-Size\")).to.eql(\"1\"); });",
+                  "pm.collectionVariables.set(\"sedePagina0Id\", pm.response.json()[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes page=1&size=1: otra sede distinta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?page=1&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"No repite la sede de la pagina 0\", function () { pm.expect(pm.response.json()[0].id).to.not.eql(parseInt(pm.collectionVariables.get(\"sedePagina0Id\"))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes solo size=1 (page 0 por defecto)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"X-Page = 0\", function () { pm.expect(pm.response.headers.get(\"X-Page\")).to.eql(\"0\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes solo page=0 (size 20 por defecto)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?page=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"X-Page-Size = 20\", function () { pm.expect(pm.response.headers.get(\"X-Page-Size\")).to.eql(\"20\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Categorias page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categorias?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "categorias"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Libros page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/libros?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libros"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ejemplares page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ejemplares?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ejemplares"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Clientes page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/clientes?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "clientes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prestamos page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/prestamos?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "prestamos"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reservas page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reservas?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reservas"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Traslados page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traslados?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traslados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Usuarios administrativos page=0&size=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios-admin?page=0&size=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "usuarios-admin"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"El cuerpo es un arreglo JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                  "pm.test(\"Maximo 1 elemento\", function () { pm.expect(pm.response.json().length).to.be.at.most(1); });",
+                  "pm.test(\"Headers de paginacion presentes\", function () { [\"X-Total-Count\",\"X-Total-Pages\",\"X-Page\",\"X-Page-Size\"].forEach(function (h) { pm.expect(pm.response.headers.has(h), h).to.be.true; }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes con size=0 (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?size=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes con size=101 (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?size=101",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "101"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes con page=-1 (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?page=-1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "-1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sedes con page=abc (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sedes?page=abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "abc"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [

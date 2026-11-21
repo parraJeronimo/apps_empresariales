@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,6 +40,11 @@ public class EjemplarDAO {
 
     public List<EjemplarDTO> findAll() {
         return ejemplarMapper.toDTOList(ejemplarRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<EjemplarDTO> findAll(Pageable pageable) {
+        return ejemplarRepository.findAll(pageable).map(ejemplarMapper::toDTO);
     }
 
     public Optional<EjemplarDTO> findByCodigo(String codigo) {

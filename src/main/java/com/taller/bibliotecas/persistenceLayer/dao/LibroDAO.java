@@ -19,6 +19,8 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -42,6 +44,11 @@ public class LibroDAO {
 
     public List<LibroDTO> findAll() {
         return libroMapper.toDTOList(libroRepository.findAll());
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page<LibroDTO> findAll(Pageable pageable) {
+        return libroRepository.findAll(pageable).map(libroMapper::toDTO);
     }
 
     public List<LibroDTO> findConEjemplaresDisponibles() {

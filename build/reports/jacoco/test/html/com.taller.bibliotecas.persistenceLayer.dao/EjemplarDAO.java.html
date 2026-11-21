@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,78 +27,83 @@ public class EjemplarDAO {
 
     /** El ejemplar nace DISPONIBLE; la sede donde se registra es a la vez propietaria y actual. */
     public EjemplarDTO save(EjemplarCreateDTO createDTO) {
-<span class="nc" id="L28">        EjemplarEntity entity = ejemplarMapper.toEntity(createDTO);</span>
-<span class="nc" id="L29">        entity.setLibroEntity(libroRepository.getReferenceById(createDTO.getLibroId()));</span>
-<span class="nc" id="L30">        entity.setSedePropietariaEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
-<span class="nc" id="L31">        entity.setSedeActualEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
-<span class="nc" id="L32">        return ejemplarMapper.toDTO(ejemplarRepository.save(entity));</span>
+<span class="nc" id="L30">        EjemplarEntity entity = ejemplarMapper.toEntity(createDTO);</span>
+<span class="nc" id="L31">        entity.setLibroEntity(libroRepository.getReferenceById(createDTO.getLibroId()));</span>
+<span class="nc" id="L32">        entity.setSedePropietariaEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
+<span class="nc" id="L33">        entity.setSedeActualEntity(sedeRepository.getReferenceById(createDTO.getSedeId()));</span>
+<span class="nc" id="L34">        return ejemplarMapper.toDTO(ejemplarRepository.save(entity));</span>
     }
 
     public Optional&lt;EjemplarDTO&gt; findById(Long id) {
-<span class="nc" id="L36">        return ejemplarRepository.findById(id).map(ejemplarMapper::toDTO);</span>
+<span class="nc" id="L38">        return ejemplarRepository.findById(id).map(ejemplarMapper::toDTO);</span>
     }
 
     public List&lt;EjemplarDTO&gt; findAll() {
-<span class="nc" id="L40">        return ejemplarMapper.toDTOList(ejemplarRepository.findAll());</span>
+<span class="fc" id="L42">        return ejemplarMapper.toDTOList(ejemplarRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;EjemplarDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L47">        return ejemplarRepository.findAll(pageable).map(ejemplarMapper::toDTO);</span>
     }
 
     public Optional&lt;EjemplarDTO&gt; findByCodigo(String codigo) {
-<span class="nc" id="L44">        return ejemplarRepository.findByCodigo(codigo).map(ejemplarMapper::toDTO);</span>
+<span class="nc" id="L51">        return ejemplarRepository.findByCodigo(codigo).map(ejemplarMapper::toDTO);</span>
     }
 
     public List&lt;EjemplarDTO&gt; findByLibroId(Long libroId) {
-<span class="nc" id="L48">        return ejemplarMapper.toDTOList(ejemplarRepository.findByLibroEntityId(libroId));</span>
+<span class="nc" id="L55">        return ejemplarMapper.toDTOList(ejemplarRepository.findByLibroEntityId(libroId));</span>
     }
 
     public List&lt;EjemplarDTO&gt; findBySedeActualId(Long sedeId) {
-<span class="nc" id="L52">        return ejemplarMapper.toDTOList(ejemplarRepository.findBySedeActualEntityId(sedeId));</span>
+<span class="nc" id="L59">        return ejemplarMapper.toDTOList(ejemplarRepository.findBySedeActualEntityId(sedeId));</span>
     }
 
     /** Cambia el estado y, si sedeActualId no es null, tambien la ubicacion actual del ejemplar. */
     public Optional&lt;EjemplarDTO&gt; actualizarEstadoYSede(Long id, EstadoEjemplar estado, Long sedeActualId) {
-<span class="nc" id="L57">        return ejemplarRepository.findById(id).map(existing -&gt; {</span>
-<span class="nc" id="L58">            existing.setEstado(estado);</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (sedeActualId != null) {</span>
-<span class="nc" id="L60">                existing.setSedeActualEntity(sedeRepository.getReferenceById(sedeActualId));</span>
+<span class="nc" id="L64">        return ejemplarRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L65">            existing.setEstado(estado);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (sedeActualId != null) {</span>
+<span class="nc" id="L67">                existing.setSedeActualEntity(sedeRepository.getReferenceById(sedeActualId));</span>
             }
-<span class="nc" id="L62">            return ejemplarMapper.toDTO(ejemplarRepository.save(existing));</span>
+<span class="nc" id="L69">            return ejemplarMapper.toDTO(ejemplarRepository.save(existing));</span>
         });
     }
 
     public boolean existsById(Long id) {
-<span class="nc" id="L67">        return ejemplarRepository.existsById(id);</span>
+<span class="nc" id="L74">        return ejemplarRepository.existsById(id);</span>
     }
 
     public boolean existsByCodigo(String codigo) {
-<span class="nc" id="L71">        return ejemplarRepository.existsByCodigo(codigo);</span>
+<span class="nc" id="L78">        return ejemplarRepository.existsByCodigo(codigo);</span>
     }
 
     public boolean existsByLibroId(Long libroId) {
-<span class="nc" id="L75">        return ejemplarRepository.existsByLibroEntityId(libroId);</span>
+<span class="nc" id="L82">        return ejemplarRepository.existsByLibroEntityId(libroId);</span>
     }
 
     public long countByLibroId(Long libroId) {
-<span class="nc" id="L79">        return ejemplarRepository.countByLibroEntityId(libroId);</span>
+<span class="nc" id="L86">        return ejemplarRepository.countByLibroEntityId(libroId);</span>
     }
 
     public long countByEstado(EstadoEjemplar estado) {
-<span class="nc" id="L83">        return ejemplarRepository.countByEstado(estado);</span>
+<span class="nc" id="L90">        return ejemplarRepository.countByEstado(estado);</span>
     }
 
     public long countBySedeActualId(Long sedeId) {
-<span class="nc" id="L87">        return ejemplarRepository.countBySedeActualEntityId(sedeId);</span>
+<span class="nc" id="L94">        return ejemplarRepository.countBySedeActualEntityId(sedeId);</span>
     }
 
     public long countByLibroIdAndSedeActualIdAndEstado(Long libroId, Long sedeId, EstadoEjemplar estado) {
-<span class="nc" id="L91">        return ejemplarRepository.countByLibroEntityIdAndSedeActualEntityIdAndEstado(libroId, sedeId, estado);</span>
+<span class="nc" id="L98">        return ejemplarRepository.countByLibroEntityIdAndSedeActualEntityIdAndEstado(libroId, sedeId, estado);</span>
     }
 
     public long countBySedeActualIdAndEstadoNot(Long sedeId, EstadoEjemplar estado) {
-<span class="nc" id="L95">        return ejemplarRepository.countBySedeActualEntityIdAndEstadoNot(sedeId, estado);</span>
+<span class="nc" id="L102">        return ejemplarRepository.countBySedeActualEntityIdAndEstadoNot(sedeId, estado);</span>
     }
 
     public long count() {
-<span class="nc" id="L99">        return ejemplarRepository.count();</span>
+<span class="nc" id="L106">        return ejemplarRepository.count();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

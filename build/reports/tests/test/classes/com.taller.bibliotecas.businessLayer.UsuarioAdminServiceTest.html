@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">21</div>
+<div class="counter">22</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.098s</div>
+<div class="counter">0.184s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,37 +79,42 @@
 </thead>
 <tr>
 <td class="success">testCreateUsuario_AdministradorDeSede()</td>
-<td class="success">0.002s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateUsuario_AdministradorGeneralNoNecesitaSede()</td>
-<td class="success">0.003s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testCreateUsuario_BibliotecarioSinSede()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testCreateUsuario_CifraLaContrasenaYNormalizaElEmail()</td>
 <td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">testCreateUsuario_BibliotecarioSinSede()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCreateUsuario_CifraLaContrasenaYNormalizaElEmail()</td>
+<td class="success">0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">testCreateUsuario_EmailDuplicado()</td>
-<td class="success">0.003s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testCreateUsuario_SedeNoExiste()</td>
-<td class="success">0.003s</td>
+<td class="success">0.007s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testGetAllUsuarios_Paginado()</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetAllUsuarios_ReturnsList()</td>
-<td class="success">0.050s</td>
+<td class="success">0.091s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -119,42 +124,42 @@
 </tr>
 <tr>
 <td class="success">testGetUsuarioById_NotFound()</td>
-<td class="success">0.002s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetUsuariosBySede_SedeNoExiste()</td>
-<td class="success">0.002s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testGetUsuariosBySede_Success()</td>
-<td class="success">0.002s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testUpdateUsuario_CambiaElRolYLaSede()</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateUsuario_DeGeneralASedeRequiereSede()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateUsuario_DesactivarUsuario()</td>
-<td class="success">0.002s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">testUpdateUsuario_DesaparecioAlActualizar()</td>
 <td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">testUpdateUsuario_DeGeneralASedeRequiereSede()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateUsuario_DesactivarUsuario()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testUpdateUsuario_DesaparecioAlActualizar()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">testUpdateUsuario_EmailDeOtroUsuario()</td>
-<td class="success">0.002s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -164,22 +169,22 @@
 </tr>
 <tr>
 <td class="success">testUpdateUsuario_NotFound()</td>
-<td class="success">0.001s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testUpdateUsuario_RestableceLaContrasenaCifrada()</td>
-<td class="success">0.006s</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testUpdateUsuario_SinContrasenaNoLaCifra()</td>
-<td class="success">0.002s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testUpdateUsuario_SoloNombre()</td>
-<td class="success">0.001s</td>
+<td class="success">0.003s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -187,12 +192,12 @@
 <div class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>18:25:22.737 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
-18:25:22.754 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
-18:25:22.761 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
-18:25:22.795 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
-18:25:22.812 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
-18:25:22.821 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+<pre>19:53:20.513 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+19:53:20.552 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+19:53:20.563 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+19:53:20.624 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+19:53:20.663 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
+19:53:20.683 [Test worker] INFO com.taller.bibliotecas.businessLayer.service.impl.UsuarioAdminServiceImpl -- Registrando usuario administrativo: maria@biblioteca.com
 </pre>
 </span>
 </div>
@@ -204,7 +209,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 6:25:43 p. m.</p>
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 20/11/2026, 7:54:07 p. m.</p>
 </div>
 </div>
 </body>

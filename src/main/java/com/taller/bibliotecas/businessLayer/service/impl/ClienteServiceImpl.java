@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -52,6 +54,12 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional(readOnly = true)
     public List<ClienteDTO> getAllClientes() {
         return clienteDAO.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ClienteDTO> getAllClientes(Pageable pageable) {
+        return clienteDAO.findAll(pageable);
     }
 
     @Override

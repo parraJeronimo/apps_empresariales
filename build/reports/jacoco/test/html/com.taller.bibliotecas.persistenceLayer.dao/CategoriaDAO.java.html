@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,50 +22,55 @@ public class CategoriaDAO {
     private final CategoriaMapper categoriaMapper;
 
     public CategoriaDTO save(CategoriaCreateDTO createDTO) {
-<span class="nc" id="L23">        CategoriaEntity entity = categoriaMapper.toEntity(createDTO);</span>
-<span class="nc bnc" id="L24" title="All 2 branches missed.">        if (createDTO.getCategoriaPadreId() != null) {</span>
-<span class="nc" id="L25">            entity.setCategoriaPadreEntity(categoriaRepository.getReferenceById(createDTO.getCategoriaPadreId()));</span>
+<span class="nc" id="L25">        CategoriaEntity entity = categoriaMapper.toEntity(createDTO);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (createDTO.getCategoriaPadreId() != null) {</span>
+<span class="nc" id="L27">            entity.setCategoriaPadreEntity(categoriaRepository.getReferenceById(createDTO.getCategoriaPadreId()));</span>
         }
-<span class="nc" id="L27">        return categoriaMapper.toDTO(categoriaRepository.save(entity));</span>
+<span class="nc" id="L29">        return categoriaMapper.toDTO(categoriaRepository.save(entity));</span>
     }
 
     public Optional&lt;CategoriaDTO&gt; findById(Long id) {
-<span class="nc" id="L31">        return categoriaRepository.findById(id).map(categoriaMapper::toDTO);</span>
+<span class="nc" id="L33">        return categoriaRepository.findById(id).map(categoriaMapper::toDTO);</span>
     }
 
     public List&lt;CategoriaDTO&gt; findAll() {
-<span class="nc" id="L35">        return categoriaMapper.toDTOList(categoriaRepository.findAll());</span>
+<span class="fc" id="L37">        return categoriaMapper.toDTOList(categoriaRepository.findAll());</span>
+    }
+
+    /** Pagina de resultados (la consulta se limita en la base de datos con LIMIT/OFFSET). */
+    public Page&lt;CategoriaDTO&gt; findAll(Pageable pageable) {
+<span class="fc" id="L42">        return categoriaRepository.findAll(pageable).map(categoriaMapper::toDTO);</span>
     }
 
     public List&lt;CategoriaDTO&gt; findRaices() {
-<span class="nc" id="L39">        return categoriaMapper.toDTOList(categoriaRepository.findByCategoriaPadreEntityIsNull());</span>
+<span class="nc" id="L46">        return categoriaMapper.toDTOList(categoriaRepository.findByCategoriaPadreEntityIsNull());</span>
     }
 
     public List&lt;CategoriaDTO&gt; findByPadreId(Long categoriaPadreId) {
-<span class="nc" id="L43">        return categoriaMapper.toDTOList(categoriaRepository.findByCategoriaPadreEntityId(categoriaPadreId));</span>
+<span class="nc" id="L50">        return categoriaMapper.toDTOList(categoriaRepository.findByCategoriaPadreEntityId(categoriaPadreId));</span>
     }
 
     public Optional&lt;CategoriaDTO&gt; update(Long id, CategoriaUpdateDTO updateDTO) {
-<span class="nc" id="L47">        return categoriaRepository.findById(id).map(existing -&gt; {</span>
-<span class="nc" id="L48">            categoriaMapper.updateEntityFromDTO(updateDTO, existing);</span>
-<span class="nc" id="L49">            return categoriaMapper.toDTO(categoriaRepository.save(existing));</span>
+<span class="nc" id="L54">        return categoriaRepository.findById(id).map(existing -&gt; {</span>
+<span class="nc" id="L55">            categoriaMapper.updateEntityFromDTO(updateDTO, existing);</span>
+<span class="nc" id="L56">            return categoriaMapper.toDTO(categoriaRepository.save(existing));</span>
         });
     }
 
     public boolean deleteById(Long id) {
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (categoriaRepository.existsById(id)) {</span>
-<span class="nc" id="L55">            categoriaRepository.deleteById(id);</span>
-<span class="nc" id="L56">            return true;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (categoriaRepository.existsById(id)) {</span>
+<span class="nc" id="L62">            categoriaRepository.deleteById(id);</span>
+<span class="nc" id="L63">            return true;</span>
         }
-<span class="nc" id="L58">        return false;</span>
+<span class="nc" id="L65">        return false;</span>
     }
 
     public boolean existsById(Long id) {
-<span class="nc" id="L62">        return categoriaRepository.existsById(id);</span>
+<span class="nc" id="L69">        return categoriaRepository.existsById(id);</span>
     }
 
     public boolean existsByPadreId(Long categoriaPadreId) {
-<span class="nc" id="L66">        return categoriaRepository.existsByCategoriaPadreEntityId(categoriaPadreId);</span>
+<span class="nc" id="L73">        return categoriaRepository.existsByCategoriaPadreEntityId(categoriaPadreId);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

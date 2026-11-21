@@ -266,4 +266,20 @@ class LibroServiceTest {
         assertEquals("No se puede eliminar el libro porque tiene ejemplares registrados", ex.getMessage());
         verify(libroDao, never()).deleteById(any());
     }
+
+    // ---------- paginacion (listados base) ----------
+
+    @Test
+    void testGetAllLibros_Paginado() {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 2);
+        when(libroDao.findAll(pageable))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(List.of(TestData.libro(1L, "Cien anos", "111"), TestData.libro(2L, "El coronel", "222")), pageable, 5));
+
+        var result = libroService.getAllLibros(pageable);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(5, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
+        verify(libroDao, times(1)).findAll(pageable);
+    }
 }

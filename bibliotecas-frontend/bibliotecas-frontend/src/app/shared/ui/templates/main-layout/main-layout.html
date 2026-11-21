@@ -1,0 +1,54 @@
+<app-barra-carga [activa]="carga.activa()" />
+<app-notification-center
+  [notificaciones]="notificaciones.notificaciones()"
+  (cerrar)="notificaciones.cerrar($event)"
+/>
+
+<div class="shell">
+  <aside class="sidebar" [class.sidebar--abierto]="menuAbierto()" aria-label="Menú principal">
+    <div class="sidebar__marca">
+      <span class="sidebar__logo">BG</span>
+      <span class="sidebar__titulo">Bibliotecas</span>
+    </div>
+
+    <nav class="sidebar__nav">
+      @for (item of enlaces; track item.ruta) {
+        <a
+          class="sidebar__link"
+          [routerLink]="item.ruta"
+          routerLinkActive="sidebar__link--activo"
+          ariaCurrentWhenActive="page"
+          (click)="menuAbierto.set(false)"
+        >
+          {{ item.etiqueta }}
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <div class="shell__principal">
+    <header class="topbar">
+      <button
+        type="button"
+        class="topbar__menu-btn"
+        aria-label="Alternar menú"
+        (click)="menuAbierto.update(v => !v)"
+      >
+        ☰
+      </button>
+
+      <div class="topbar__usuario">
+        @if (auth.usuario(); as u) {
+          <span class="topbar__chip">{{ u.nombre }} · {{ u.rol }}</span>
+          <button type="button" class="topbar__salir" (click)="cerrarSesion()">Salir</button>
+        } @else {
+          <a class="topbar__login" routerLink="/auth/login">Iniciar sesión</a>
+        }
+      </div>
+    </header>
+
+    <main class="shell__contenido">
+      <router-outlet />
+    </main>
+  </div>
+</div>

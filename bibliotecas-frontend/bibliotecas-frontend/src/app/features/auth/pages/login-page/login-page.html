@@ -1,0 +1,43 @@
+@if (mensajeError()) {
+  <div class="alerta" role="alert">{{ mensajeError() }}</div>
+}
+
+<form class="login-form" [formRoot]="formulario">
+  <div class="fila" [class.fila--error]="errorDe(formulario.email())">
+    <label for="email">Correo electrónico</label>
+    <input
+      id="email"
+      type="email"
+      class="campo"
+      autocomplete="email"
+      placeholder="usuario@biblioteca.com"
+      [formField]="formulario.email"
+    />
+    @if (errorDe(formulario.email()); as err) {
+      <small class="fila__error" role="alert">{{ err }}</small>
+    }
+  </div>
+
+  <div class="fila" [class.fila--error]="errorDe(formulario.password())">
+    <label for="password">Contraseña</label>
+    <input
+      id="password"
+      type="password"
+      class="campo"
+      autocomplete="current-password"
+      placeholder="••••••••"
+      [formField]="formulario.password"
+    />
+    @if (errorDe(formulario.password()); as err) {
+      <small class="fila__error" role="alert">{{ err }}</small>
+    }
+  </div>
+
+  <button type="submit" class="btn-submit" [disabled]="cargando()">
+    {{ cargando() ? 'Ingresando...' : 'Iniciar sesión' }}
+  </button>
+
+  <p class="login-form__pie">
+    <a routerLink="/catalogo">Explorar el catálogo público</a>
+  </p>
+</form>

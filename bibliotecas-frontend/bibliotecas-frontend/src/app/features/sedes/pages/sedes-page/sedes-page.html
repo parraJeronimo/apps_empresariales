@@ -1,0 +1,87 @@
+<app-page-header titulo="Sedes" subtitulo="Administración de bibliotecas afiliadas">
+  <app-button texto="+ Nueva sede" (presionado)="abrirCrear()" />
+</app-page-header>
+
+@if (cargando() && sedes().length === 0) {
+  <p>Cargando sedes...</p>
+} @else if (sedes().length === 0) {
+  <app-empty-state titulo="No hay sedes registradas" descripcion="Registra la primera sede de la red.">
+    <app-button texto="Registrar sede" (presionado)="abrirCrear()" />
+  </app-empty-state>
+} @else {
+  <div class="tabla-contenedor">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Ciudad</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (s of sedes(); track s.id) {
+          <tr>
+            <td><strong>{{ s.nombre }}</strong></td>
+            <td>{{ s.ciudad || '—' }}</td>
+            <td>{{ s.direccion }}</td>
+            <td>{{ s.telefono || '—' }}</td>
+            <td><app-status-badge [estado]="s.activa ? 'ACTIVA' : 'INACTIVA'" /></td>
+            <td class="tabla__acciones">
+              <app-button texto="Editar" variante="secundario" (presionado)="abrirEditar(s)" />
+              <app-button
+                [texto]="s.activa ? 'Desactivar' : 'Activar'"
+                [variante]="s.activa ? 'peligro' : 'primario'"
+                (presionado)="pedirCambioEstado(s)"
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <app-paginator
+    [(pagina)]="pagina"
+    [totalPaginas]="meta().totalPages"
+    [totalElementos]="meta().totalElements"
+    etiqueta="sedes"
+  />
+}
+
+<app-modal [titulo]="sedeEditando() ? 'Editar sede' : 'Nueva sede'" [(abierto)]="modalAbierto">
+  <form id="sedeForm" [formRoot]="formulario" class="panel-form panel-form--modal">
+    @if (errorForm()) {
+      <p class="mensaje-error" role="alert">{{ errorForm() }}</p>
+    }
+    <app-form-field etiqueta="Nombre" para="s-nombre" [obligatorio]="true" [error]="errorDe(formulario.nombre())">
+      <input id="s-nombre" class="campo" [formField]="formulario.nombre" />
+    </app-form-field>
+    <app-form-field etiqueta="Dirección" para="s-dir" [obligatorio]="true" [error]="errorDe(formulario.direccion())">
+      <input id="s-dir" class="campo" [formField]="formulario.direccion" />
+    </app-form-field>
+    <app-form-field etiqueta="Ciudad" para="s-ciudad">
+      <input id="s-ciudad" class="campo" [formField]="formulario.ciudad" />
+    </app-form-field>
+    <app-form-field etiqueta="Teléfono" para="s-tel">
+      <input id="s-tel" class="campo" [formField]="formulario.telefono" />
+    </app-form-field>
+  </form>
+  <ng-container modalPie>
+    <app-button texto="Cancelar" variante="secundario" (presionado)="modalAbierto.set(false)" />
+    <app-button tipo="submit" formId="sedeForm" texto="Guardar" [cargando]="guardando()" />
+  </ng-container>
+</app-modal>
+
+<app-confirm-dialog
+  [titulo]="sedeToggle()?.activa ? 'Desactivar sede' : 'Activar sede'"
+  [mensaje]="'¿Confirmas cambiar el estado de ' + (sedeToggle()?.nombre ?? '') + '?'"
+  [textoConfirmar]="sedeToggle()?.activa ? 'Desactivar' : 'Activar'"
+  [varianteConfirmar]="sedeToggle()?.activa ? 'peligro' : 'primario'"
+  [cargando]="procesandoToggle()"
+  [error]="errorToggle()"
+  [(abierto)]="confirmAbierto"
+  (confirmar)="confirmarCambioEstado()"
+/>

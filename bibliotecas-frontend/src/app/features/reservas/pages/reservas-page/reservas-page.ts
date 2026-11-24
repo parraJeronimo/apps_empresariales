@@ -1,9 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { form, FormField as SignalFormField, FormRoot, min, ReadonlyFieldState, required } from '@angular/forms/signals';
 import { PageMeta } from '../../../../core/models/api.model';
+import { Sede } from '../../../../core/models/gestion.model';
 import { Reserva } from '../../../../core/models/operacion.model';
 import { NotificacionesService } from '../../../../core/services/notificaciones';
 import { ReservaService } from '../../../../core/services/reserva';
+import { SedeService } from '../../../../core/services/sede';
 import { mensajeDeError } from '../../../../core/utils/errores';
 import { Button } from '../../../../shared/ui/atoms/button/button';
 import { EmptyState } from '../../../../shared/ui/molecules/empty-state/empty-state';
@@ -15,12 +19,19 @@ import { PageHeader } from '../../../../shared/ui/organisms/page-header/page-hea
 
 @Component({
   selector: 'app-reservas-page',
-  imports: [PageHeader, Button, StatusBadge, Paginator, EmptyState, Modal, FormField],
+  imports: [
+    SignalFormField, FormRoot, PageHeader, Button,
+    StatusBadge, Paginator, EmptyState, Modal, FormField,
+  ],
   template: `
-    <app-page-header titulo="Reservas" subtitulo="Gestión de solicitudes cuando no hay ejemplares disponibles" />
+    <app-page-header titulo="Reservas" subtitulo="Gestión de solicitudes cuando no hay ejemplares disponibles">
+      <app-button texto="+ Nueva reserva" (presionado)="abrirCrear()" />
+    </app-page-header>
 
     @if (reservas().length === 0) {
-      <app-empty-state titulo="No hay reservas registradas" />
+      <app-empty-state titulo="No hay reservas registradas" descripcion="Crea una solicitud cuando un libro no tenga ejemplares disponibles en la sede.">
+        <app-button texto="Registrar reserva" (presionado)="abrirCrear()" />
+      </app-empty-state>
     } @else {
       <div class="tabla-contenedor">
         <table class="tabla">
@@ -65,6 +76,34 @@ import { PageHeader } from '../../../../shared/ui/organisms/page-header/page-hea
       />
     }
 
+    <!-- Modal Nueva Reserva (HU-14) -->
+    <app-modal titulo="Nueva reserva" [(abierto)]="modalCrear">
+      <form id="reservaForm" [formRoot]="formulario" class="panel-form panel-form--modal">
+        @if (errorCrear()) {
+          <p class="mensaje-error" role="alert">{{ errorCrear() }}</p>
+        }
+        <app-form-field etiqueta="ID Cliente" para="res-cliente" [obligatorio]="true" [error]="errorDe(formulario.clienteId())">
+          <input id="res-cliente" type="number" class="campo" [formField]="formulario.clienteId" />
+        </app-form-field>
+        <app-form-field etiqueta="ID Libro" para="res-libro" [obligatorio]="true" [error]="errorDe(formulario.libroId())">
+          <input id="res-libro" type="number" class="campo" [formField]="formulario.libroId" />
+        </app-form-field>
+        <app-form-field etiqueta="Sede de recogida" para="res-sede" [obligatorio]="true" [error]="errorDe(formulario.sedeId())">
+          <select id="res-sede" class="campo" [formField]="formulario.sedeId">
+            <option value="" disabled>Seleccione una sede...</option>
+            @for (s of sedes(); track s.id) {
+              <option [value]="s.id">{{ s.nombre }}</option>
+            }
+          </select>
+        </app-form-field>
+      </form>
+      <ng-container modalPie>
+        <app-button texto="Cancelar" variante="secundario" (presionado)="modalCrear.set(false)" />
+        <app-button tipo="submit" formId="reservaForm" texto="Crear reserva" [cargando]="guardando()" />
+      </ng-container>
+    </app-modal>
+
+    <!-- Modal Rechazar Reserva (HU-15) -->
     <app-modal [titulo]="'Rechazar reserva #' + (reservaRechazo()?.id ?? '')" [(abierto)]="modalRechazo">
       <app-form-field etiqueta="Motivo del rechazo" para="r-motivo" [obligatorio]="true" [error]="errorRechazo()">
         <textarea
@@ -84,12 +123,31 @@ import { PageHeader } from '../../../../shared/ui/organisms/page-header/page-hea
 })
 export class ReservasPage {
   private readonly reservaService = inject(ReservaService);
+  private readonly sedeService = inject(SedeService);
   private readonly notificaciones = inject(NotificacionesService);
 
+  protected readonly sedes = toSignal(this.sedeService.listarTodas(), { initialValue: [] as Sede[] });
   protected readonly reservas = signal<Reserva[]>([]);
   protected readonly pagina = signal(0);
   protected readonly meta = signal<PageMeta>({ totalElements: 0, totalPages: 1, number: 0, size: 10 });
 
+  // Estado Modal Nueva Reserva
+  protected readonly modalCrear = signal(false);
+  protected readonly guardando = signal(false);
+  protected readonly errorCrear = signal<string | null>(null);
+  protected readonly modelo = signal({ clienteId: 1, libroId: 1, sedeId: '' });
+
+  protected readonly formulario = form(
+    this.modelo,
+    (p) => {
+      min(p.clienteId, 1, { message: 'El ID del cliente es obligatorio' });
+      min(p.libroId, 1, { message: 'El ID del libro es obligatorio' });
+      required(p.sedeId, { message: 'La sede es obligatoria' });
+    },
+    { submission: { action: async () => this.guardar() } },
+  );
+
+  // Estado Modal Rechazo
   protected readonly modalRechazo = signal(false);
   protected readonly reservaRechazo = signal<Reserva | null>(null);
   protected readonly motivoRechazo = signal('');
@@ -104,6 +162,41 @@ export class ReservasPage {
       this.reservas.set(res.items);
       this.meta.set(res.page);
     });
+  }
+
+  protected abrirCrear(): void {
+    this.errorCrear.set(null);
+    this.modelo.set({ clienteId: 1, libroId: 1, sedeId: '' });
+    this.modalCrear.set(true);
+  }
+
+  protected errorDe(campo: ReadonlyFieldState<unknown>): string | null {
+    return campo.touched() ? (campo.errors()[0]?.message ?? null) : null;
+  }
+
+  private guardar(): void {
+    this.guardando.set(true);
+    this.errorCrear.set(null);
+    const v = this.modelo();
+
+    this.reservaService
+      .crear({
+        clienteId: Number(v.clienteId),
+        libroId: Number(v.libroId),
+        sedeId: Number(v.sedeId),
+      })
+      .subscribe({
+        next: (creada) => {
+          this.guardando.set(false);
+          this.modalCrear.set(false);
+          this.notificaciones.mostrar(`Reserva #${creada.id} creada en estado ${creada.estado}.`, 'exito');
+          this.cargar();
+        },
+        error: (e: HttpErrorResponse) => {
+          this.guardando.set(false);
+          this.errorCrear.set(mensajeDeError(e));
+        },
+      });
   }
 
   protected aprobar(id: number): void {
